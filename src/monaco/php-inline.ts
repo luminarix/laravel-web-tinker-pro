@@ -636,11 +636,351 @@ interface FunctionSignature {
 }
 
 const phpFunctionSignatures: FunctionSignature[] = [
-  // String functions
+  // String functions - comprehensive list with accurate signatures
+  {
+    name: 'addcslashes',
+    signature: 'addcslashes(string $str, string $charlist): string',
+    description: 'Quote string with slashes in a C style',
+  },
+  {
+    name: 'addslashes',
+    signature: 'addslashes(string $string): string',
+    description: 'Quote string with slashes',
+  },
+  {
+    name: 'bin2hex',
+    signature: 'bin2hex(string $string): string',
+    description: 'Convert binary data into hexadecimal representation',
+  },
+  {
+    name: 'chr',
+    signature: 'chr(int $codepoint): string',
+    description: 'Generate a single-byte string from a number',
+  },
+  {
+    name: 'chunk_split',
+    signature:
+      'chunk_split(string $string, int $length = 76, string $separator = "\r\n"): string',
+    description: 'Split a string into smaller chunks',
+  },
+  {
+    name: 'crc32',
+    signature: 'crc32(string $string): int',
+    description: 'Calculates the crc32 polynomial of a string',
+  },
+  {
+    name: 'crypt',
+    signature: 'crypt(string $string, string $salt): string',
+    description: 'One-way string hashing',
+  },
+  {
+    name: 'echo',
+    signature: 'echo(string ...$expressions): void',
+    description: 'Output one or more strings',
+  },
+  {
+    name: 'explode',
+    signature:
+      'explode(string $separator, string $string, int $limit = PHP_INT_MAX): array',
+    description: 'Split a string by a string',
+  },
+  {
+    name: 'hex2bin',
+    signature: 'hex2bin(string $string): string|false',
+    description: 'Decodes a hexadecimally encoded binary string',
+  },
+  {
+    name: 'html_entity_decode',
+    signature:
+      'html_entity_decode(string $string, int $flags = ENT_HTML401 | ENT_COMPAT, ?string $encoding = null): string',
+    description: 'Convert HTML entities to their corresponding characters',
+  },
+  {
+    name: 'htmlentities',
+    signature:
+      'htmlentities(string $string, int $flags = ENT_HTML401 | ENT_COMPAT, ?string $encoding = null, bool $double_encode = true): string',
+    description: 'Convert all applicable characters to HTML entities',
+  },
+  {
+    name: 'htmlspecialchars',
+    signature:
+      'htmlspecialchars(string $string, int $flags = ENT_HTML401 | ENT_COMPAT, ?string $encoding = null, bool $double_encode = true): string',
+    description: 'Convert special characters to HTML entities',
+  },
+  {
+    name: 'htmlspecialchars_decode',
+    signature:
+      'htmlspecialchars_decode(string $string, int $flags = ENT_HTML401 | ENT_COMPAT): string',
+    description: 'Convert special HTML entities back to characters',
+  },
+  {
+    name: 'implode',
+    signature: 'implode(string $separator, array $array): string',
+    description: 'Join array elements with a string',
+  },
+  {
+    name: 'lcfirst',
+    signature: 'lcfirst(string $string): string',
+    description: "Make a string's first character lowercase",
+  },
+  {
+    name: 'levenshtein',
+    signature:
+      'levenshtein(string $string1, string $string2, int $insertion_cost = 1, int $replacement_cost = 1, int $deletion_cost = 1): int',
+    description: 'Calculate Levenshtein distance between two strings',
+  },
+  {
+    name: 'ltrim',
+    signature:
+      'ltrim(string $string, string $characters = " \\f\\n\\r\\t\\v\\x00"): string',
+    description:
+      'Strip whitespace (or other characters) from the beginning of a string',
+  },
+  {
+    name: 'md5',
+    signature: 'md5(string $string, bool $binary = false): string',
+    description: 'Calculate the md5 hash of a string',
+  },
+  {
+    name: 'md5_file',
+    signature: 'md5_file(string $filename, bool $binary = false): string|false',
+    description: 'Calculates the md5 hash of a given file',
+  },
+  {
+    name: 'nl2br',
+    signature: 'nl2br(string $string, bool $use_xhtml = true): string',
+    description: 'Inserts HTML line breaks before all newlines in a string',
+  },
+  {
+    name: 'number_format',
+    signature:
+      'number_format(float $num, int $decimals = 0, ?string $decimal_separator = ".", ?string $thousands_separator = ","): string',
+    description: 'Format a number with grouped thousands',
+  },
+  {
+    name: 'ord',
+    signature: 'ord(string $character): int',
+    description:
+      'Convert the first byte of a string to a value between 0 and 255',
+  },
+  {
+    name: 'parse_str',
+    signature: 'parse_str(string $string, array &$result): void',
+    description: 'Parse a string as a URL query string',
+  },
+  {
+    name: 'print',
+    signature: 'print(string $expression): int',
+    description: 'Output a string',
+  },
+  {
+    name: 'printf',
+    signature: 'printf(string $format, mixed ...$values): int',
+    description: 'Output a formatted string',
+  },
+  {
+    name: 'rtrim',
+    signature:
+      'rtrim(string $string, string $characters = " \\f\\n\\r\\t\\v\\x00"): string',
+    description:
+      'Strip whitespace (or other characters) from the end of a string',
+  },
+  {
+    name: 'sha1',
+    signature: 'sha1(string $string, bool $binary = false): string',
+    description: 'Calculate the sha1 hash of a string',
+  },
+  {
+    name: 'sha1_file',
+    signature:
+      'sha1_file(string $filename, bool $binary = false): string|false',
+    description: 'Calculate the sha1 hash of a file',
+  },
+  {
+    name: 'similar_text',
+    signature:
+      'similar_text(string $string1, string $string2, float &$percent = null): int',
+    description: 'Calculate the similarity between two strings',
+  },
+  {
+    name: 'soundex',
+    signature: 'soundex(string $string): string',
+    description: 'Calculate the soundex key of a string',
+  },
+  {
+    name: 'sprintf',
+    signature: 'sprintf(string $format, mixed ...$values): string',
+    description: 'Return a formatted string',
+  },
+  {
+    name: 'str_contains',
+    signature: 'str_contains(string $haystack, string $needle): bool',
+    description: 'Determine if a string contains a given substring',
+  },
+  {
+    name: 'str_ends_with',
+    signature: 'str_ends_with(string $haystack, string $needle): bool',
+    description: 'Checks if a string ends with a given substring',
+  },
+  {
+    name: 'str_pad',
+    signature:
+      'str_pad(string $string, int $length, string $pad_string = " ", int $pad_type = STR_PAD_RIGHT): string',
+    description: 'Pad a string to a certain length with another string',
+  },
+  {
+    name: 'str_repeat',
+    signature: 'str_repeat(string $string, int $times): string',
+    description: 'Repeat a string',
+  },
+  {
+    name: 'str_replace',
+    signature:
+      'str_replace(array|string $search, array|string $replace, string|array $subject, int &$count = null): string|array',
+    description:
+      'Replace all occurrences of the search string with the replacement string',
+  },
+  {
+    name: 'str_shuffle',
+    signature: 'str_shuffle(string $string): string',
+    description: 'Randomly shuffles a string',
+  },
+  {
+    name: 'str_split',
+    signature: 'str_split(string $string, int $length = 1): array',
+    description: 'Convert a string to an array',
+  },
+  {
+    name: 'str_starts_with',
+    signature: 'str_starts_with(string $haystack, string $needle): bool',
+    description: 'Checks if a string starts with a given substring',
+  },
+  {
+    name: 'str_word_count',
+    signature:
+      'str_word_count(string $string, int $format = 0, ?string $characters = null): array|int',
+    description: 'Return information about words used in a string',
+  },
+  {
+    name: 'strcasecmp',
+    signature: 'strcasecmp(string $string1, string $string2): int',
+    description: 'Binary safe case-insensitive string comparison',
+  },
+  {
+    name: 'strcmp',
+    signature: 'strcmp(string $string1, string $string2): int',
+    description: 'Binary safe string comparison',
+  },
+  {
+    name: 'strcspn',
+    signature:
+      'strcspn(string $string, string $characters, int $offset = 0, ?int $length = null): int',
+    description: 'Find length of initial segment not matching mask',
+  },
+  {
+    name: 'strip_tags',
+    signature:
+      'strip_tags(string $string, array|string|null $allowed_tags = null): string',
+    description: 'Strip HTML and PHP tags from a string',
+  },
+  {
+    name: 'stripos',
+    signature:
+      'stripos(string $haystack, string $needle, int $offset = 0): int|false',
+    description:
+      'Find the position of the first occurrence of a case-insensitive substring in a string',
+  },
+  {
+    name: 'stripslashes',
+    signature: 'stripslashes(string $string): string',
+    description: 'Un-quotes a quoted string',
+  },
+  {
+    name: 'stristr',
+    signature:
+      'stristr(string $haystack, string $needle, bool $before_needle = false): string|false',
+    description: 'Case-insensitive strstr',
+  },
   {
     name: 'strlen',
     signature: 'strlen(string $string): int',
     description: 'Get string length',
+  },
+  {
+    name: 'strnatcasecmp',
+    signature: 'strnatcasecmp(string $string1, string $string2): int',
+    description:
+      'Case insensitive string comparisons using a "natural order" algorithm',
+  },
+  {
+    name: 'strnatcmp',
+    signature: 'strnatcmp(string $string1, string $string2): int',
+    description: 'String comparisons using a "natural order" algorithm',
+  },
+  {
+    name: 'strpos',
+    signature:
+      'strpos(string $haystack, string $needle, int $offset = 0): int|false',
+    description:
+      'Find the position of the first occurrence of a substring in a string',
+  },
+  {
+    name: 'strrchr',
+    signature:
+      'strrchr(string $haystack, string $needle, bool $before_needle = false): string|false',
+    description: 'Find the last occurrence of a character in a string',
+  },
+  {
+    name: 'strrev',
+    signature: 'strrev(string $string): string',
+    description: 'Reverse a string',
+  },
+  {
+    name: 'strripos',
+    signature:
+      'strripos(string $haystack, string $needle, int $offset = 0): int|false',
+    description:
+      'Find the position of the last occurrence of a case-insensitive substring in a string',
+  },
+  {
+    name: 'strrpos',
+    signature:
+      'strrpos(string $haystack, string $needle, int $offset = 0): int|false',
+    description:
+      'Find the position of the last occurrence of a substring in a string',
+  },
+  {
+    name: 'strspn',
+    signature:
+      'strspn(string $string, string $characters, int $offset = 0, ?int $length = null): int',
+    description:
+      'Finds the length of the initial segment of a string consisting entirely of characters contained within a given mask',
+  },
+  {
+    name: 'strstr',
+    signature:
+      'strstr(string $haystack, string $needle, bool $before_needle = false): string|false',
+    description: 'Find the first occurrence of a string',
+  },
+  {
+    name: 'strtok',
+    signature: 'strtok(string $string, string $token): string|false',
+    description: 'Tokenize string',
+  },
+  {
+    name: 'strtolower',
+    signature: 'strtolower(string $string): string',
+    description: 'Make a string lowercase',
+  },
+  {
+    name: 'strtoupper',
+    signature: 'strtoupper(string $string): string',
+    description: 'Make a string uppercase',
+  },
+  {
+    name: 'strtr',
+    signature: 'strtr(string $string, string $from, string $to): string',
+    description: 'Translate characters or replace substrings',
   },
   {
     name: 'substr',
@@ -649,135 +989,439 @@ const phpFunctionSignatures: FunctionSignature[] = [
     description: 'Return part of a string',
   },
   {
-    name: 'strpos',
+    name: 'substr_compare',
     signature:
-      'strpos(string $haystack, string $needle, int $offset = 0): int|false',
-    description: 'Find position of first occurrence of string',
+      'substr_compare(string $haystack, string $needle, int $offset, ?int $length = null, bool $case_insensitive = false): int',
+    description:
+      'Binary safe comparison of two strings from an offset, up to length characters',
   },
   {
-    name: 'str_replace',
+    name: 'substr_count',
     signature:
-      'str_replace(array|string $search, array|string $replace, string|array $subject, int &$count = null): string|array',
-    description: 'Replace all occurrences of search string with replacement',
+      'substr_count(string $haystack, string $needle, int $offset = 0, ?int $length = null): int',
+    description: 'Count the number of substring occurrences',
   },
   {
-    name: 'explode',
+    name: 'substr_replace',
     signature:
-      'explode(string $delimiter, string $string, int $limit = PHP_INT_MAX): array',
-    description: 'Split string by delimiter',
-  },
-  {
-    name: 'implode',
-    signature: 'implode(string $separator, array $array): string',
-    description: 'Join array elements with string',
+      'substr_replace(array|string $string, array|string $replacement, array|int $offset, array|int|null $length = null): string|array',
+    description: 'Replace text within a portion of a string',
   },
   {
     name: 'trim',
     signature:
-      'trim(string $string, string $characters = " \\n\\r\\t\\v\\0"): string',
-    description: 'Strip whitespace from beginning and end',
-  },
-  {
-    name: 'strtolower',
-    signature: 'strtolower(string $string): string',
-    description: 'Make string lowercase',
-  },
-  {
-    name: 'strtoupper',
-    signature: 'strtoupper(string $string): string',
-    description: 'Make string uppercase',
+      'trim(string $string, string $characters = " \\f\\n\\r\\t\\v\\x00"): string',
+    description:
+      'Strip whitespace (or other characters) from the beginning and end of a string',
   },
   {
     name: 'ucfirst',
     signature: 'ucfirst(string $string): string',
-    description: 'Make first character uppercase',
+    description: "Make a string's first character uppercase",
   },
   {
-    name: 'str_contains',
-    signature: 'str_contains(string $haystack, string $needle): bool',
-    description: 'Determine if string contains substring',
+    name: 'ucwords',
+    signature:
+      'ucwords(string $string, string $separators = " \\f\\n\\r\\t\\v"): string',
+    description: 'Uppercase the first character of each word in a string',
   },
   {
-    name: 'str_starts_with',
-    signature: 'str_starts_with(string $haystack, string $needle): bool',
-    description: 'Check if string starts with substring',
-  },
-  {
-    name: 'str_ends_with',
-    signature: 'str_ends_with(string $haystack, string $needle): bool',
-    description: 'Check if string ends with substring',
+    name: 'wordwrap',
+    signature:
+      'wordwrap(string $string, int $width = 75, string $break = "\\n", bool $cut_long_words = false): string',
+    description: 'Wraps a string to a given number of characters',
   },
 
-  // Array functions
+  // Array functions - comprehensive list with accurate signatures
   {
-    name: 'count',
-    signature: 'count(Countable|array $value, int $mode = COUNT_NORMAL): int',
-    description: 'Count elements in array',
+    name: 'array',
+    signature: 'array(mixed ...$values): array',
+    description: 'Create an array',
   },
   {
-    name: 'array_push',
-    signature: 'array_push(array &$array, mixed ...$values): int',
-    description: 'Push elements onto end of array',
+    name: 'array_all',
+    signature: 'array_all(array $array, callable $callback): bool',
+    description: 'Checks if all array elements satisfy a callback function',
   },
   {
-    name: 'array_pop',
-    signature: 'array_pop(array &$array): mixed',
-    description: 'Pop element off end of array',
+    name: 'array_any',
+    signature: 'array_any(array $array, callable $callback): bool',
+    description:
+      'Checks if at least one array element satisfies a callback function',
   },
   {
-    name: 'array_shift',
-    signature: 'array_shift(array &$array): mixed',
-    description: 'Shift element off beginning of array',
-  },
-  {
-    name: 'array_unshift',
-    signature: 'array_unshift(array &$array, mixed ...$values): int',
-    description: 'Prepend elements to beginning of array',
-  },
-  {
-    name: 'array_merge',
-    signature: 'array_merge(array ...$arrays): array',
-    description: 'Merge arrays',
-  },
-  {
-    name: 'array_keys',
+    name: 'array_change_key_case',
     signature:
-      'array_keys(array $array, mixed $search_value = null, bool $strict = false): array',
-    description: 'Return array keys',
+      'array_change_key_case(array $array, int $case = CASE_LOWER): array',
+    description: 'Changes the case of all keys in an array',
   },
   {
-    name: 'array_values',
-    signature: 'array_values(array $array): array',
-    description: 'Return array values',
+    name: 'array_chunk',
+    signature:
+      'array_chunk(array $array, int $length, bool $preserve_keys = false): array',
+    description: 'Split an array into chunks',
+  },
+  {
+    name: 'array_column',
+    signature:
+      'array_column(array $array, int|string|null $column_key, int|string|null $index_key = null): array',
+    description: 'Return the values from a single column in the input array',
+  },
+  {
+    name: 'array_combine',
+    signature: 'array_combine(array $keys, array $values): array',
+    description:
+      'Creates an array by using one array for keys and another for its values',
+  },
+  {
+    name: 'array_count_values',
+    signature: 'array_count_values(array $array): array',
+    description: 'Counts the occurrences of each distinct value in an array',
+  },
+  {
+    name: 'array_diff',
+    signature: 'array_diff(array $array, array ...$arrays): array',
+    description: 'Computes the difference of arrays',
+  },
+  {
+    name: 'array_diff_assoc',
+    signature: 'array_diff_assoc(array $array, array ...$arrays): array',
+    description:
+      'Computes the difference of arrays with additional index check',
+  },
+  {
+    name: 'array_diff_key',
+    signature: 'array_diff_key(array $array, array ...$arrays): array',
+    description: 'Computes the difference of arrays using keys for comparison',
+  },
+  {
+    name: 'array_fill',
+    signature: 'array_fill(int $start_index, int $count, mixed $value): array',
+    description: 'Fill an array with values',
+  },
+  {
+    name: 'array_fill_keys',
+    signature: 'array_fill_keys(array $keys, mixed $value): array',
+    description: 'Fill an array with values, specifying keys',
   },
   {
     name: 'array_filter',
     signature:
       'array_filter(array $array, ?callable $callback = null, int $mode = 0): array',
-    description: 'Filter array elements',
+    description: 'Filters elements of an array using a callback function',
+  },
+  {
+    name: 'array_find',
+    signature: 'array_find(array $array, callable $callback): mixed',
+    description: 'Returns the first element satisfying a callback function',
+  },
+  {
+    name: 'array_find_key',
+    signature: 'array_find_key(array $array, callable $callback): mixed',
+    description:
+      'Returns the key of the first element satisfying a callback function',
+  },
+  {
+    name: 'array_flip',
+    signature: 'array_flip(array $array): array',
+    description: 'Exchanges all keys with their associated values in an array',
+  },
+  {
+    name: 'array_intersect',
+    signature: 'array_intersect(array $array, array ...$arrays): array',
+    description: 'Computes the intersection of arrays',
+  },
+  {
+    name: 'array_intersect_assoc',
+    signature: 'array_intersect_assoc(array $array, array ...$arrays): array',
+    description:
+      'Computes the intersection of arrays with additional index check',
+  },
+  {
+    name: 'array_intersect_key',
+    signature: 'array_intersect_key(array $array, array ...$arrays): array',
+    description:
+      'Computes the intersection of arrays using keys for comparison',
+  },
+  {
+    name: 'array_is_list',
+    signature: 'array_is_list(array $array): bool',
+    description: 'Checks whether a given array is a list',
+  },
+  {
+    name: 'array_key_exists',
+    signature: 'array_key_exists(string|int $key, array $array): bool',
+    description: 'Checks if the given key or index exists in the array',
+  },
+  {
+    name: 'array_key_first',
+    signature: 'array_key_first(array $array): int|string|null',
+    description: 'Gets the first key of an array',
+  },
+  {
+    name: 'array_key_last',
+    signature: 'array_key_last(array $array): int|string|null',
+    description: 'Gets the last key of an array',
+  },
+  {
+    name: 'array_keys',
+    signature:
+      'array_keys(array $array, mixed $search_value = null, bool $strict = false): array',
+    description: 'Return all the keys or a subset of the keys of an array',
   },
   {
     name: 'array_map',
     signature:
       'array_map(?callable $callback, array $array, array ...$arrays): array',
-    description: 'Apply callback to array elements',
+    description: 'Applies the callback to the elements of the given arrays',
   },
   {
-    name: 'in_array',
+    name: 'array_merge',
+    signature: 'array_merge(array ...$arrays): array',
+    description: 'Merge one or more arrays',
+  },
+  {
+    name: 'array_merge_recursive',
+    signature: 'array_merge_recursive(array ...$arrays): array',
+    description: 'Merge one or more arrays recursively',
+  },
+  {
+    name: 'array_pad',
+    signature: 'array_pad(array $array, int $length, mixed $value): array',
+    description: 'Pad array to the specified length with a value',
+  },
+  {
+    name: 'array_pop',
+    signature: 'array_pop(array &$array): mixed',
+    description: 'Pop the element off the end of array',
+  },
+  {
+    name: 'array_product',
+    signature: 'array_product(array $array): int|float',
+    description: 'Calculate the product of values in an array',
+  },
+  {
+    name: 'array_push',
+    signature: 'array_push(array &$array, mixed ...$values): int',
+    description: 'Push one or more elements onto the end of array',
+  },
+  {
+    name: 'array_rand',
+    signature: 'array_rand(array $array, int $num = 1): int|string|array',
+    description: 'Pick one or more random keys out of an array',
+  },
+  {
+    name: 'array_reduce',
     signature:
-      'in_array(mixed $needle, array $haystack, bool $strict = false): bool',
-    description: 'Check if value exists in array',
+      'array_reduce(array $array, callable $callback, mixed $initial = null): mixed',
+    description:
+      'Iteratively reduce the array to a single value using a callback function',
+  },
+  {
+    name: 'array_replace',
+    signature: 'array_replace(array $array, array ...$replacements): array',
+    description: 'Replaces elements from passed arrays into the first array',
+  },
+  {
+    name: 'array_replace_recursive',
+    signature:
+      'array_replace_recursive(array $array, array ...$replacements): array',
+    description:
+      'Replaces elements from passed arrays into the first array recursively',
+  },
+  {
+    name: 'array_reverse',
+    signature:
+      'array_reverse(array $array, bool $preserve_keys = false): array',
+    description: 'Return an array with elements in reverse order',
   },
   {
     name: 'array_search',
     signature:
       'array_search(mixed $needle, array $haystack, bool $strict = false): int|string|false',
-    description: 'Search array for value',
+    description:
+      'Searches the array for a given value and returns the first corresponding key if successful',
   },
   {
-    name: 'array_key_exists',
-    signature: 'array_key_exists(string|int $key, array $array): bool',
-    description: 'Check if key exists in array',
+    name: 'array_shift',
+    signature: 'array_shift(array &$array): mixed',
+    description: 'Shift an element off the beginning of array',
+  },
+  {
+    name: 'array_slice',
+    signature:
+      'array_slice(array $array, int $offset, ?int $length = null, bool $preserve_keys = false): array',
+    description: 'Extract a slice of the array',
+  },
+  {
+    name: 'array_splice',
+    signature:
+      'array_splice(array &$array, int $offset, ?int $length = null, mixed $replacement = []): array',
+    description:
+      'Remove a portion of the array and replace it with something else',
+  },
+  {
+    name: 'array_sum',
+    signature: 'array_sum(array $array): int|float',
+    description: 'Calculate the sum of values in an array',
+  },
+  {
+    name: 'array_unique',
+    signature: 'array_unique(array $array, int $flags = SORT_STRING): array',
+    description: 'Removes duplicate values from an array',
+  },
+  {
+    name: 'array_unshift',
+    signature: 'array_unshift(array &$array, mixed ...$values): int',
+    description: 'Prepend one or more elements to the beginning of an array',
+  },
+  {
+    name: 'array_values',
+    signature: 'array_values(array $array): array',
+    description: 'Return all the values of an array',
+  },
+  {
+    name: 'array_walk',
+    signature:
+      'array_walk(array|object &$array, callable $callback, mixed $arg = null): bool',
+    description: 'Apply a user supplied function to every member of an array',
+  },
+  {
+    name: 'array_walk_recursive',
+    signature:
+      'array_walk_recursive(array|object &$array, callable $callback, mixed $arg = null): bool',
+    description:
+      'Apply a user function recursively to every member of an array',
+  },
+  {
+    name: 'arsort',
+    signature: 'arsort(array &$array, int $flags = SORT_REGULAR): bool',
+    description:
+      'Sort an array in descending order and maintain index association',
+  },
+  {
+    name: 'asort',
+    signature: 'asort(array &$array, int $flags = SORT_REGULAR): bool',
+    description:
+      'Sort an array in ascending order and maintain index association',
+  },
+  {
+    name: 'compact',
+    signature:
+      'compact(array|string $var_name, array|string ...$var_names): array',
+    description: 'Create array containing variables and their values',
+  },
+  {
+    name: 'count',
+    signature: 'count(Countable|array $value, int $mode = COUNT_NORMAL): int',
+    description: 'Counts all elements in an array or in a Countable object',
+  },
+  {
+    name: 'current',
+    signature: 'current(array|object $array): mixed',
+    description: 'Return the current element in an array',
+  },
+  {
+    name: 'end',
+    signature: 'end(array|object &$array): mixed',
+    description: 'Set the internal pointer of an array to its last element',
+  },
+  {
+    name: 'extract',
+    signature:
+      'extract(array &$array, int $flags = EXTR_OVERWRITE, string $prefix = ""): int',
+    description: 'Import variables into the current symbol table from an array',
+  },
+  {
+    name: 'in_array',
+    signature:
+      'in_array(mixed $needle, array $haystack, bool $strict = false): bool',
+    description: 'Checks if a value exists in an array',
+  },
+  {
+    name: 'key',
+    signature: 'key(array|object $array): int|string|null',
+    description: 'Fetch a key from an array',
+  },
+  {
+    name: 'krsort',
+    signature: 'krsort(array &$array, int $flags = SORT_REGULAR): bool',
+    description: 'Sort an array by key in descending order',
+  },
+  {
+    name: 'ksort',
+    signature: 'ksort(array &$array, int $flags = SORT_REGULAR): bool',
+    description: 'Sort an array by key in ascending order',
+  },
+  {
+    name: 'natcasesort',
+    signature: 'natcasesort(array &$array): bool',
+    description:
+      'Sort an array using a case insensitive "natural order" algorithm',
+  },
+  {
+    name: 'natsort',
+    signature: 'natsort(array &$array): bool',
+    description: 'Sort an array using a "natural order" algorithm',
+  },
+  {
+    name: 'next',
+    signature: 'next(array|object &$array): mixed',
+    description: 'Advance the internal pointer of an array',
+  },
+  {
+    name: 'prev',
+    signature: 'prev(array|object &$array): mixed',
+    description: 'Rewind the internal array pointer',
+  },
+  {
+    name: 'range',
+    signature:
+      'range(string|int|float $start, string|int|float $end, int|float $step = 1): array',
+    description: 'Create an array containing a range of elements',
+  },
+  {
+    name: 'reset',
+    signature: 'reset(array|object &$array): mixed',
+    description: 'Set the internal pointer of an array to its first element',
+  },
+  {
+    name: 'rsort',
+    signature: 'rsort(array &$array, int $flags = SORT_REGULAR): bool',
+    description: 'Sort an array in descending order',
+  },
+  {
+    name: 'shuffle',
+    signature: 'shuffle(array &$array): bool',
+    description: 'Shuffle an array',
+  },
+  {
+    name: 'sizeof',
+    signature: 'sizeof(Countable|array $value, int $mode = COUNT_NORMAL): int',
+    description: 'Alias of count',
+  },
+  {
+    name: 'sort',
+    signature: 'sort(array &$array, int $flags = SORT_REGULAR): bool',
+    description: 'Sort an array in ascending order',
+  },
+  {
+    name: 'uasort',
+    signature: 'uasort(array &$array, callable $callback): bool',
+    description:
+      'Sort an array with a user-defined comparison function and maintain index association',
+  },
+  {
+    name: 'uksort',
+    signature: 'uksort(array &$array, callable $callback): bool',
+    description:
+      'Sort an array by keys using a user-defined comparison function',
+  },
+  {
+    name: 'usort',
+    signature: 'usort(array &$array, callable $callback): bool',
+    description:
+      'Sort an array by values using a user-defined comparison function',
   },
 
   // JSON functions
@@ -841,59 +1485,91 @@ const phpFunctionSignatures: FunctionSignature[] = [
     signature: 'is_numeric(mixed $value): bool',
     description: 'Check if variable is numeric',
   },
+  {
+    name: 'is_resource',
+    signature: 'is_resource(mixed $value): bool',
+    description: 'Check if variable is resource',
+  },
 
   // File functions
   {
     name: 'file_exists',
     signature: 'file_exists(string $filename): bool',
-    description: 'Check if file exists',
+    description: 'Check if file or directory exists',
   },
   {
     name: 'file_get_contents',
     signature:
       'file_get_contents(string $filename, bool $use_include_path = false, ?resource $context = null, int $offset = 0, ?int $length = null): string|false',
-    description: 'Read file contents into string',
+    description: 'Reads entire file into a string',
   },
   {
     name: 'file_put_contents',
     signature:
       'file_put_contents(string $filename, mixed $data, int $flags = 0, ?resource $context = null): int|false',
-    description: 'Write data to file',
+    description: 'Write data to a file',
   },
 
   // Date/time functions
   {
     name: 'date',
     signature: 'date(string $format, ?int $timestamp = null): string',
-    description: 'Format timestamp as date string',
+    description: 'Format a Unix timestamp',
   },
   {
     name: 'time',
     signature: 'time(): int',
-    description: 'Get current Unix timestamp',
+    description: 'Return current Unix timestamp',
   },
   {
     name: 'strtotime',
     signature:
       'strtotime(string $datetime, ?int $baseTimestamp = null): int|false',
-    description: 'Parse datetime string to timestamp',
+    description:
+      'Parse about any English textual datetime description into a Unix timestamp',
+  },
+  {
+    name: 'microtime',
+    signature: 'microtime(bool $as_float = false): string|float',
+    description: 'Return current Unix timestamp with microseconds',
+  },
+  {
+    name: 'sleep',
+    signature: 'sleep(int $seconds): int',
+    description: 'Delay execution',
+  },
+  {
+    name: 'usleep',
+    signature: 'usleep(int $microseconds): void',
+    description: 'Delay execution in microseconds',
   },
 
   // Variable functions
   {
     name: 'var_dump',
     signature: 'var_dump(mixed ...$values): void',
-    description: 'Dump variable information',
+    description: 'Dumps information about a variable',
   },
   {
     name: 'var_export',
     signature: 'var_export(mixed $value, bool $return = false): ?string',
-    description: 'Export variable as string',
+    description:
+      'Outputs or returns a parsable string representation of a variable',
   },
   {
     name: 'print_r',
     signature: 'print_r(mixed $value, bool $return = false): string|bool',
-    description: 'Print human-readable variable information',
+    description: 'Prints human-readable information about a variable',
+  },
+  {
+    name: 'serialize',
+    signature: 'serialize(mixed $value): string',
+    description: 'Generates a storable representation of a value',
+  },
+  {
+    name: 'unserialize',
+    signature: 'unserialize(string $data, array $options = []): mixed',
+    description: 'Creates a PHP value from a stored representation',
   },
 
   // Regular expressions
@@ -901,19 +1577,19 @@ const phpFunctionSignatures: FunctionSignature[] = [
     name: 'preg_match',
     signature:
       'preg_match(string $pattern, string $subject, array &$matches = null, int $flags = 0, int $offset = 0): int|false',
-    description: 'Perform regular expression match',
+    description: 'Perform a regular expression match',
   },
   {
     name: 'preg_replace',
     signature:
       'preg_replace(string|array $pattern, string|array $replacement, string|array $subject, int $limit = -1, int &$count = null): string|array|null',
-    description: 'Perform regular expression replacement',
+    description: 'Perform a regular expression search and replace',
   },
   {
     name: 'preg_split',
     signature:
       'preg_split(string $pattern, string $subject, int $limit = -1, int $flags = 0): array|false',
-    description: 'Split string by regular expression',
+    description: 'Split string by a regular expression',
   },
 ];
 
@@ -1006,27 +1682,220 @@ export const phpHoverProvider: languages.HoverProvider = {
 
     // Check if it's a PHP constant
     if (phpInlineTokenizer.constants?.includes(wordText)) {
-      let description = 'PHP constant';
+      let description: string;
+      let signature: string;
 
       // Add specific descriptions for well-known constants
       if (wordText.startsWith('__') && wordText.endsWith('__')) {
-        const constantDescriptions: Record<string, string> = {
-          __CLASS__: 'The name of the current class',
-          __DIR__: 'The directory of the current file',
-          __FILE__: 'The full path and filename of the current file',
-          __FUNCTION__: 'The name of the current function',
-          __LINE__: 'The current line number',
-          __METHOD__: 'The name of the current class method',
-          __NAMESPACE__: 'The name of the current namespace',
-          __TRAIT__: 'The name of the current trait',
-          __PROPERTY__: 'The name of the current property (PHP 8.4+)',
+        const constantDescriptions: Record<
+          string,
+          { description: string; signature: string }
+        > = {
+          __CLASS__: {
+            description:
+              'The name of the current class. Returns an empty string when used outside of a class.',
+            signature: 'string __CLASS__',
+          },
+          __DIR__: {
+            description:
+              'The directory of the current file. This is equivalent to dirname(__FILE__). Directory names do not have a trailing slash unless they are the root directory.',
+            signature: 'string __DIR__',
+          },
+          __FILE__: {
+            description:
+              'The full path and filename of the current file with symlinks resolved. When used inside an include, the name of the included file is returned.',
+            signature: 'string __FILE__',
+          },
+          __FUNCTION__: {
+            description:
+              'The name of the current function, or {closure} for anonymous functions. Returns an empty string when used outside of a function.',
+            signature: 'string __FUNCTION__',
+          },
+          __LINE__: {
+            description: 'The current line number of the file.',
+            signature: 'int __LINE__',
+          },
+          __METHOD__: {
+            description:
+              'The class method name (added in PHP 5.0.0). The method name is returned as it was declared (case-sensitive).',
+            signature: 'string __METHOD__',
+          },
+          __NAMESPACE__: {
+            description:
+              'The name of the current namespace (added in PHP 5.3.0). Returns an empty string when used outside of a namespace.',
+            signature: 'string __NAMESPACE__',
+          },
+          __TRAIT__: {
+            description:
+              'The trait name (added in PHP 5.4.0). The trait name includes the namespace it was declared in.',
+            signature: 'string __TRAIT__',
+          },
+          __PROPERTY__: {
+            description:
+              'The name of the current property (PHP 8.4+). Only works within property hooks.',
+            signature: 'string __PROPERTY__',
+          },
+          __COMPILER_HALT_OFFSET__: {
+            description:
+              'Data offset after __halt_compiler(). Only defined in a file that uses __halt_compiler().',
+            signature: 'int __COMPILER_HALT_OFFSET__',
+          },
         };
-        description = constantDescriptions[wordText] || 'PHP magic constant';
+        const constantInfo = constantDescriptions[wordText];
+        if (constantInfo) {
+          description = constantInfo.description;
+          signature = constantInfo.signature;
+        } else {
+          description = 'PHP magic constant';
+          signature = `mixed ${wordText}`;
+        }
       } else if (wordText.startsWith('E_')) {
-        description = 'PHP error constant';
+        const errorDescriptions: Record<string, string> = {
+          E_ERROR:
+            'Fatal run-time errors. These indicate errors that can not be recovered from, such as a memory allocation problem.',
+          E_WARNING:
+            'Run-time warnings (non-fatal errors). Execution of the script is not halted.',
+          E_PARSE:
+            'Compile-time parse errors. Parse errors should only be generated by the parser.',
+          E_NOTICE:
+            'Run-time notices. These are warnings which can indicate that your code may have a bug.',
+          E_CORE_ERROR:
+            "Fatal errors that occur during PHP's initial startup. This is like an E_ERROR, except it is generated by the core of PHP.",
+          E_CORE_WARNING:
+            "Warnings (non-fatal errors) that occur during PHP's initial startup.",
+          E_COMPILE_ERROR:
+            'Fatal compile-time errors. This is like an E_ERROR, except it is generated by the Zend Scripting Engine.',
+          E_COMPILE_WARNING:
+            'Compile-time warnings (non-fatal errors). This is like an E_WARNING, except it is generated by the Zend Scripting Engine.',
+          E_USER_ERROR:
+            'User-generated error message. This is like an E_ERROR, except it is generated in PHP code by using the PHP function trigger_error().',
+          E_USER_WARNING:
+            'User-generated warning message. This is like an E_WARNING, except it is generated in PHP code by using the PHP function trigger_error().',
+          E_USER_NOTICE:
+            'User-generated notice message. This is like an E_NOTICE, except it is generated in PHP code by using the PHP function trigger_error().',
+          E_STRICT:
+            'Enable to have PHP suggest changes to your code which will ensure the best interoperability and forward compatibility of your code.',
+          E_RECOVERABLE_ERROR:
+            'Catchable fatal error. It indicates that a probably dangerous error occurred, but did not leave the Engine in an unstable state.',
+          E_DEPRECATED:
+            'Run-time notices. Enable this to receive warnings about code that will not work in future versions.',
+          E_USER_DEPRECATED:
+            'User-generated warning message. This is like an E_DEPRECATED, except it is generated in PHP code by using the PHP function trigger_error().',
+          E_ALL: 'All errors, warnings, and notices.',
+        };
+        description =
+          errorDescriptions[wordText] || 'PHP error reporting constant';
+        signature = `int ${wordText}`;
       } else if (wordText.startsWith('PHP_')) {
-        description = 'PHP core constant';
+        const phpConstantDescriptions: Record<string, string> = {
+          PHP_VERSION:
+            'Contains the current version of PHP as a string in "major.minor.release[extra]" notation.',
+          PHP_MAJOR_VERSION:
+            'Contains the current PHP "major" version as an integer (e.g., int(5) from version "5.2.7-extra").',
+          PHP_MINOR_VERSION:
+            'Contains the current PHP "minor" version as an integer (e.g., int(2) from version "5.2.7-extra").',
+          PHP_RELEASE_VERSION:
+            'Contains the current PHP "release" version as an integer (e.g., int(7) from version "5.2.7-extra").',
+          PHP_VERSION_ID:
+            'Contains the current version of PHP as an integer, useful for version comparisons.',
+          PHP_EXTRA_VERSION:
+            'Contains the current PHP "extra" version as a string (e.g., "-extra" from version "5.2.7-extra").',
+          PHP_OS:
+            'Contains the name of the operating system PHP was built for.',
+          PHP_OS_FAMILY:
+            'Contains the name of the operating system family PHP was built for.',
+          PHP_SAPI:
+            'Contains the name of the Server API for this build of PHP.',
+          PHP_EOL: "The correct 'End Of Line' symbol for this platform.",
+          PHP_INT_MAX: 'The largest integer supported.',
+          PHP_INT_MIN: 'The smallest integer supported.',
+          PHP_INT_SIZE: 'The size of an integer in bytes.',
+          PHP_FLOAT_MAX: 'Largest representable floating point number.',
+          PHP_FLOAT_MIN:
+            'Smallest representable positive normalized floating point number.',
+          PHP_FLOAT_DIG:
+            'Number of decimal digits that can be rounded into a float back without precision loss.',
+          PHP_FLOAT_EPSILON:
+            'Difference between 1 and the smallest floating point number greater than 1.',
+          PHP_MAXPATHLEN:
+            'Maximum length of filenames (including path) supported by this build of PHP.',
+        };
+        description = phpConstantDescriptions[wordText] || 'PHP core constant';
+        signature =
+          wordText.includes('VERSION') ||
+          wordText.includes('SIZE') ||
+          wordText.includes('MAX') ||
+          wordText.includes('MIN')
+            ? `int ${wordText}`
+            : `string ${wordText}`;
+      } else {
+        // Handle other constants
+        const otherConstants: Record<
+          string,
+          { description: string; signature: string }
+        > = {
+          true: {
+            description: 'The boolean value TRUE',
+            signature: 'bool true',
+          },
+          false: {
+            description: 'The boolean value FALSE',
+            signature: 'bool false',
+          },
+          null: { description: 'The NULL value', signature: 'null null' },
+          TRUE: {
+            description: 'The boolean value TRUE (case-insensitive)',
+            signature: 'bool TRUE',
+          },
+          FALSE: {
+            description: 'The boolean value FALSE (case-insensitive)',
+            signature: 'bool FALSE',
+          },
+          NULL: {
+            description: 'The NULL value (case-insensitive)',
+            signature: 'null NULL',
+          },
+          STDERR: {
+            description:
+              "An already opened stream to stderr. This saves opening it with fopen('php://stderr', 'w')",
+            signature: 'resource STDERR',
+          },
+          STDIN: {
+            description:
+              "An already opened stream to stdin. This saves opening it with fopen('php://stdin', 'r')",
+            signature: 'resource STDIN',
+          },
+          STDOUT: {
+            description:
+              "An already opened stream to stdout. This saves opening it with fopen('php://stdout', 'w')",
+            signature: 'resource STDOUT',
+          },
+        };
+        const constantInfo = otherConstants[wordText];
+        if (constantInfo) {
+          description = constantInfo.description;
+          signature = constantInfo.signature;
+        } else {
+          description = 'PHP constant';
+          signature = `mixed ${wordText}`;
+        }
       }
+
+      const contents = [
+        {
+          value: `**${wordText}**`,
+        },
+      ];
+
+      if (signature) {
+        contents.push({
+          value: `\`\`\`php\n${signature}\n\`\`\``,
+        });
+      }
+
+      contents.push({
+        value: description,
+      });
 
       return {
         range: new Range(
@@ -1035,14 +1904,7 @@ export const phpHoverProvider: languages.HoverProvider = {
           position.lineNumber,
           word.endColumn,
         ),
-        contents: [
-          {
-            value: `**${wordText}**`,
-          },
-          {
-            value: description,
-          },
-        ],
+        contents,
       };
     }
 
