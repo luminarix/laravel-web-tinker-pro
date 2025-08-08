@@ -1,7 +1,7 @@
+import { SplitPane } from '@rexxars/react-split-pane';
 import { nanoid } from 'nanoid';
 import type React from 'react';
 import { useCallback, useEffect, useState } from 'react';
-import { SplitPane } from '@rexxars/react-split-pane';
 import CodeEditor from './components/CodeEditor';
 import Header from './components/Header';
 import OutputPanel from './components/OutputPanel';
@@ -137,12 +137,15 @@ const App: React.FC = () => {
     [activeTabId],
   );
 
-  const handleRun = useCallback((code?: string) => {
-    if (activeTab) {
-      // Use provided code (from keyboard shortcut) or current tab code
-      executeCode(code || activeTab.code);
-    }
-  }, [activeTab, executeCode]);
+  const handleRun = useCallback(
+    (code?: string) => {
+      if (activeTab) {
+        // Use provided code (from keyboard shortcut) or current tab code
+        executeCode(code || activeTab.code);
+      }
+    },
+    [activeTab, executeCode],
+  );
 
   const handleCodeShare = useCallback(() => {
     if (activeTab) {
@@ -247,10 +250,7 @@ const App: React.FC = () => {
             theme={theme}
             onRun={handleRun}
           />
-          <OutputPanel
-            executionState={executionState}
-            theme={theme}
-          />
+          <OutputPanel executionState={executionState} theme={theme} />
         </SplitPane>
       </div>
     </div>

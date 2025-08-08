@@ -61,14 +61,14 @@ export async function executePhpCode(
     if (echoMatches) {
       echoMatches.forEach((match) => {
         const content = match.match(/["']([^"']*)["']/)?.[1];
-        if (content) mockOutput += content + '\n';
+        if (content) mockOutput += `${content}\n`;
       });
     }
 
     if (printMatches) {
       printMatches.forEach((match) => {
         const content = match.match(/["']([^"']*)["']/)?.[1];
-        if (content) mockOutput += content + '\n';
+        if (content) mockOutput += `${content}\n`;
       });
     }
 
