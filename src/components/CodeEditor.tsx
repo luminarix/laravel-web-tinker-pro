@@ -2,6 +2,10 @@ import Editor from '@monaco-editor/react';
 import type { editor } from 'monaco-editor';
 import type React from 'react';
 import { useRef } from 'react';
+import {
+  phpInlineLanguageConfig,
+  phpInlineTokenizer,
+} from '../monaco/php-inline';
 
 // Configure Monaco to load from CDN (optional - removes bundling warnings)
 // loader.config({
@@ -51,20 +55,29 @@ const CodeEditor: React.FC<CodeEditorProps> = ({
   ) => {
     editorRef.current = editor;
 
+    // Register custom PHP inline language
+    monaco.languages.register({ id: 'php-inline' });
+
+    // Set language configuration for PHP inline
+    monaco.languages.setLanguageConfiguration(
+      'php-inline',
+      phpInlineLanguageConfig,
+    );
+
+    // Set tokenization rules for PHP inline
+    monaco.languages.setMonarchTokensProvider('php-inline', phpInlineTokenizer);
+
+    // Set the model language to PHP inline
+    const model = editor.getModel();
+    if (model) {
+      monaco.editor.setModelLanguage(model, 'php-inline');
+    }
+
     // Add keyboard shortcut for running code (Ctrl+Enter)
     if (onRun) {
       editor.addCommand(monaco.KeyMod.CtrlCmd | monaco.KeyCode.Enter, () => {
         // Get current editor value to avoid stale closure issues
-        const currentCode = editor.getValue();
-        // Ensure we have a valid string before passing to onRun
-        if (typeof currentCode === 'string') {
-          onRun(currentCode);
-        } else {
-          console.error(
-            'Editor getValue() returned non-string value:',
-            currentCode,
-          );
-        }
+        onRun(editor.getValue());
       });
     }
 
