@@ -4,7 +4,7 @@ import { MdClear } from 'react-icons/md';
 import type { ExecutionState } from '../types';
 
 interface HeaderProps {
-  onRun: () => void;
+  onRun: (code?: string) => void;
   onShare: () => void;
   onClear: () => void;
   onToggleTheme: () => void;
