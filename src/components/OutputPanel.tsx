@@ -1,5 +1,6 @@
 import type React from 'react';
 import type { ExecutionState } from '../types';
+import { isMac } from '../utils/platform';
 
 interface OutputPanelProps {
   executionState: ExecutionState;
@@ -79,7 +80,7 @@ const OutputPanel: React.FC<OutputPanelProps> = ({ executionState, theme }) => {
             <div className="placeholder-icon">🚀</div>
             <p>Click "Run" to execute your PHP code</p>
             <p className="placeholder-hint">
-              Use Ctrl+Enter as a keyboard shortcut
+              Use {isMac() ? 'Cmd+Enter' : 'Ctrl+Enter'} as a keyboard shortcut
             </p>
           </div>
         )}
