@@ -1,4 +1,4 @@
-import type { languages } from 'monaco-editor';
+import { languages, Range } from 'monaco-editor';
 
 /**
  * PHP Inline Language Configuration for Monaco Editor
@@ -624,5 +624,509 @@ export const phpInlineTokenizer: languages.IMonarchLanguage = {
       [/\\./, 'string.escape.invalid'],
       [/`/, { token: 'string.quote', bracket: '@close', next: '@pop' }],
     ],
+  },
+};
+
+// PHP Function Signatures for autocompletion
+interface FunctionSignature {
+  name: string;
+  signature: string;
+  description: string;
+  parameters?: string[];
+}
+
+const phpFunctionSignatures: FunctionSignature[] = [
+  // String functions
+  {
+    name: 'strlen',
+    signature: 'strlen(string $string): int',
+    description: 'Get string length',
+  },
+  {
+    name: 'substr',
+    signature:
+      'substr(string $string, int $offset, ?int $length = null): string',
+    description: 'Return part of a string',
+  },
+  {
+    name: 'strpos',
+    signature:
+      'strpos(string $haystack, string $needle, int $offset = 0): int|false',
+    description: 'Find position of first occurrence of string',
+  },
+  {
+    name: 'str_replace',
+    signature:
+      'str_replace(array|string $search, array|string $replace, string|array $subject, int &$count = null): string|array',
+    description: 'Replace all occurrences of search string with replacement',
+  },
+  {
+    name: 'explode',
+    signature:
+      'explode(string $delimiter, string $string, int $limit = PHP_INT_MAX): array',
+    description: 'Split string by delimiter',
+  },
+  {
+    name: 'implode',
+    signature: 'implode(string $separator, array $array): string',
+    description: 'Join array elements with string',
+  },
+  {
+    name: 'trim',
+    signature:
+      'trim(string $string, string $characters = " \\n\\r\\t\\v\\0"): string',
+    description: 'Strip whitespace from beginning and end',
+  },
+  {
+    name: 'strtolower',
+    signature: 'strtolower(string $string): string',
+    description: 'Make string lowercase',
+  },
+  {
+    name: 'strtoupper',
+    signature: 'strtoupper(string $string): string',
+    description: 'Make string uppercase',
+  },
+  {
+    name: 'ucfirst',
+    signature: 'ucfirst(string $string): string',
+    description: 'Make first character uppercase',
+  },
+  {
+    name: 'str_contains',
+    signature: 'str_contains(string $haystack, string $needle): bool',
+    description: 'Determine if string contains substring',
+  },
+  {
+    name: 'str_starts_with',
+    signature: 'str_starts_with(string $haystack, string $needle): bool',
+    description: 'Check if string starts with substring',
+  },
+  {
+    name: 'str_ends_with',
+    signature: 'str_ends_with(string $haystack, string $needle): bool',
+    description: 'Check if string ends with substring',
+  },
+
+  // Array functions
+  {
+    name: 'count',
+    signature: 'count(Countable|array $value, int $mode = COUNT_NORMAL): int',
+    description: 'Count elements in array',
+  },
+  {
+    name: 'array_push',
+    signature: 'array_push(array &$array, mixed ...$values): int',
+    description: 'Push elements onto end of array',
+  },
+  {
+    name: 'array_pop',
+    signature: 'array_pop(array &$array): mixed',
+    description: 'Pop element off end of array',
+  },
+  {
+    name: 'array_shift',
+    signature: 'array_shift(array &$array): mixed',
+    description: 'Shift element off beginning of array',
+  },
+  {
+    name: 'array_unshift',
+    signature: 'array_unshift(array &$array, mixed ...$values): int',
+    description: 'Prepend elements to beginning of array',
+  },
+  {
+    name: 'array_merge',
+    signature: 'array_merge(array ...$arrays): array',
+    description: 'Merge arrays',
+  },
+  {
+    name: 'array_keys',
+    signature:
+      'array_keys(array $array, mixed $search_value = null, bool $strict = false): array',
+    description: 'Return array keys',
+  },
+  {
+    name: 'array_values',
+    signature: 'array_values(array $array): array',
+    description: 'Return array values',
+  },
+  {
+    name: 'array_filter',
+    signature:
+      'array_filter(array $array, ?callable $callback = null, int $mode = 0): array',
+    description: 'Filter array elements',
+  },
+  {
+    name: 'array_map',
+    signature:
+      'array_map(?callable $callback, array $array, array ...$arrays): array',
+    description: 'Apply callback to array elements',
+  },
+  {
+    name: 'in_array',
+    signature:
+      'in_array(mixed $needle, array $haystack, bool $strict = false): bool',
+    description: 'Check if value exists in array',
+  },
+  {
+    name: 'array_search',
+    signature:
+      'array_search(mixed $needle, array $haystack, bool $strict = false): int|string|false',
+    description: 'Search array for value',
+  },
+  {
+    name: 'array_key_exists',
+    signature: 'array_key_exists(string|int $key, array $array): bool',
+    description: 'Check if key exists in array',
+  },
+
+  // JSON functions
+  {
+    name: 'json_encode',
+    signature:
+      'json_encode(mixed $value, int $flags = 0, int $depth = 512): string|false',
+    description: 'Encode value as JSON',
+  },
+  {
+    name: 'json_decode',
+    signature:
+      'json_decode(string $json, ?bool $associative = null, int $depth = 512, int $flags = 0): mixed',
+    description: 'Decode JSON string',
+  },
+
+  // Type checking functions
+  {
+    name: 'is_array',
+    signature: 'is_array(mixed $value): bool',
+    description: 'Check if variable is array',
+  },
+  {
+    name: 'is_string',
+    signature: 'is_string(mixed $value): bool',
+    description: 'Check if variable is string',
+  },
+  {
+    name: 'is_int',
+    signature: 'is_int(mixed $value): bool',
+    description: 'Check if variable is integer',
+  },
+  {
+    name: 'is_float',
+    signature: 'is_float(mixed $value): bool',
+    description: 'Check if variable is float',
+  },
+  {
+    name: 'is_bool',
+    signature: 'is_bool(mixed $value): bool',
+    description: 'Check if variable is boolean',
+  },
+  {
+    name: 'is_null',
+    signature: 'is_null(mixed $value): bool',
+    description: 'Check if variable is null',
+  },
+  {
+    name: 'is_object',
+    signature: 'is_object(mixed $value): bool',
+    description: 'Check if variable is object',
+  },
+  {
+    name: 'is_callable',
+    signature:
+      'is_callable(mixed $value, bool $syntax_only = false, string &$callable_name = null): bool',
+    description: 'Check if variable is callable',
+  },
+  {
+    name: 'is_numeric',
+    signature: 'is_numeric(mixed $value): bool',
+    description: 'Check if variable is numeric',
+  },
+
+  // File functions
+  {
+    name: 'file_exists',
+    signature: 'file_exists(string $filename): bool',
+    description: 'Check if file exists',
+  },
+  {
+    name: 'file_get_contents',
+    signature:
+      'file_get_contents(string $filename, bool $use_include_path = false, ?resource $context = null, int $offset = 0, ?int $length = null): string|false',
+    description: 'Read file contents into string',
+  },
+  {
+    name: 'file_put_contents',
+    signature:
+      'file_put_contents(string $filename, mixed $data, int $flags = 0, ?resource $context = null): int|false',
+    description: 'Write data to file',
+  },
+
+  // Date/time functions
+  {
+    name: 'date',
+    signature: 'date(string $format, ?int $timestamp = null): string',
+    description: 'Format timestamp as date string',
+  },
+  {
+    name: 'time',
+    signature: 'time(): int',
+    description: 'Get current Unix timestamp',
+  },
+  {
+    name: 'strtotime',
+    signature:
+      'strtotime(string $datetime, ?int $baseTimestamp = null): int|false',
+    description: 'Parse datetime string to timestamp',
+  },
+
+  // Variable functions
+  {
+    name: 'var_dump',
+    signature: 'var_dump(mixed ...$values): void',
+    description: 'Dump variable information',
+  },
+  {
+    name: 'var_export',
+    signature: 'var_export(mixed $value, bool $return = false): ?string',
+    description: 'Export variable as string',
+  },
+  {
+    name: 'print_r',
+    signature: 'print_r(mixed $value, bool $return = false): string|bool',
+    description: 'Print human-readable variable information',
+  },
+
+  // Regular expressions
+  {
+    name: 'preg_match',
+    signature:
+      'preg_match(string $pattern, string $subject, array &$matches = null, int $flags = 0, int $offset = 0): int|false',
+    description: 'Perform regular expression match',
+  },
+  {
+    name: 'preg_replace',
+    signature:
+      'preg_replace(string|array $pattern, string|array $replacement, string|array $subject, int $limit = -1, int &$count = null): string|array|null',
+    description: 'Perform regular expression replacement',
+  },
+  {
+    name: 'preg_split',
+    signature:
+      'preg_split(string $pattern, string $subject, int $limit = -1, int $flags = 0): array|false',
+    description: 'Split string by regular expression',
+  },
+];
+
+// PHP Completion Provider
+export const phpCompletionProvider: languages.CompletionItemProvider = {
+  provideCompletionItems: (model, position) => {
+    const word = model.getWordUntilPosition(position);
+    const range = {
+      startLineNumber: position.lineNumber,
+      endLineNumber: position.lineNumber,
+      startColumn: word.startColumn,
+      endColumn: word.endColumn,
+    };
+
+    const suggestions: languages.CompletionItem[] = [];
+
+    // Add function completions
+    phpFunctionSignatures.forEach((func) => {
+      suggestions.push({
+        label: func.name,
+        kind: languages.CompletionItemKind.Function,
+        insertText: `${func.name}()`,
+        insertTextRules: languages.CompletionItemInsertTextRule.InsertAsSnippet,
+        range,
+        detail: func.signature,
+        documentation: func.description,
+      });
+    });
+
+    // Add constants completions
+    phpInlineTokenizer.constants?.forEach((constant: string) => {
+      suggestions.push({
+        label: constant,
+        kind: languages.CompletionItemKind.Constant,
+        insertText: constant,
+        range,
+        detail: `PHP constant: ${constant}`,
+      });
+    });
+
+    // Add keyword completions
+    phpInlineTokenizer.keywords?.forEach((keyword: string) => {
+      suggestions.push({
+        label: keyword,
+        kind: languages.CompletionItemKind.Keyword,
+        insertText: keyword,
+        range,
+        detail: `PHP keyword: ${keyword}`,
+      });
+    });
+
+    return { suggestions };
+  },
+};
+
+// PHP Hover Provider
+export const phpHoverProvider: languages.HoverProvider = {
+  provideHover: (model, position) => {
+    const word = model.getWordAtPosition(position);
+    if (!word) return null;
+
+    const wordText = word.word;
+
+    // Find function signature
+    const functionInfo = phpFunctionSignatures.find(
+      (func) => func.name === wordText,
+    );
+
+    if (functionInfo) {
+      return {
+        range: new Range(
+          position.lineNumber,
+          word.startColumn,
+          position.lineNumber,
+          word.endColumn,
+        ),
+        contents: [
+          {
+            value: `**${functionInfo.name}**`,
+          },
+          {
+            value: `\`\`\`php\n${functionInfo.signature}\n\`\`\``,
+          },
+          {
+            value: functionInfo.description,
+          },
+        ],
+      };
+    }
+
+    // Check if it's a PHP constant
+    if (phpInlineTokenizer.constants?.includes(wordText)) {
+      let description = 'PHP constant';
+
+      // Add specific descriptions for well-known constants
+      if (wordText.startsWith('__') && wordText.endsWith('__')) {
+        const constantDescriptions: Record<string, string> = {
+          __CLASS__: 'The name of the current class',
+          __DIR__: 'The directory of the current file',
+          __FILE__: 'The full path and filename of the current file',
+          __FUNCTION__: 'The name of the current function',
+          __LINE__: 'The current line number',
+          __METHOD__: 'The name of the current class method',
+          __NAMESPACE__: 'The name of the current namespace',
+          __TRAIT__: 'The name of the current trait',
+          __PROPERTY__: 'The name of the current property (PHP 8.4+)',
+        };
+        description = constantDescriptions[wordText] || 'PHP magic constant';
+      } else if (wordText.startsWith('E_')) {
+        description = 'PHP error constant';
+      } else if (wordText.startsWith('PHP_')) {
+        description = 'PHP core constant';
+      }
+
+      return {
+        range: new Range(
+          position.lineNumber,
+          word.startColumn,
+          position.lineNumber,
+          word.endColumn,
+        ),
+        contents: [
+          {
+            value: `**${wordText}**`,
+          },
+          {
+            value: description,
+          },
+        ],
+      };
+    }
+
+    // Check if it's a PHP keyword
+    if (phpInlineTokenizer.keywords?.includes(wordText)) {
+      const keywordDescriptions: Record<string, string> = {
+        abstract: 'Declares a class or method as abstract',
+        array: 'Creates an array',
+        as: 'Used in foreach loops and imports',
+        break: 'Breaks out of loops',
+        case: 'Case clause in switch statements',
+        catch: 'Catches exceptions',
+        class: 'Declares a class',
+        clone: 'Clones an object',
+        const: 'Declares a constant',
+        continue: 'Continues to next iteration',
+        declare: 'Sets execution directives',
+        default: 'Default case in switch',
+        do: 'Do-while loop',
+        echo: 'Outputs strings',
+        else: 'Else clause',
+        elseif: 'Else if clause',
+        empty: 'Checks if variable is empty',
+        extends: 'Extends a class',
+        final: 'Final class or method',
+        finally: 'Finally block in try-catch',
+        fn: 'Arrow function (PHP 7.4+)',
+        for: 'For loop',
+        foreach: 'Foreach loop',
+        function: 'Declares a function',
+        global: 'Declares global variables',
+        goto: 'Jump to another point',
+        if: 'Conditional statement',
+        implements: 'Implements an interface',
+        include: 'Includes a file',
+        include_once: 'Includes a file once',
+        instanceof: 'Tests object instance',
+        interface: 'Declares an interface',
+        isset: 'Checks if variable is set',
+        list: 'Assigns variables from array',
+        match: 'Match expression (PHP 8.0+)',
+        namespace: 'Declares a namespace',
+        new: 'Creates object instance',
+        print: 'Outputs a string',
+        private: 'Private visibility',
+        protected: 'Protected visibility',
+        public: 'Public visibility',
+        readonly: 'Readonly property (PHP 8.1+)',
+        require: 'Requires a file',
+        require_once: 'Requires a file once',
+        return: 'Returns from function',
+        static: 'Static property/method',
+        switch: 'Switch statement',
+        throw: 'Throws an exception',
+        trait: 'Declares a trait',
+        try: 'Try block',
+        unset: 'Unsets variables',
+        use: 'Imports namespaces/traits',
+        var: 'Declares property',
+        while: 'While loop',
+        yield: 'Yields value from generator',
+        'yield from': 'Yields from another generator',
+      };
+
+      const description = keywordDescriptions[wordText] || 'PHP keyword';
+
+      return {
+        range: new Range(
+          position.lineNumber,
+          word.startColumn,
+          position.lineNumber,
+          word.endColumn,
+        ),
+        contents: [
+          {
+            value: `**${wordText}**`,
+          },
+          {
+            value: description,
+          },
+        ],
+      };
+    }
+
+    return null;
   },
 };

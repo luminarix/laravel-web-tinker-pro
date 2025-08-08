@@ -3,9 +3,11 @@ import type { editor } from 'monaco-editor';
 import type React from 'react';
 import { useRef } from 'react';
 import {
+  phpCompletionProvider,
+  phpHoverProvider,
   phpInlineLanguageConfig,
   phpInlineTokenizer,
-} from '../monaco/php-inline';
+} from '../monaco/php-inline'; // Configure Monaco to load from CDN (optional - removes bundling warnings)
 
 // Configure Monaco to load from CDN (optional - removes bundling warnings)
 // loader.config({
@@ -39,6 +41,11 @@ const CodeEditor: React.FC<CodeEditorProps> = ({
 
     // Register custom PHP inline language
     monaco.languages.register({ id: 'php-inline' });
+    monaco.languages.registerCompletionItemProvider(
+      'php-inline',
+      phpCompletionProvider,
+    );
+    monaco.languages.registerHoverProvider('php-inline', phpHoverProvider);
 
     // Set language configuration for PHP inline
     monaco.languages.setLanguageConfiguration(
