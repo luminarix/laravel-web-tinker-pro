@@ -145,9 +145,10 @@ const App: React.FC = () => {
     [activeTabId],
   );
 
-  const handleRun = useCallback(() => {
+  const handleRun = useCallback((code?: string) => {
     if (activeTab) {
-      executeCode(activeTab.code);
+      // Use provided code (from keyboard shortcut) or current tab code
+      executeCode(code || activeTab.code);
     }
   }, [activeTab, executeCode]);
 

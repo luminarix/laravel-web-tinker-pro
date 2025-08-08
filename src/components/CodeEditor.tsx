@@ -14,7 +14,7 @@ interface CodeEditorProps {
   value: string;
   onChange: (value: string) => void;
   theme: 'light' | 'dark';
-  onRun?: () => void;
+  onRun?: (code?: string) => void;
   readOnly?: boolean;
 }
 
@@ -51,7 +51,9 @@ const CodeEditor: React.FC<CodeEditorProps> = ({
     // Add keyboard shortcut for running code (Ctrl+Enter)
     if (onRun) {
       editor.addCommand(monaco.KeyMod.CtrlCmd | monaco.KeyCode.Enter, () => {
-        onRun();
+        // Get current editor value to avoid stale closure issues
+        const currentCode = editor.getValue();
+        onRun(currentCode);
       });
     }
 
