@@ -23,7 +23,7 @@ const TabManager: React.FC<TabManagerProps> = ({
 }) => {
   const handleTabDoubleClick = (tab: Tab) => {
     const newName = prompt('Enter new tab name:', tab.name);
-    if (newName && newName.trim() && newName !== tab.name) {
+    if (newName?.trim() && newName !== tab.name) {
       const finalName = newName.endsWith('.php') ? newName : `${newName}.php`;
       onTabRename(tab.id, finalName);
     }
