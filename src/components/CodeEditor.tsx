@@ -22,24 +22,6 @@ interface CodeEditorProps {
   readOnly?: boolean;
 }
 
-const defaultPhpCode = `<?php
-// Welcome to Laravel Web Tinker
-// Write your PHP code here and click Run
-
-echo "Hello, World!";
-
-// Example of using variables
-$name = "Laravel";
-echo "\\nWelcome to $name Web Tinker!";
-
-// Example function
-function greet($name) {
-    return "Hello, $name!";
-}
-
-echo "\\n" . greet("Developer");
-?>`;
-
 const CodeEditor: React.FC<CodeEditorProps> = ({
   value,
   onChange,
@@ -93,9 +75,9 @@ const CodeEditor: React.FC<CodeEditorProps> = ({
     <div className="code-editor">
       <Editor
         height="100%"
-        defaultLanguage="php"
-        theme={theme === 'dark' ? 'vs-dark' : 'vs-light'}
-        value={value || defaultPhpCode}
+        defaultLanguage={'php-inline'}
+        theme={theme === 'dark' ? 'vs-dark' : 'light'}
+        value={value || ''}
         onChange={handleEditorChange}
         onMount={handleEditorDidMount}
         options={{

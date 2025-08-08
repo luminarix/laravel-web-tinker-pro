@@ -31,8 +31,7 @@ const TabManager: React.FC<TabManagerProps> = ({
 
   const handleModalConfirm = (newName: string) => {
     if (selectedTab && newName.trim() && newName !== selectedTab.name) {
-      const finalName = newName.endsWith('.php') ? newName : `${newName}.php`;
-      onTabRename(selectedTab.id, finalName);
+      onTabRename(selectedTab.id, newName);
     }
     setIsModalOpen(false);
     setSelectedTab(null);

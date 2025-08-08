@@ -19,24 +19,6 @@ const STORAGE_KEYS = {
   THEME: 'webTinker_theme',
 };
 
-const defaultPhpCode = `<?php
-// Welcome to Laravel Web Tinker
-// Write your PHP code here and click Run
-
-echo "Hello, World!";
-
-// Example of using variables
-$name = "Laravel";
-echo "\\nWelcome to $name Web Tinker!";
-
-// Example function
-function greet($name) {
-    return "Hello, $name!";
-}
-
-echo "\\n" . greet("Developer");
-?>`;
-
 const App: React.FC = () => {
   const [tabs, setTabs] = useState<Tab[]>([]);
   const [activeTabId, setActiveTabId] = useState<string>('');
@@ -69,8 +51,8 @@ const App: React.FC = () => {
     // Create default tab
     const defaultTab: Tab = {
       id: nanoid(),
-      name: 'index.php',
-      code: defaultPhpCode,
+      name: 'Tab 1',
+      code: '',
       isActive: true,
     };
 
@@ -86,7 +68,7 @@ const App: React.FC = () => {
         if (sharedData) {
           const sharedTab: Tab = {
             id: nanoid(),
-            name: sharedData.title || 'shared.php',
+            name: sharedData.title || 'Shared Code',
             code: sharedData.code,
             isActive: true,
           };
@@ -187,8 +169,8 @@ const App: React.FC = () => {
   const handleTabAdd = useCallback(() => {
     const newTab: Tab = {
       id: nanoid(),
-      name: `script${tabs.length + 1}.php`,
-      code: defaultPhpCode,
+      name: `Tab ${tabs.length + 1}`,
+      code: '',
       isActive: true,
     };
 
