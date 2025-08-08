@@ -224,7 +224,6 @@ const App: React.FC = () => {
 
       <TabManager
         tabs={tabs}
-        activeTabId={activeTabId}
         onTabSelect={handleTabSelect}
         onTabClose={handleTabClose}
         onTabAdd={handleTabAdd}

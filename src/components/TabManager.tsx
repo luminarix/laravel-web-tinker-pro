@@ -4,7 +4,6 @@ import type { Tab } from '../types';
 
 interface TabManagerProps {
   tabs: Tab[];
-  activeTabId: string;
   onTabSelect: (tabId: string) => void;
   onTabClose: (tabId: string) => void;
   onTabAdd: () => void;
@@ -14,7 +13,6 @@ interface TabManagerProps {
 
 const TabManager: React.FC<TabManagerProps> = ({
   tabs,
-  activeTabId,
   onTabSelect,
   onTabClose,
   onTabAdd,
@@ -40,18 +38,28 @@ const TabManager: React.FC<TabManagerProps> = ({
 
   return (
     <div className={`tab-manager ${theme}`}>
-      <div className="tab-list">
+      <div className="tab-list" role="tablist">
         {tabs.map((tab) => (
           <div
             key={tab.id}
             className={`tab ${tab.isActive ? 'active' : ''}`}
             onClick={() => handleTabSelect(tab.id)}
             onDoubleClick={() => handleTabDoubleClick(tab)}
+            onKeyDown={(e) => {
+              if (e.key === 'Enter' || e.key === ' ') {
+                e.preventDefault();
+                handleTabSelect(tab.id);
+              }
+            }}
+            role="tab"
+            tabIndex={0}
+            aria-selected={tab.isActive}
             title={tab.name}
           >
             <span className="tab-name">{tab.name}</span>
             {tabs.length > 1 && (
               <button
+                type="button"
                 className="tab-close"
                 onClick={(e) => handleTabClose(e, tab.id)}
                 title="Close tab"
