@@ -1,13 +1,13 @@
-import Editor, { loader } from '@monaco-editor/react';
+import Editor from '@monaco-editor/react';
 import type { editor } from 'monaco-editor';
 import type React from 'react';
 import { useRef } from 'react';
 
 // Configure Monaco to load from CDN (optional - removes bundling warnings)
-// loader.config({ 
-//   paths: { 
-//     vs: 'https://cdn.jsdelivr.net/npm/monaco-editor@0.43.0/min/vs' 
-//   } 
+// loader.config({
+//   paths: {
+//     vs: 'https://cdn.jsdelivr.net/npm/monaco-editor@0.43.0/min/vs'
+//   }
 // });
 
 interface CodeEditorProps {
