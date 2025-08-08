@@ -44,15 +44,12 @@ const TabManager: React.FC<TabManagerProps> = ({
         {tabs.map((tab) => (
           <div
             key={tab.id}
-            className={`tab ${tab.isActive ? 'active' : ''} ${tab.isUnsaved ? 'unsaved' : ''}`}
+            className={`tab ${tab.isActive ? 'active' : ''}`}
             onClick={() => handleTabSelect(tab.id)}
             onDoubleClick={() => handleTabDoubleClick(tab)}
-            title={tab.isUnsaved ? `${tab.name} (unsaved changes)` : tab.name}
+            title={tab.name}
           >
-            <span className="tab-name">
-              {tab.name}
-              {tab.isUnsaved && <span className="unsaved-indicator">•</span>}
-            </span>
+            <span className="tab-name">{tab.name}</span>
             {tabs.length > 1 && (
               <button
                 className="tab-close"

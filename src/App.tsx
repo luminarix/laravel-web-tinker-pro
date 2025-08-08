@@ -71,9 +71,7 @@ const App: React.FC = () => {
       id: nanoid(),
       name: 'index.php',
       code: defaultPhpCode,
-      originalCode: defaultPhpCode,
       isActive: true,
-      isUnsaved: false,
     };
 
     setTabs([defaultTab]);
@@ -90,9 +88,7 @@ const App: React.FC = () => {
             id: nanoid(),
             name: sharedData.title || 'shared.php',
             code: sharedData.code,
-            originalCode: sharedData.code,
             isActive: true,
-            isUnsaved: false,
           };
 
           setTabs([sharedTab]);
@@ -129,13 +125,9 @@ const App: React.FC = () => {
       setTabs((prevTabs) =>
         prevTabs.map((tab) => {
           if (tab.id === activeTabId) {
-            // Get the original code when tab was first created/loaded
-            const originalCode = tab.isUnsaved ? tab.code : (tab.originalCode || tab.code);
             return {
               ...tab,
               code: value,
-              originalCode: originalCode,
-              isUnsaved: value !== originalCode
             };
           }
           return tab;
@@ -194,9 +186,7 @@ const App: React.FC = () => {
       id: nanoid(),
       name: `script${tabs.length + 1}.php`,
       code: defaultPhpCode,
-      originalCode: defaultPhpCode,
       isActive: true,
-      isUnsaved: false,
     };
 
     setTabs((prevTabs) => [

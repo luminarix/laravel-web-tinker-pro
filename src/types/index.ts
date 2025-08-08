@@ -2,9 +2,7 @@ export interface Tab {
   id: string;
   name: string;
   code: string;
-  originalCode?: string;
   isActive: boolean;
-  isUnsaved: boolean;
 }
 
 export interface ExecuteCodeRequest {
