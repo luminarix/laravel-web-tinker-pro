@@ -1,5 +1,5 @@
 import type React from 'react';
-import { FaClear, FaMoon, FaPlay, FaShare, FaSun } from 'react-icons/fa';
+import { FaMoon, FaPlay, FaShare, FaSun } from 'react-icons/fa';
 import { MdClear } from 'react-icons/md';
 import type { ExecutionState } from '../types';
 
