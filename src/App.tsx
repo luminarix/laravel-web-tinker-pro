@@ -234,11 +234,11 @@ const App: React.FC = () => {
           split="vertical"
           minSize={200}
           maxSize={-200}
-          defaultSize="60%"
+          defaultSize={window.innerWidth * 0.6}
           resizerStyle={{
             background: 'var(--border-color)',
             width: '2px',
-            cursor: 'col-resize'
+            cursor: 'col-resize',
           }}
         >
           <CodeEditor
