@@ -47,7 +47,7 @@ const CodeEditor: React.FC<CodeEditorProps> = ({
 
   const handleEditorDidMount = (
     editor: editor.IStandaloneCodeEditor,
-    monaco: any,
+    monaco: typeof import('monaco-editor'),
   ) => {
     editorRef.current = editor;
 
@@ -56,7 +56,15 @@ const CodeEditor: React.FC<CodeEditorProps> = ({
       editor.addCommand(monaco.KeyMod.CtrlCmd | monaco.KeyCode.Enter, () => {
         // Get current editor value to avoid stale closure issues
         const currentCode = editor.getValue();
-        onRun(currentCode);
+        // Ensure we have a valid string before passing to onRun
+        if (typeof currentCode === 'string') {
+          onRun(currentCode);
+        } else {
+          console.error(
+            'Editor getValue() returned non-string value:',
+            currentCode,
+          );
+        }
       });
     }
 
