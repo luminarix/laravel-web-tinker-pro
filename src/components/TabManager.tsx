@@ -62,7 +62,12 @@ const TabManager: React.FC<TabManagerProps> = ({
           </div>
         ))}
 
-        <button className="tab-add" onClick={onTabAdd} title="Add new tab">
+        <button
+          type="button"
+          className="tab-add"
+          onClick={onTabAdd}
+          title="Add new tab"
+        >
           <FaPlus />
         </button>
       </div>

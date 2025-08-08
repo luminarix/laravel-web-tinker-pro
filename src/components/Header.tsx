@@ -30,8 +30,9 @@ const Header: React.FC<HeaderProps> = ({
 
       <div className="header-right">
         <button
+          type="button"
           className={`btn btn-run ${executionState.isExecuting ? 'executing' : ''}`}
-          onClick={onRun}
+          onClick={() => onRun()}
           disabled={executionState.isExecuting}
           title="Run PHP Code (Ctrl+Enter)"
         >
@@ -39,12 +40,18 @@ const Header: React.FC<HeaderProps> = ({
           {executionState.isExecuting ? 'Running...' : 'Run'}
         </button>
 
-        <button className="btn btn-share" onClick={onShare} title="Share Code">
+        <button
+          type="button"
+          className="btn btn-share"
+          onClick={onShare}
+          title="Share Code"
+        >
           <FaShare />
           Share
         </button>
 
         <button
+          type="button"
           className="btn btn-clear"
           onClick={onClear}
           title="Clear Output"
@@ -54,6 +61,7 @@ const Header: React.FC<HeaderProps> = ({
         </button>
 
         <button
+          type="button"
           className="btn btn-theme"
           onClick={onToggleTheme}
           title={`Switch to ${theme === 'dark' ? 'light' : 'dark'} theme`}
