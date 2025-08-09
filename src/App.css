@@ -428,6 +428,12 @@ body {
   height: 100% !important;
 }
 
+@media (min-width: 769px) {
+  .monaco-editor .parameter-hints-widget {
+    transform: translateY(95px) !important;
+  }
+}
+
 /* Responsive Design */
 @media (max-width: 768px) {
   .header {
