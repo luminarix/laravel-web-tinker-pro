@@ -1645,6 +1645,105 @@ export const phpCompletionProvider: languages.CompletionItemProvider = {
   },
 };
 
+// PHP Signature Help Provider
+export const phpSignatureHelpProvider: languages.SignatureHelpProvider = {
+  signatureHelpTriggerCharacters: ['(', ','],
+  signatureHelpRetriggerCharacters: [','],
+  provideSignatureHelp: (model, position) => {
+    const lineContent = model.getLineContent(position.lineNumber);
+    const lineUpToPosition = lineContent.substring(0, position.column - 1);
+
+    // Find the function call we're currently in
+    let openParenCount = 0;
+    let currentFunctionStart = -1;
+
+    for (let i = lineUpToPosition.length - 1; i >= 0; i--) {
+      const char = lineUpToPosition[i];
+
+      if (char === ')') {
+        openParenCount++;
+      } else if (char === '(') {
+        if (openParenCount === 0) {
+          // Found the opening parenthesis of our function call
+          currentFunctionStart = i;
+          break;
+        }
+        openParenCount--;
+      }
+    }
+
+    if (currentFunctionStart === -1) {
+      return null;
+    }
+
+    // Extract function name before the opening parenthesis
+    const beforeParen = lineUpToPosition
+      .substring(0, currentFunctionStart)
+      .trim();
+    const functionNameMatch = beforeParen.match(/([a-zA-Z_][a-zA-Z0-9_]*)$/);
+
+    if (!functionNameMatch) {
+      return null;
+    }
+
+    const functionName = functionNameMatch[1];
+
+    // Find the function signature
+    const functionInfo = phpFunctionSignatures.find(
+      (func) => func.name === functionName,
+    );
+
+    if (!functionInfo) {
+      return null;
+    }
+
+    // Count current parameter position by counting commas
+    const parametersSection = lineUpToPosition.substring(
+      currentFunctionStart + 1,
+    );
+    let parameterIndex = 0;
+    let parenDepth = 0;
+
+    for (const char of parametersSection) {
+      if (char === '(') {
+        parenDepth++;
+      } else if (char === ')') {
+        parenDepth--;
+      } else if (char === ',' && parenDepth === 0) {
+        parameterIndex++;
+      }
+    }
+
+    // Parse parameters from signature
+    const signatureMatch = functionInfo.signature.match(/\((.*?)\)/);
+    const parametersText = signatureMatch ? signatureMatch[1] : '';
+
+    let parameters: languages.ParameterInformation[] = [];
+    if (parametersText.trim()) {
+      const paramParts = parametersText.split(',').map((p) => p.trim());
+      parameters = paramParts.map((param) => ({
+        label: param,
+        documentation: undefined,
+      }));
+    }
+
+    const signature: languages.SignatureInformation = {
+      label: functionInfo.signature,
+      documentation: functionInfo.description,
+      parameters: parameters,
+    };
+
+    return {
+      value: {
+        signatures: [signature],
+        activeSignature: 0,
+        activeParameter: Math.min(parameterIndex, parameters.length - 1),
+      },
+      dispose: () => {},
+    };
+  },
+};
+
 // PHP Hover Provider
 export const phpHoverProvider: languages.HoverProvider = {
   provideHover: (model, position) => {
