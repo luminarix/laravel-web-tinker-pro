@@ -196,6 +196,21 @@ textarea {
   margin-top: 2px;
 }
 
+.production-warning {
+  background: #dc2626;
+  color: #ffffff;
+  padding: 4px 12px;
+  border-radius: 4px;
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 0.5px;
+  text-transform: uppercase;
+  margin-left: 16px;
+  box-shadow: 0 2px 8px rgba(220, 38, 38, 0.3);
+  border: 2px solid #b91c1c;
+  animation: pulse-warning 2s infinite;
+}
+
 .header-right {
   display: flex;
   align-items: center;
@@ -271,6 +286,18 @@ textarea {
   }
   100% {
     box-shadow: 0 0 0 0 rgba(37, 99, 235, 0);
+  }
+}
+
+@keyframes pulse-warning {
+  0%,
+  100% {
+    box-shadow: 0 2px 8px rgba(220, 38, 38, 0.3);
+    transform: scale(1);
+  }
+  50% {
+    box-shadow: 0 2px 12px rgba(220, 38, 38, 0.6);
+    transform: scale(1.02);
   }
 }
 
@@ -824,6 +851,12 @@ textarea {
   .btn {
     padding: 6px 10px;
     font-size: 13px;
+  }
+
+  .production-warning {
+    font-size: 10px;
+    padding: 3px 8px;
+    margin-left: 8px;
   }
 
   .tab-list {

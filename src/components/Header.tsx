@@ -57,6 +57,7 @@ const Header: React.FC<HeaderProps> = ({
           <h1 className="title">{title}</h1>
           <div className="subtitle">Minimal PHP tinker, redesigned</div>
         </div>
+        {__PROD__ && <div className="production-warning">PRODUCTION</div>}
       </div>
 
       <div className="header-right">
