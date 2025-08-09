@@ -7,7 +7,8 @@ import {
   phpHoverProvider,
   phpInlineLanguageConfig,
   phpInlineTokenizer,
-} from '../monaco/php-inline'; // Configure Monaco to load from CDN (optional - removes bundling warnings)
+  phpSignatureHelpProvider,
+} from '../monaco/php-inline';
 
 // Configure Monaco to load from CDN (optional - removes bundling warnings)
 // loader.config({
@@ -46,6 +47,10 @@ const CodeEditor: React.FC<CodeEditorProps> = ({
       phpCompletionProvider,
     );
     monaco.languages.registerHoverProvider('php-inline', phpHoverProvider);
+    monaco.languages.registerSignatureHelpProvider(
+      'php-inline',
+      phpSignatureHelpProvider,
+    );
 
     // Set language configuration for PHP inline
     monaco.languages.setLanguageConfiguration(
@@ -111,6 +116,14 @@ const CodeEditor: React.FC<CodeEditorProps> = ({
             showKeywords: true,
             showSnippets: true,
             showFunctions: true,
+          },
+          parameterHints: {
+            enabled: true,
+            cycle: true,
+          },
+          hover: {
+            enabled: true,
+            delay: 300,
           },
           quickSuggestions: {
             other: true,
