@@ -4,9 +4,9 @@
   "private": true,
   "type": "module",
   "scripts": {
-    "build": "rsbuild build",
+    "build": "rsbuild build -c rsbuild.build.config.ts",
     "check": "biome check --write",
-    "dev": "rsbuild dev",
+    "dev": "rsbuild dev -c rsbuild.dev.config.ts",
     "format": "biome format --write",
     "preview": "rsbuild preview"
   },
