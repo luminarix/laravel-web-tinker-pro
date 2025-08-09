@@ -177,10 +177,16 @@ const App: React.FC = () => {
         const currentResult = await executeCode(userCode);
 
         // Use the current result's output but keep composed result's execution context
-        result = {
-          ...composedResult,
-          output: currentResult.output,
-        };
+        result =
+          composedResult && currentResult
+            ? {
+                output: currentResult.output,
+                error: composedResult.error,
+                executionTime: composedResult.executionTime,
+                memoryUsage: composedResult.memoryUsage,
+                exitCode: composedResult.exitCode,
+              }
+            : composedResult;
       } else {
         // Non-REPL mode: just execute the current code
         result = await executeCode(userCode);
