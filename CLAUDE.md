@@ -4,45 +4,74 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ## Project Overview
 
-This is a React + TypeScript web application built with Rsbuild (a modern build tool). Despite the name "laravel-web-tinker", this is currently a frontend-only React project with no Laravel backend components.
+Laravel Web Tinker is a React-based web application that provides an online PHP code editor and execution environment, similar to Laravel's tinker command but in a browser interface. The project uses modern React patterns with TypeScript, Monaco Editor for code editing, and a mock backend for PHP code execution.
 
 ## Development Commands
 
-**Package manager**: This project uses `bun`
+```bash
+# Install dependencies
+bun install
 
-- **Start development server**: `bun run dev` (start development server at http://localhost:3000)
-- **Build for production**: `bun run build`
-- **Preview production build**: `bun run preview`
-- **Lint and format**: `bun run check` (runs Biome linter with auto-fix)
-- **Format only**: `bun run format`
+# Start development server (http://localhost:3000)
+bun run dev
 
-## Code Quality Tools
+# Build for production
+bun run build
 
-- **Linter/Formatter**: Biome (configured in `biome.json`)
-  - Uses single quotes for JavaScript
-  - 2-space indentation
-  - Auto-organizes imports
-  - CSS modules support enabled
+# Preview production build
+bun run preview
+
+# Format and lint code with Biome
+bun run format
+bun run check
+```
 
 ## Architecture
 
-- **Build tool**: Rsbuild with React plugin
-- **TypeScript**: Strict mode enabled with ES2020 target
-- **Module system**: ESNext with bundler resolution
+### Core Structure
+- **Frontend**: React 19 with TypeScript, using hooks for state management
+- **Build Tool**: Rsbuild with React plugin
+- **Code Editor**: Monaco Editor with custom PHP-inline language support
+- **Styling**: CSS with custom properties for theming
+- **State**: Local state with localStorage persistence
 
-## Key Configuration Files
+### Key Components
+- `App.tsx` - Main application orchestrating tabs, themes, and execution flow
+- `CodeEditor.tsx` - Monaco Editor wrapper with PHP syntax highlighting and custom language features
+- `TabManager.tsx` - Multi-tab interface for managing multiple code snippets
+- `OutputPanel.tsx` - Displays PHP execution results and errors
+- `Header.tsx` - Toolbar with run, share, and theme controls
 
-- `rsbuild.config.ts`: Build configuration
-- `biome.json`: Linting and formatting rules
-- `tsconfig.json`: TypeScript compiler options with strict checking
+### Custom Monaco Configuration
+The project includes a custom PHP-inline language definition (`src/monaco/php-inline.ts`) that provides:
+- PHP syntax highlighting without requiring opening `<?php` tags
+- Code completion for PHP functions and Laravel-specific helpers
+- Hover documentation and signature help
+- Custom tokenization rules for inline PHP execution
 
-## The NEVER DOs
+### State Management
+- Uses React hooks (`useState`, `useCallback`, `useEffect`) for local state
+- Custom hooks: `useCodeExecution` and `useCodeSharing`
+- localStorage persistence for tabs, active tab, theme, and background pattern preferences
+- URL-based code sharing with `?share=` parameter
 
-- NEVER edit the package.json directly - if you need to add a package, use `bun add <package_name>`
-- NEVER run `bun run dev` or `bun run build` by yourself. Always reach out to the user for assistance.
+### Mock Backend
+The `src/services/api.ts` file contains mock implementations that simulate:
+- PHP code execution with realistic delays and responses
+- Code sharing via localStorage (for development)
+- Error simulation for testing (use `syntax_error` or `runtime_error` in code)
 
-## The ALWAYS DOs
-- You have access to powerful research helper tools, such as Context7, Ref and Firecrawl. Use them proactively.
-- You have access to Playwright with Vision that you can use to monitor the current state of the website.
-- ALWAYS format the code as the final step using `bun run check`
-- ALWAYS make Git commits after every meaningful change.
+## Key Features
+- Multi-tab code editing with persistent state
+- Light/dark theme switching with background pattern toggle
+- Code execution with simulated PHP output
+- Code sharing via URL generation
+- Keyboard shortcuts (Ctrl+Enter to run code)
+- Responsive split-pane layout
+
+## Development Notes
+- The project uses Biome for formatting and linting with single quotes preference
+- TypeScript strict mode enabled
+- Monaco Editor warnings are suppressed in Rsbuild configuration
+- All components use React.FC typing pattern
+- LocalStorage keys are centralized in STORAGE_KEYS constant
