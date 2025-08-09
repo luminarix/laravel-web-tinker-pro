@@ -94,7 +94,6 @@ const CodeEditor: React.FC<CodeEditorProps> = ({
         onMount={handleEditorDidMount}
         loading={
           <div className="editor-skeleton" aria-busy="true" aria-live="polite">
-            <div className="editor-skeleton-toolbar" />
             <div className="editor-skeleton-lines">
               <div className="line w-95" />
               <div className="line w-90" />

@@ -81,6 +81,12 @@ textarea {
   --error-color: #dc2626; /* red-600 */
   --warning-color: #d97706; /* amber-600 */
 
+  /* skeleton (Tailwind-like) */
+  /* surface: near-white (#fffffe), lines: gray-200/300 */
+  --skeleton-surface: #fffffe;
+  --skeleton-line-1: #f3f4f6; /* gray-100/200 */
+  --skeleton-line-2: #e5e7eb; /* gray-200 */
+
   /* interactive */
   --focus-ring: 2px solid color-mix(in oklab, var(--accent-color) 65%, white);
 
@@ -94,7 +100,6 @@ textarea {
   --radius-1: 6px;
   --radius-2: 10px;
 }
-
 .app.dark {
   color-scheme: dark;
 
@@ -128,6 +133,12 @@ textarea {
   --error-color: #f87171; /* red-400 */
   --warning-color: #f59e0b; /* amber-500 */
 
+  /* skeleton (Tailwind-like) */
+  /* surface: bg-secondary, lines: zinc-700/600 */
+  --skeleton-surface: var(--bg-secondary);
+  --skeleton-line-1: #2f353c; /* approx zinc-800 over dark */
+  --skeleton-line-2: #3a4048; /* approx zinc-700 */
+
   /* interactive */
   --focus-ring: 2px solid color-mix(in oklab, var(--accent-color) 70%, black);
 
@@ -141,7 +152,6 @@ textarea {
   --radius-1: 6px;
   --radius-2: 10px;
 }
-
 .main-content {
   flex: 1;
   min-height: 0;
@@ -453,8 +463,8 @@ textarea {
   width: 100%;
   height: 100%;
   border-radius: var(--radius-1);
-  border: 1px solid #1e1e1e;
-  background: #1e1e1e;
+  border: 1px solid var(--border-color);
+  background: var(--skeleton-surface);
   padding: 12px;
   overflow: hidden;
 }
@@ -464,12 +474,12 @@ textarea {
   border-radius: 6px;
   margin: 10px 0;
   width: 100% !important;
-  /* Contrast-aware shimmer using text and surface tokens */
+  /* Tailwind-like shimmer using static utility-like tokens */
   background: linear-gradient(
     90deg,
-    color-mix(in oklab, var(--text-secondary) 22%, var(--bg-secondary)) 25%,
-    color-mix(in oklab, var(--text-secondary) 10%, var(--bg-secondary)) 37%,
-    color-mix(in oklab, var(--text-secondary) 22%, var(--bg-secondary)) 63%
+    var(--skeleton-line-2) 25%,
+    var(--skeleton-line-1) 37%,
+    var(--skeleton-line-2) 63%
   );
   background-size: 400% 100%;
   animation: skeleton-shimmer 1.4s ease-in-out infinite;
