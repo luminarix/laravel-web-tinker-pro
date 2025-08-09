@@ -435,6 +435,81 @@ textarea {
   background: var(--bg-primary);
 }
 
+/* Editor Loading Skeleton */
+.editor-skeleton {
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  padding: 12px;
+}
+
+.editor-skeleton-toolbar {
+  height: 28px;
+  border-radius: var(--radius-1);
+  background: linear-gradient(
+    90deg,
+    color-mix(in oklab, var(--bg-tertiary) 88%, transparent) 25%,
+    color-mix(in oklab, var(--bg-tertiary) 70%, transparent) 37%,
+    color-mix(in oklab, var(--bg-tertiary) 88%, transparent) 63%
+  );
+  background-size: 400% 100%;
+  animation: skeleton-shimmer 1.4s ease-in-out infinite;
+  box-shadow: var(--shadow-1);
+  border: 1px solid var(--border-color);
+}
+
+.editor-skeleton-lines {
+  flex: 1;
+  border-radius: var(--radius-1);
+  border: 1px solid var(--border-color);
+  background: var(--bg-secondary);
+  padding: 12px;
+  overflow: hidden;
+}
+
+.editor-skeleton-lines .line {
+  height: 12px;
+  border-radius: 6px;
+  margin: 10px 0;
+  background: linear-gradient(
+    90deg,
+    color-mix(in oklab, var(--bg-tertiary) 86%, transparent) 25%,
+    color-mix(in oklab, var(--bg-tertiary) 68%, transparent) 37%,
+    color-mix(in oklab, var(--bg-tertiary) 86%, transparent) 63%
+  );
+  background-size: 400% 100%;
+  animation: skeleton-shimmer 1.4s ease-in-out infinite;
+}
+
+.editor-skeleton-lines .line.w-95 {
+  width: 95%;
+}
+.editor-skeleton-lines .line.w-90 {
+  width: 90%;
+}
+.editor-skeleton-lines .line.w-80 {
+  width: 80%;
+}
+.editor-skeleton-lines .line.w-70 {
+  width: 70%;
+}
+.editor-skeleton-lines .line.w-60 {
+  width: 60%;
+}
+.editor-skeleton-lines .line.w-50 {
+  width: 50%;
+}
+
+@keyframes skeleton-shimmer {
+  0% {
+    background-position: 200% 0;
+  }
+  100% {
+    background-position: -200% 0;
+  }
+}
+
 /* Output Panel Styles */
 .output-panel {
   height: 100%;

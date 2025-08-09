@@ -92,6 +92,19 @@ const CodeEditor: React.FC<CodeEditorProps> = ({
         value={value || ''}
         onChange={handleEditorChange}
         onMount={handleEditorDidMount}
+        loading={
+          <div className="editor-skeleton" aria-busy="true" aria-live="polite">
+            <div className="editor-skeleton-toolbar" />
+            <div className="editor-skeleton-lines">
+              <div className="line w-95" />
+              <div className="line w-90" />
+              <div className="line w-80" />
+              <div className="line w-60" />
+              <div className="line w-70" />
+              <div className="line w-50" />
+            </div>
+          </div>
+        }
         options={{
           fontSize: 14,
           lineNumbers: 'on',
