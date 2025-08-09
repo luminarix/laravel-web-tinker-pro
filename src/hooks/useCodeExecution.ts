@@ -12,7 +12,7 @@ export const useCodeExecution = () => {
   const executeCode = useCallback(
     async (code: string, stdin?: string) => {
       if (executionState.isExecuting) {
-        return;
+        return null;
       }
 
       setExecutionState((prev) => ({
@@ -34,17 +34,21 @@ export const useCodeExecution = () => {
           result,
           error: null,
         });
+        return result;
       } catch (error) {
         console.error('Code execution failed:', error);
+
+        const message =
+          error instanceof Error
+            ? error.message
+            : 'Failed to execute code. Please try again.';
 
         setExecutionState({
           isExecuting: false,
           result: null,
-          error:
-            error instanceof Error
-              ? error.message
-              : 'Failed to execute code. Please try again.',
+          error: message,
         });
+        return null;
       }
     },
     [executionState.isExecuting],

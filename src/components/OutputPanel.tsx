@@ -7,9 +7,14 @@ import { isMac } from '../utils/platform';
 interface OutputPanelProps {
   executionState: ExecutionState;
   theme: 'light' | 'dark';
+  onOpenHistory?: () => void;
 }
 
-const OutputPanel: React.FC<OutputPanelProps> = ({ executionState, theme }) => {
+const OutputPanel: React.FC<OutputPanelProps> = ({
+  executionState,
+  theme,
+  onOpenHistory,
+}) => {
   const { isExecuting, result, error } = executionState;
   const [copied, setCopied] = useState(false);
 
@@ -64,6 +69,16 @@ const OutputPanel: React.FC<OutputPanelProps> = ({ executionState, theme }) => {
                 aria-live="polite"
               >
                 <FaRegCopy />
+              </button>
+            )}
+            {onOpenHistory && (
+              <button
+                type="button"
+                className="btn btn-theme btn-xs"
+                onClick={onOpenHistory}
+                title="Open History"
+              >
+                History
               </button>
             )}
           </div>

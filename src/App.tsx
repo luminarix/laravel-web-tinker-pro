@@ -3,7 +3,9 @@ import { nanoid } from 'nanoid';
 import type React from 'react';
 import { useCallback, useEffect, useState } from 'react';
 import CodeEditor from './components/CodeEditor';
+import DiffModal from './components/DiffModal';
 import Header from './components/Header';
+import HistoryModal from './components/HistoryModal';
 import OutputPanel from './components/OutputPanel';
 import TabManager from './components/TabManager';
 
@@ -27,6 +29,10 @@ const App: React.FC = () => {
   const [bgPattern, setBgPattern] = useState<boolean>(false);
   const [hasLoadedFromStorage, setHasLoadedFromStorage] =
     useState<boolean>(false);
+  const [isHistoryOpen, setIsHistoryOpen] = useState<boolean>(false);
+  const [diffPair, setDiffPair] = useState<{ a: string; b: string } | null>(
+    null,
+  );
 
   const { executionState, executeCode, clearOutput } = useCodeExecution();
   const { handleShare, loadSharedCode, getShareIdFromUrl } = useCodeSharing();
@@ -65,6 +71,10 @@ const App: React.FC = () => {
       name: 'Tab 1',
       code: '',
       isActive: true,
+      pinned: false,
+      locked: false,
+      history: [],
+      replState: { enabled: true, cells: [] },
     };
 
     setTabs([defaultTab]);
@@ -140,11 +150,48 @@ const App: React.FC = () => {
   );
 
   const handleRun = useCallback(
-    (code?: string) => {
-      if (activeTab) {
-        // Use provided code (from keyboard shortcut) or current tab code
-        executeCode(code || activeTab.code);
-      }
+    async (code?: string) => {
+      if (!activeTab) return;
+
+      // Compose REPL state
+      const tab = activeTab;
+      const userCode = (code ?? tab.code) || '';
+      const replEnabled = tab.replState?.enabled ?? true;
+      const joinedRepl = replEnabled
+        ? (tab.replState?.cells || []).map((c) => c.code).join('\n')
+        : '';
+      const composedCode = joinedRepl ? `${joinedRepl}\n${userCode}` : userCode;
+
+      const result = await executeCode(composedCode);
+
+      // Record history (with the user's code snapshot, not the composed one)
+      setTabs((prev) =>
+        prev.map((t) => {
+          if (t.id !== tab.id) return t;
+          const history = t.history ?? [];
+          const newRecord = {
+            id: nanoid(),
+            code: userCode,
+            result,
+            error: result ? null : 'Execution failed',
+            ts: Date.now(),
+            pinned: false,
+          };
+          // cap history to last 100
+          const nextHistory = [...history, newRecord].slice(-100);
+
+          // If success and REPL is enabled, persist the code as a state cell
+          const nextRepl = { ...(t.replState ?? { enabled: true, cells: [] }) };
+          if (replEnabled && result && result.exitCode === 0) {
+            nextRepl.cells = [
+              ...(nextRepl.cells || []),
+              { id: nanoid(), code: userCode, ts: Date.now() },
+            ];
+          }
+
+          return { ...t, history: nextHistory, replState: nextRepl };
+        }),
+      );
     },
     [activeTab, executeCode],
   );
@@ -196,6 +243,10 @@ const App: React.FC = () => {
       name: `Tab ${tabs.length + 1}`,
       code: '',
       isActive: true,
+      pinned: false,
+      locked: false,
+      history: [],
+      replState: { enabled: true, cells: [] },
     };
 
     setTabs((prevTabs) => [
@@ -221,6 +272,39 @@ const App: React.FC = () => {
         onClear={clearOutput}
         onToggleTheme={handleToggleTheme}
         onToggleBgPattern={handleToggleBgPattern}
+        onToggleRepl={() => {
+          if (!activeTab) return;
+          setTabs((prev) =>
+            prev.map((t) =>
+              t.id === activeTab.id
+                ? {
+                    ...t,
+                    replState: {
+                      enabled: !(t.replState?.enabled ?? true),
+                      cells: t.replState?.cells || [],
+                    },
+                  }
+                : t,
+            ),
+          );
+        }}
+        onResetRepl={() => {
+          if (!activeTab) return;
+          setTabs((prev) =>
+            prev.map((t) =>
+              t.id === activeTab.id
+                ? {
+                    ...t,
+                    replState: {
+                      enabled: t.replState?.enabled ?? true,
+                      cells: [],
+                    },
+                  }
+                : t,
+            ),
+          );
+        }}
+        replEnabled={activeTab?.replState?.enabled ?? true}
         executionState={executionState}
         theme={theme}
         bgPattern={bgPattern}
@@ -232,6 +316,44 @@ const App: React.FC = () => {
         onTabClose={handleTabClose}
         onTabAdd={handleTabAdd}
         onTabRename={handleTabRename}
+        onReorder={(orderedIds) => {
+          setTabs((prev) => {
+            const map = new Map(prev.map((t) => [t.id, t] as const));
+            const next = orderedIds
+              .map((id) => map.get(id))
+              .filter(Boolean) as Tab[];
+            // Keep active flag consistent
+            return next.map((t) => ({ ...t, isActive: t.id === activeTabId }));
+          });
+        }}
+        onTogglePin={(tabId: string) => {
+          setTabs((prev) =>
+            prev.map((t) => (t.id === tabId ? { ...t, pinned: !t.pinned } : t)),
+          );
+        }}
+        onToggleLock={(tabId: string) => {
+          setTabs((prev) =>
+            prev.map((t) => (t.id === tabId ? { ...t, locked: !t.locked } : t)),
+          );
+        }}
+        onDuplicate={(tabId: string) => {
+          setTabs((prev) => {
+            const idx = prev.findIndex((t) => t.id === tabId);
+            if (idx === -1) return prev;
+            const orig = prev[idx];
+            const dup: Tab = {
+              ...orig,
+              id: nanoid(),
+              name: `${orig.name} copy`,
+              isActive: false,
+              // Do not duplicate history by default
+              history: [],
+            };
+            const next = [...prev];
+            next.splice(idx + 1, 0, dup);
+            return next;
+          });
+        }}
         theme={theme}
       />
 
@@ -252,10 +374,76 @@ const App: React.FC = () => {
             onChange={handleCodeChange}
             theme={theme}
             onRun={handleRun}
+            readOnly={!!activeTab?.locked}
           />
-          <OutputPanel executionState={executionState} theme={theme} />
+          <OutputPanel
+            executionState={executionState}
+            theme={theme}
+            onOpenHistory={() => setIsHistoryOpen(true)}
+          />
         </SplitPane>
       </div>
+
+      {/* History Modal */}
+      {activeTab && (
+        <HistoryModal
+          isOpen={isHistoryOpen}
+          onClose={() => setIsHistoryOpen(false)}
+          history={activeTab.history || []}
+          onRestore={(recordId) => {
+            const rec = (activeTab.history || []).find(
+              (r) => r.id === recordId,
+            );
+            if (!rec) return;
+            setTabs((prev) =>
+              prev.map((t) =>
+                t.id === activeTab.id ? { ...t, code: rec.code } : t,
+              ),
+            );
+            setIsHistoryOpen(false);
+          }}
+          onPinToggle={(recordId) => {
+            setTabs((prev) =>
+              prev.map((t) => {
+                if (t.id !== activeTab.id) return t;
+                const history = (t.history || []).map((r) =>
+                  r.id === recordId ? { ...r, pinned: !r.pinned } : r,
+                );
+                return { ...t, history };
+              }),
+            );
+          }}
+          onClear={() => {
+            setTabs((prev) =>
+              prev.map((t) =>
+                t.id === activeTab.id ? { ...t, history: [] } : t,
+              ),
+            );
+          }}
+          onCompare={(aId, bId) => {
+            setDiffPair({ a: aId, b: bId });
+            setIsHistoryOpen(false);
+          }}
+          theme={theme}
+        />
+      )}
+
+      {/* Diff Modal */}
+      {activeTab && diffPair && (
+        <DiffModal
+          isOpen={!!diffPair}
+          onClose={() => setDiffPair(null)}
+          original={
+            (activeTab.history || []).find((r) => r.id === diffPair.a)?.code ||
+            ''
+          }
+          modified={
+            (activeTab.history || []).find((r) => r.id === diffPair.b)?.code ||
+            ''
+          }
+          theme={theme}
+        />
+      )}
     </div>
   );
 };

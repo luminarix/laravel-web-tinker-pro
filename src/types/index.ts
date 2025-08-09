@@ -1,8 +1,33 @@
+export interface ReplCell {
+  id: string;
+  code: string;
+  ts: number;
+}
+
+export interface ReplState {
+  enabled: boolean;
+  cells: ReplCell[];
+}
+
+export interface ExecutionRecord {
+  id: string;
+  code: string;
+  result: ExecuteCodeResponse | null;
+  error: string | null;
+  ts: number;
+  pinned?: boolean;
+}
+
 export interface Tab {
   id: string;
   name: string;
   code: string;
   isActive: boolean;
+
+  pinned?: boolean;
+  locked?: boolean;
+  history?: ExecutionRecord[];
+  replState?: ReplState;
 }
 
 export interface ExecuteCodeRequest {

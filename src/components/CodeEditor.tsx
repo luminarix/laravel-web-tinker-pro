@@ -10,13 +10,6 @@ import {
   phpSignatureHelpProvider,
 } from '../monaco/php-inline';
 
-// Configure Monaco to load from CDN (optional - removes bundling warnings)
-// loader.config({
-//   paths: {
-//     vs: 'https://cdn.jsdelivr.net/npm/monaco-editor@0.43.0/min/vs'
-//   }
-// });
-
 interface CodeEditorProps {
   value: string;
   onChange: (value: string) => void;

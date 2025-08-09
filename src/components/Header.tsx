@@ -9,6 +9,9 @@ interface HeaderProps {
   onClear: () => void;
   onToggleTheme: () => void;
   onToggleBgPattern: () => void;
+  onToggleRepl: () => void;
+  onResetRepl: () => void;
+  replEnabled: boolean;
   executionState: ExecutionState;
   theme: 'light' | 'dark';
   bgPattern: boolean;
@@ -21,6 +24,9 @@ const Header: React.FC<HeaderProps> = ({
   onClear,
   onToggleTheme,
   onToggleBgPattern,
+  onToggleRepl,
+  onResetRepl,
+  replEnabled,
   executionState,
   theme,
   bgPattern,
@@ -94,6 +100,25 @@ const Header: React.FC<HeaderProps> = ({
         >
           <FaTh />
         </button>
+
+        <div className="btn-group">
+          <button
+            type="button"
+            className={`btn btn-theme ${replEnabled ? 'is-active' : ''}`}
+            onClick={onToggleRepl}
+            title={`REPL state ${replEnabled ? 'On' : 'Off'}`}
+          >
+            REPL
+          </button>
+          <button
+            type="button"
+            className="btn btn-theme"
+            onClick={onResetRepl}
+            title="Reset REPL state"
+          >
+            Reset
+          </button>
+        </div>
 
         <button
           type="button"
