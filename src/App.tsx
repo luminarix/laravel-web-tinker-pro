@@ -17,12 +17,14 @@ const STORAGE_KEYS = {
   TABS: 'webTinker_tabs',
   ACTIVE_TAB: 'webTinker_activeTab',
   THEME: 'webTinker_theme',
+  BG_PATTERN: 'webTinker_bgPattern',
 };
 
 const App: React.FC = () => {
   const [tabs, setTabs] = useState<Tab[]>([]);
   const [activeTabId, setActiveTabId] = useState<string>('');
   const [theme, setTheme] = useState<'light' | 'dark'>('dark');
+  const [bgPattern, setBgPattern] = useState<boolean>(false);
 
   const { executionState, executeCode, clearOutput } = useCodeExecution();
   const { handleShare, loadSharedCode, getShareIdFromUrl } = useCodeSharing();
@@ -35,6 +37,11 @@ const App: React.FC = () => {
 
     if (savedTheme) {
       setTheme(savedTheme as 'light' | 'dark');
+    }
+
+    const savedBg = localStorage.getItem(STORAGE_KEYS.BG_PATTERN);
+    if (savedBg) {
+      setBgPattern(savedBg === '1' || savedBg === 'true');
     }
 
     if (savedTabs && savedActiveTab) {
@@ -100,6 +107,11 @@ const App: React.FC = () => {
     localStorage.setItem(STORAGE_KEYS.THEME, theme);
   }, [theme]);
 
+  // Save bg pattern to localStorage
+  useEffect(() => {
+    localStorage.setItem(STORAGE_KEYS.BG_PATTERN, bgPattern ? '1' : '0');
+  }, [bgPattern]);
+
   const activeTab = tabs.find((tab) => tab.id === activeTabId);
 
   const handleCodeChange = useCallback(
@@ -137,6 +149,10 @@ const App: React.FC = () => {
 
   const handleToggleTheme = useCallback(() => {
     setTheme((prev) => (prev === 'dark' ? 'light' : 'dark'));
+  }, []);
+
+  const handleToggleBgPattern = useCallback(() => {
+    setBgPattern((prev) => !prev);
   }, []);
 
   const handleTabSelect = useCallback((tabId: string) => {
@@ -194,14 +210,16 @@ const App: React.FC = () => {
   }
 
   return (
-    <div className={`app ${theme}`}>
+    <div className={`app ${theme} ${bgPattern ? 'bg-grid' : ''}`}>
       <Header
         onRun={handleRun}
         onShare={handleCodeShare}
         onClear={clearOutput}
         onToggleTheme={handleToggleTheme}
+        onToggleBgPattern={handleToggleBgPattern}
         executionState={executionState}
         theme={theme}
+        bgPattern={bgPattern}
       />
 
       <TabManager
