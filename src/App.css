@@ -352,7 +352,7 @@ textarea {
 .tab {
   display: inline-flex;
   align-items: center;
-  gap: 8px;
+  gap: 6px;
   padding: 10px 14px;
   border: none;
   background: transparent;
@@ -386,6 +386,56 @@ textarea {
   font-size: 14px;
 }
 
+.tab-actions {
+  display: flex;
+  align-items: center;
+  gap: 2px;
+}
+
+.tab-action {
+  padding: 4px;
+  background: none;
+  border: none;
+  color: var(--text-muted);
+  cursor: pointer;
+  border-radius: 3px;
+  font-size: 11px;
+  min-width: 20px;
+  min-height: 20px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition:
+    color 0.15s ease,
+    background-color 0.15s ease,
+    transform 0.1s ease;
+}
+
+.tab-action:hover {
+  color: var(--text-primary);
+}
+
+.app.light .tab-action:hover {
+  background: rgba(0, 0, 0, 0.08);
+}
+
+.app.dark .tab-action:hover {
+  background: rgba(255, 255, 255, 0.1);
+}
+
+.tab-action:active {
+  transform: scale(0.95);
+}
+
+.tab-action.active {
+  color: var(--accent-color);
+}
+
+.tab-action:focus-visible {
+  outline: var(--focus-ring);
+  outline-offset: 2px;
+}
+
 .unsaved-indicator {
   color: var(--warning-color);
   font-weight: 600;
@@ -397,16 +447,33 @@ textarea {
   border: none;
   color: var(--text-muted);
   cursor: pointer;
-  border-radius: 4px;
-  font-size: 12px;
+  border-radius: 3px;
+  font-size: 11px;
+  min-width: 20px;
+  min-height: 20px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
   transition:
     color 0.15s ease,
-    background-color 0.15s ease;
+    background-color 0.15s ease,
+    transform 0.1s ease;
 }
 
 .tab-close:hover {
   color: var(--error-color);
-  background: transparent;
+}
+
+.app.light .tab-close:hover {
+  background: rgba(220, 38, 38, 0.1);
+}
+
+.app.dark .tab-close:hover {
+  background: rgba(248, 113, 113, 0.15);
+}
+
+.tab-close:active {
+  transform: scale(0.95);
 }
 
 .tab-close:focus-visible {

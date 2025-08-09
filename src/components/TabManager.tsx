@@ -6,6 +6,7 @@ import {
   FaPlus,
   FaRegClone,
   FaTimes,
+  FaThumbtack,
 } from 'react-icons/fa';
 import type { Tab } from '../types';
 import InputModal from './InputModal';
@@ -138,7 +139,7 @@ const TabManager: React.FC<TabManagerProps> = ({
                   }}
                   title={tab.locked ? 'Unlock' : 'Lock'}
                 >
-                  {tab.locked ? <FaLockOpen /> : <FaLock />}
+                  {tab.locked ? <FaLock /> : <FaLockOpen />}
                 </button>
                 <button
                   type="button"
@@ -149,7 +150,7 @@ const TabManager: React.FC<TabManagerProps> = ({
                   }}
                   title={tab.pinned ? 'Unpin' : 'Pin'}
                 >
-                  📌
+                  <FaThumbtack />
                 </button>
                 {tabs.length > 1 && !tab.locked && !tab.pinned && (
                   <button
