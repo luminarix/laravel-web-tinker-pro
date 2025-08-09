@@ -1,7 +1,7 @@
 import Editor from '@monaco-editor/react';
 import type { editor } from 'monaco-editor';
 import type React from 'react';
-import { useRef } from 'react';
+import { useEffect, useRef } from 'react';
 import {
   phpCompletionProvider,
   phpHoverProvider,
@@ -26,6 +26,11 @@ const CodeEditor: React.FC<CodeEditorProps> = ({
   readOnly = false,
 }) => {
   const editorRef = useRef<editor.IStandaloneCodeEditor | null>(null);
+  // Ensure the keyboard shortcut uses the latest onRun reference to avoid stale closures
+  const onRunRef = useRef(onRun);
+  useEffect(() => {
+    onRunRef.current = onRun;
+  }, [onRun]);
 
   const handleEditorDidMount = (
     editor: editor.IStandaloneCodeEditor,
@@ -63,8 +68,11 @@ const CodeEditor: React.FC<CodeEditorProps> = ({
     // Add keyboard shortcut for running code (Ctrl+Enter)
     if (onRun) {
       editor.addCommand(monaco.KeyMod.CtrlCmd | monaco.KeyCode.Enter, () => {
-        // Get current editor value to avoid stale closure issues
-        onRun(editor.getValue());
+        // Use a ref to call the latest onRun with the current editor value (fixes stale closure)
+        const currentOnRun = onRunRef.current;
+        if (currentOnRun) {
+          currentOnRun(editor.getValue());
+        }
       });
     }
 
