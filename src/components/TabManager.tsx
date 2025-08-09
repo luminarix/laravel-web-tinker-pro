@@ -5,8 +5,8 @@ import {
   FaLockOpen,
   FaPlus,
   FaRegClone,
-  FaTimes,
   FaThumbtack,
+  FaTimes,
 } from 'react-icons/fa';
 import type { Tab } from '../types';
 import InputModal from './InputModal';

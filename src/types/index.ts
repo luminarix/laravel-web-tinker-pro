@@ -2,6 +2,7 @@ export interface ReplCell {
   id: string;
   code: string;
   ts: number;
+  historyId?: string;
 }
 
 export interface ReplState {

@@ -1,5 +1,5 @@
 import type React from 'react';
-import { useMemo, useState, useEffect, useCallback } from 'react';
+import { useCallback, useEffect, useMemo, useState } from 'react';
 import type { ExecutionRecord } from '../types';
 
 interface HistoryModalProps {
@@ -21,7 +21,6 @@ const HistoryModal: React.FC<HistoryModalProps> = ({
   onPinToggle,
   onClear,
   onCompare,
-  theme,
 }) => {
   const [selected, setSelected] = useState<string[]>([]);
 
@@ -31,7 +30,9 @@ const HistoryModal: React.FC<HistoryModalProps> = ({
       setSelected([]);
     } else {
       // Ensure selection is still valid if history changed
-      setSelected((prev) => prev.filter((id) => history.some((h) => h.id === id)).slice(0, 2));
+      setSelected((prev) =>
+        prev.filter((id) => history.some((h) => h.id === id)).slice(0, 2),
+      );
     }
   }, [isOpen, history]);
 
@@ -64,19 +65,32 @@ const HistoryModal: React.FC<HistoryModalProps> = ({
       role="dialog"
       aria-modal="true"
       onClick={onClose}
+      onKeyDown={(e) => {
+        if (e.key === 'Escape') onClose();
+      }}
+      tabIndex={-1}
     >
       <div
         className="modal-content modal-history"
         role="document"
         onClick={(e) => e.stopPropagation()}
+        onKeyDown={(e) => e.stopPropagation()}
       >
         <h3 className="modal-title">Execution History</h3>
 
         <div className="modal-actions modal-actions-top">
-          <button type="button" className="modal-button cancel" onClick={onClear}>
+          <button
+            type="button"
+            className="modal-button cancel"
+            onClick={onClear}
+          >
             Clear
           </button>
-          <button type="button" className="modal-button cancel" onClick={onClose}>
+          <button
+            type="button"
+            className="modal-button cancel"
+            onClick={onClose}
+          >
             Close
           </button>
         </div>
@@ -119,10 +133,7 @@ const HistoryModal: React.FC<HistoryModalProps> = ({
                           : `Exit ${rec.result.exitCode}`
                         : 'Error'}
                     </span>
-                    <span
-                      title={rec.code}
-                      className="modal-history-code"
-                    >
+                    <span title={rec.code} className="modal-history-code">
                       {rec.code.split('\n')[0]?.slice(0, 120)}
                     </span>
                   </div>
@@ -159,7 +170,11 @@ const HistoryModal: React.FC<HistoryModalProps> = ({
             onClick={() => {
               if (selected.length === 2) onCompare(selected[0], selected[1]);
             }}
-            title={selected.length === 2 ? 'Compare selected' : 'Select two items to compare'}
+            title={
+              selected.length === 2
+                ? 'Compare selected'
+                : 'Select two items to compare'
+            }
           >
             Compare Selected
           </button>

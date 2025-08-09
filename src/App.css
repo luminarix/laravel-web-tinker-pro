@@ -1098,3 +1098,120 @@ textarea {
     0 0 / 20px 20px,
     var(--bg-primary);
 }
+
+/* REPL Mode Styles */
+.output-panel.repl-mode .output-content {
+  padding: 0;
+}
+
+.repl-cells {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  padding: 16px;
+  max-height: calc(100vh - 120px);
+  overflow-y: auto;
+}
+
+.repl-cell-block {
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-2);
+  background: var(--bg-secondary);
+  overflow: hidden;
+  box-shadow: 0 1px 3px color-mix(in oklab, var(--text-primary) 8%, transparent);
+}
+
+.repl-cell-block.latest {
+  border-color: var(--accent-color);
+  box-shadow:
+    0 0 0 1px color-mix(in oklab, var(--accent-color) 25%, transparent),
+    0 2px 8px color-mix(in oklab, var(--text-primary) 10%, transparent);
+}
+
+.repl-cell-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 8px 12px;
+  background: var(--bg-primary);
+  border-bottom: 1px solid var(--border-color);
+  font-size: 13px;
+}
+
+.repl-cell-meta {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  flex: 1;
+}
+
+.repl-cell-index {
+  font-weight: 600;
+  color: var(--accent-color);
+  font-variant-numeric: tabular-nums;
+}
+
+.repl-cell-time {
+  color: var(--text-secondary);
+  font-variant-numeric: tabular-nums;
+}
+
+.repl-cell-code {
+  padding: 12px;
+  background: var(--bg-tertiary);
+  border-bottom: 1px solid var(--border-color);
+}
+
+.repl-cell-code .code-text {
+  font-family: var(--font-mono);
+  font-size: 13px;
+  color: var(--text-secondary);
+  white-space: pre-wrap;
+  word-wrap: break-word;
+  margin: 0;
+}
+
+.repl-cell-result {
+  padding: 12px;
+}
+
+.repl-cell-result .error-message,
+.repl-cell-result .error-output,
+.repl-cell-result .success-output,
+.repl-cell-result .no-output {
+  margin: 0;
+  border: none;
+  background: transparent;
+  padding: 0;
+}
+
+.repl-cell-result .error-header,
+.repl-cell-result .output-header-text {
+  margin-bottom: 8px;
+  font-size: 13px;
+  font-weight: 500;
+}
+
+.repl-cell-result .error-text,
+.repl-cell-result .output-text {
+  font-size: 13px;
+  margin: 0;
+}
+
+/* Scrollbar styling for REPL cells */
+.repl-cells::-webkit-scrollbar {
+  width: 8px;
+}
+
+.repl-cells::-webkit-scrollbar-track {
+  background: var(--bg-secondary);
+}
+
+.repl-cells::-webkit-scrollbar-thumb {
+  background: var(--border-color);
+  border-radius: 4px;
+}
+
+.repl-cells::-webkit-scrollbar-thumb:hover {
+  background: var(--text-secondary);
+}

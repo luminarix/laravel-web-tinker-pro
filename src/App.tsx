@@ -12,7 +12,7 @@ import TabManager from './components/TabManager';
 import { useCodeExecution } from './hooks/useCodeExecution';
 import { useCodeSharing } from './hooks/useCodeSharing';
 
-import type { Tab } from './types';
+import type { ExecuteCodeResponse, Tab } from './types';
 import './App.css';
 
 const STORAGE_KEYS = {
@@ -157,12 +157,34 @@ const App: React.FC = () => {
       const tab = activeTab;
       const userCode = (code ?? tab.code) || '';
       const replEnabled = tab.replState?.enabled ?? true;
-      const joinedRepl = replEnabled
-        ? (tab.replState?.cells || []).map((c) => c.code).join('\n')
-        : '';
-      const composedCode = joinedRepl ? `${joinedRepl}\n${userCode}` : userCode;
 
-      const result = await executeCode(composedCode);
+      let result: ExecuteCodeResponse | null;
+
+      if (replEnabled) {
+        // In REPL mode, we need to execute all previous code for context
+        // but only show output from the current execution
+        const joinedRepl = (tab.replState?.cells || [])
+          .map((c) => c.code)
+          .join('\n');
+        const composedCode = joinedRepl
+          ? `${joinedRepl}\n${userCode}`
+          : userCode;
+
+        // Execute the composed code to maintain REPL state
+        const composedResult = await executeCode(composedCode);
+
+        // Also execute just the current code to get its isolated output
+        const currentResult = await executeCode(userCode);
+
+        // Use the current result's output but keep composed result's execution context
+        result = {
+          ...composedResult,
+          output: currentResult.output,
+        };
+      } else {
+        // Non-REPL mode: just execute the current code
+        result = await executeCode(userCode);
+      }
 
       // Record history (with the user's code snapshot, not the composed one)
       setTabs((prev) =>
@@ -185,7 +207,12 @@ const App: React.FC = () => {
           if (replEnabled && result && result.exitCode === 0) {
             nextRepl.cells = [
               ...(nextRepl.cells || []),
-              { id: nanoid(), code: userCode, ts: Date.now() },
+              {
+                id: nanoid(),
+                code: userCode,
+                ts: Date.now(),
+                historyId: newRecord.id,
+              },
             ];
           }
 
@@ -364,8 +391,8 @@ const App: React.FC = () => {
       <div className="main-content">
         <SplitPane
           split="vertical"
-          minSize={200}
-          maxSize={-200}
+          minSize={window.innerWidth * 0.35}
+          maxSize={-window.innerWidth * 0.35}
           defaultSize={window.innerWidth * 0.6}
           resizerStyle={{
             background: 'var(--border-color)',
@@ -384,6 +411,8 @@ const App: React.FC = () => {
             executionState={executionState}
             theme={theme}
             onOpenHistory={() => setIsHistoryOpen(true)}
+            replState={activeTab?.replState}
+            history={activeTab?.history}
           />
         </SplitPane>
       </div>

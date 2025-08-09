@@ -1,6 +1,6 @@
 import { DiffEditor } from '@monaco-editor/react';
 import type React from 'react';
-import { useEffect, useCallback } from 'react';
+import { useCallback, useEffect } from 'react';
 
 interface DiffModalProps {
   isOpen: boolean;
@@ -33,11 +33,21 @@ const DiffModal: React.FC<DiffModalProps> = ({
   if (!isOpen) return null;
 
   return (
-    <div className="modal-overlay" role="dialog" aria-modal="true" onClick={onClose}>
+    <div
+      className="modal-overlay"
+      role="dialog"
+      aria-modal="true"
+      onClick={onClose}
+      onKeyDown={(e) => {
+        if (e.key === 'Escape') onClose();
+      }}
+      tabIndex={-1}
+    >
       <div
         className="modal-content modal-diff"
         role="document"
         onClick={(e) => e.stopPropagation()}
+        onKeyDown={(e) => e.stopPropagation()}
       >
         <h3 className="modal-title">Compare Versions</h3>
 
@@ -53,7 +63,11 @@ const DiffModal: React.FC<DiffModalProps> = ({
         </div>
 
         <div className="modal-actions modal-actions-bottom">
-          <button type="button" className="modal-button cancel" onClick={onClose}>
+          <button
+            type="button"
+            className="modal-button cancel"
+            onClick={onClose}
+          >
             Close
           </button>
         </div>
