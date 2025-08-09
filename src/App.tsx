@@ -25,6 +25,7 @@ const App: React.FC = () => {
   const [activeTabId, setActiveTabId] = useState<string>('');
   const [theme, setTheme] = useState<'light' | 'dark'>('dark');
   const [bgPattern, setBgPattern] = useState<boolean>(false);
+  const [hasLoadedFromStorage, setHasLoadedFromStorage] = useState<boolean>(false);
 
   const { executionState, executeCode, clearOutput } = useCodeExecution();
   const { handleShare, loadSharedCode, getShareIdFromUrl } = useCodeSharing();
@@ -43,6 +44,8 @@ const App: React.FC = () => {
     if (savedBg) {
       setBgPattern(savedBg === '1' || savedBg === 'true');
     }
+    
+    setHasLoadedFromStorage(true);
 
     if (savedTabs && savedActiveTab) {
       try {
@@ -107,10 +110,12 @@ const App: React.FC = () => {
     localStorage.setItem(STORAGE_KEYS.THEME, theme);
   }, [theme]);
 
-  // Save bg pattern to localStorage
+  // Save bg pattern to localStorage (only after initial load)
   useEffect(() => {
-    localStorage.setItem(STORAGE_KEYS.BG_PATTERN, bgPattern ? '1' : '0');
-  }, [bgPattern]);
+    if (hasLoadedFromStorage) {
+      localStorage.setItem(STORAGE_KEYS.BG_PATTERN, bgPattern ? '1' : '0');
+    }
+  }, [bgPattern, hasLoadedFromStorage]);
 
   const activeTab = tabs.find((tab) => tab.id === activeTabId);
 
