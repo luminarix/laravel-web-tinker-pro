@@ -1,5 +1,5 @@
 import type React from 'react';
-import { useMemo, useState } from 'react';
+import { useMemo, useState, useEffect, useCallback } from 'react';
 import type { ExecutionRecord } from '../types';
 
 interface HistoryModalProps {
@@ -25,39 +25,73 @@ const HistoryModal: React.FC<HistoryModalProps> = ({
 }) => {
   const [selected, setSelected] = useState<string[]>([]);
 
+  // Reset selection whenever the modal opens/closes or history changes
+  useEffect(() => {
+    if (!isOpen) {
+      setSelected([]);
+    } else {
+      // Ensure selection is still valid if history changed
+      setSelected((prev) => prev.filter((id) => history.some((h) => h.id === id)).slice(0, 2));
+    }
+  }, [isOpen, history]);
+
+  const handleKeyDown = useCallback(
+    (e: KeyboardEvent) => {
+      if (e.key === 'Escape') onClose();
+    },
+    [onClose],
+  );
+
+  useEffect(() => {
+    if (!isOpen) return;
+    window.addEventListener('keydown', handleKeyDown);
+    return () => window.removeEventListener('keydown', handleKeyDown);
+  }, [isOpen, handleKeyDown]);
+
   const sorted = useMemo(() => {
     const pinned = history.filter((h) => h.pinned);
     const rest = history.filter((h) => !h.pinned);
-    return [...pinned, ...rest].slice().sort((a, b) => a.ts - b.ts);
+    // Keep pinned first, then sort each group by timestamp ascending
+    const byTs = (a: ExecutionRecord, b: ExecutionRecord) => a.ts - b.ts;
+    return [...pinned.sort(byTs), ...rest.sort(byTs)];
   }, [history]);
 
   if (!isOpen) return null;
 
   return (
-    <div className={`modal-backdrop ${theme}`} role="dialog" aria-modal="true">
-      <div className="modal history-modal">
-        <div className="modal-header">
-          <h3>Execution History</h3>
-          <div className="modal-actions">
-            <button type="button" className="btn btn-xs" onClick={onClear}>
-              Clear
-            </button>
-            <button type="button" className="btn btn-xs" onClick={onClose}>
-              Close
-            </button>
-          </div>
+    <div
+      className="modal-overlay"
+      role="dialog"
+      aria-modal="true"
+      onClick={onClose}
+    >
+      <div
+        className="modal-content modal-history"
+        role="document"
+        onClick={(e) => e.stopPropagation()}
+      >
+        <h3 className="modal-title">Execution History</h3>
+
+        <div className="modal-actions modal-actions-top">
+          <button type="button" className="modal-button cancel" onClick={onClear}>
+            Clear
+          </button>
+          <button type="button" className="modal-button cancel" onClick={onClose}>
+            Close
+          </button>
         </div>
-        <div className="modal-body">
+
+        <div className="modal-history-list">
           {sorted.length === 0 ? (
-            <div className="empty">No history yet</div>
+            <div className="modal-history-empty">No history yet</div>
           ) : (
-            <ul className="history-list">
+            <ul className="modal-history-items">
               {sorted.map((rec) => (
                 <li
                   key={rec.id}
-                  className={`history-item ${rec.result?.exitCode === 0 ? 'ok' : 'err'} ${rec.pinned ? 'pinned' : ''}`}
+                  className={`modal-history-item ${rec.pinned ? 'pinned' : ''}`}
                 >
-                  <div className="left">
+                  <div className="modal-history-item-info">
                     <input
                       type="checkbox"
                       checked={selected.includes(rec.id)}
@@ -65,7 +99,7 @@ const HistoryModal: React.FC<HistoryModalProps> = ({
                         const checked = e.target.checked;
                         setSelected((prev) => {
                           if (checked) {
-                            if (prev.length >= 2) return prev; // allow max 2 selections
+                            if (prev.length >= 2) return prev;
                             return [...prev, rec.id];
                           }
                           return prev.filter((id) => id !== rec.id);
@@ -73,32 +107,40 @@ const HistoryModal: React.FC<HistoryModalProps> = ({
                       }}
                       aria-label="Select for diff"
                     />
-                    <span className="time">
+                    <span className="modal-history-time">
                       {new Date(rec.ts).toLocaleTimeString()}
                     </span>
-                    <span className="status">
+                    <span
+                      className={`modal-history-status ${rec.result?.exitCode === 0 ? 'success' : 'error'}`}
+                    >
                       {rec.result
                         ? rec.result.exitCode === 0
                           ? 'OK'
                           : `Exit ${rec.result.exitCode}`
                         : 'Error'}
                     </span>
-                    <span className="preview">
-                      {rec.code.split('\n')[0]?.slice(0, 60)}
+                    <span
+                      title={rec.code}
+                      className="modal-history-code"
+                    >
+                      {rec.code.split('\n')[0]?.slice(0, 120)}
                     </span>
                   </div>
-                  <div className="right">
+
+                  <div className="modal-history-actions">
                     <button
                       type="button"
-                      className="btn btn-xs"
+                      className="modal-button cancel"
                       onClick={() => onPinToggle(rec.id)}
+                      title={rec.pinned ? 'Unpin' : 'Pin'}
                     >
                       {rec.pinned ? 'Unpin' : 'Pin'}
                     </button>
                     <button
                       type="button"
-                      className="btn btn-xs"
+                      className="modal-button confirm"
                       onClick={() => onRestore(rec.id)}
+                      title="Restore code"
                     >
                       Restore
                     </button>
@@ -108,14 +150,16 @@ const HistoryModal: React.FC<HistoryModalProps> = ({
             </ul>
           )}
         </div>
-        <div className="modal-footer">
+
+        <div className="modal-actions modal-actions-bottom">
           <button
             type="button"
-            className="btn btn-primary btn-sm"
+            className="modal-button confirm"
             disabled={selected.length !== 2}
             onClick={() => {
               if (selected.length === 2) onCompare(selected[0], selected[1]);
             }}
+            title={selected.length === 2 ? 'Compare selected' : 'Select two items to compare'}
           >
             Compare Selected
           </button>

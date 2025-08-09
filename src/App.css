@@ -306,6 +306,37 @@ textarea {
   background-color: var(--bg-secondary);
 }
 
+.btn.btn-theme.is-active {
+  background-color: var(--bg-tertiary);
+  color: var(--accent-color);
+  border-color: var(--accent-color);
+}
+
+/* Button Group */
+.btn-group {
+  display: inline-flex;
+  align-items: center;
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-1);
+  padding: 2px;
+  gap: 2px;
+  background-color: var(--bg-tertiary);
+}
+
+.btn-group .btn {
+  border: none;
+  padding: 6px 10px;
+  font-size: 13px;
+}
+
+.btn-group .btn:hover {
+  background-color: var(--bg-secondary);
+}
+
+.btn-group .btn:not(:last-child) {
+  margin-right: 2px;
+}
+
 /* Copy feedback */
 .btn-copy.copied {
   animation: pop 300ms ease;
@@ -902,6 +933,116 @@ textarea {
 .modal-button:focus-visible {
   outline: var(--focus-ring);
   outline-offset: 2px;
+}
+
+.modal-button:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+/* Diff Modal Styles */
+.modal-content.modal-diff {
+  min-width: 700px;
+  max-width: 95vw;
+  max-height: 85vh;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+}
+
+.modal-diff-editor {
+  flex: 1;
+  min-height: 50vh;
+}
+
+/* History Modal Styles */
+.modal-content.modal-history {
+  min-width: 600px;
+  max-width: 90vw;
+  max-height: 80vh;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+}
+
+.modal-history-list {
+  flex: 1;
+  overflow-y: auto;
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-1);
+  padding: 8px;
+  background: var(--bg-secondary);
+}
+
+.modal-history-empty {
+  padding: 12px;
+  color: var(--text-secondary);
+}
+
+.modal-history-items {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.modal-history-item {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  padding: 8px 10px;
+  border-bottom: 1px solid var(--border-color);
+  background: transparent;
+}
+
+.modal-history-item.pinned {
+  background: color-mix(in oklab, var(--accent-color) 10%, transparent);
+}
+
+.modal-history-item-info {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  min-width: 0;
+}
+
+.modal-history-time {
+  font-variant-numeric: tabular-nums;
+  color: var(--text-secondary);
+}
+
+.modal-history-status {
+  font-weight: 600;
+}
+
+.modal-history-status.success {
+  color: var(--success-color);
+}
+
+.modal-history-status.error {
+  color: var(--error-color);
+}
+
+.modal-history-code {
+  color: var(--text-primary);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  max-width: 40vw;
+}
+
+.modal-history-actions {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.modal-actions.modal-actions-top {
+  margin-bottom: 12px;
+}
+
+.modal-actions.modal-actions-bottom {
+  margin-top: 12px;
 }
 
 @media (max-width: 480px) {
