@@ -264,6 +264,10 @@ const App: React.FC = () => {
     );
   }, []);
 
+  if (tabs.length === 0) {
+    return;
+  }
+
   return (
     <div className={`app ${theme} ${bgPattern ? 'bg-grid' : ''}`}>
       <Header
