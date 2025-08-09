@@ -692,6 +692,7 @@ textarea {
     ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono",
     "Courier New", monospace;
   color: var(--text-primary);
+  min-height: 0;
 }
 
 .loading {
@@ -754,6 +755,10 @@ textarea {
   line-height: 1.5;
   white-space: pre-wrap;
   word-wrap: break-word;
+  min-height: auto;
+  height: auto;
+  max-height: none;
+  overflow: visible;
 }
 
 .error-text {
@@ -1141,17 +1146,24 @@ textarea {
   display: flex;
   flex-direction: column;
   gap: 12px;
-  padding: 16px;
-  max-height: calc(100vh - 120px);
+  padding: 16px 16px 24px 16px;
+  max-height: calc(100vh - 140px);
   overflow-y: auto;
+  box-sizing: border-box;
 }
 
 .repl-cell-block {
   border: 1px solid var(--border-color);
   border-radius: var(--radius-2);
   background: var(--bg-secondary);
-  overflow: hidden;
+  overflow: visible;
   box-shadow: 0 1px 3px color-mix(in oklab, var(--text-primary) 8%, transparent);
+  min-height: auto;
+  height: auto;
+}
+
+.repl-cell-block:last-child {
+  margin-bottom: 8px;
 }
 
 .repl-cell-block.latest {
@@ -1193,6 +1205,8 @@ textarea {
   padding: 12px;
   background: var(--bg-tertiary);
   border-bottom: 1px solid var(--border-color);
+  min-height: auto;
+  height: auto;
 }
 
 .repl-cell-code .code-text {
@@ -1202,10 +1216,14 @@ textarea {
   white-space: pre-wrap;
   word-wrap: break-word;
   margin: 0;
+  min-height: auto;
+  height: auto;
 }
 
 .repl-cell-result {
   padding: 12px;
+  min-height: auto;
+  height: auto;
 }
 
 .repl-cell-result .error-message,
@@ -1216,6 +1234,8 @@ textarea {
   border: none;
   background: transparent;
   padding: 0;
+  min-height: auto;
+  height: auto;
 }
 
 .repl-cell-result .error-header,
@@ -1229,6 +1249,10 @@ textarea {
 .repl-cell-result .output-text {
   font-size: 13px;
   margin: 0;
+  min-height: auto;
+  height: auto;
+  max-height: none;
+  overflow: visible;
 }
 
 /* Scrollbar styling for REPL cells */
