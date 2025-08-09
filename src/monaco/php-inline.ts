@@ -1611,7 +1611,7 @@ export const phpCompletionProvider: languages.CompletionItemProvider = {
       suggestions.push({
         label: func.name,
         kind: languages.CompletionItemKind.Function,
-        insertText: `${func.name}()`,
+        insertText: `${func.name}($1)$0`,
         insertTextRules: languages.CompletionItemInsertTextRule.InsertAsSnippet,
         range,
         detail: func.signature,
