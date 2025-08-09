@@ -1,4 +1,6 @@
 import type React from 'react';
+import { useState } from 'react';
+import { FaRegCopy } from 'react-icons/fa';
 import type { ExecutionState } from '../types';
 import { isMac } from '../utils/platform';
 
@@ -9,6 +11,7 @@ interface OutputPanelProps {
 
 const OutputPanel: React.FC<OutputPanelProps> = ({ executionState, theme }) => {
   const { isExecuting, result, error } = executionState;
+  const [copied, setCopied] = useState(false);
 
   const formatExecutionTime = (time: number): string => {
     if (time < 0.001) return '<0.001s';
@@ -40,6 +43,29 @@ const OutputPanel: React.FC<OutputPanelProps> = ({ executionState, theme }) => {
             >
               Exit: {result.exitCode}
             </span>
+            {(result.output || result.error) && (
+              <button
+                type="button"
+                className={`btn btn-theme btn-xs btn-copy ${copied ? 'copied' : ''}`}
+                onClick={() => {
+                  const text = result.output || result.error || '';
+                  navigator.clipboard
+                    ?.writeText(text)
+                    .then(() => {
+                      setCopied(true);
+                      setTimeout(() => setCopied(false), 1200);
+                    })
+                    .catch(() => {
+                      setCopied(true);
+                      setTimeout(() => setCopied(false), 1200);
+                    });
+                }}
+                title={copied ? 'Copied' : 'Copy output'}
+                aria-live="polite"
+              >
+                <FaRegCopy />
+              </button>
+            )}
           </div>
         )}
       </div>

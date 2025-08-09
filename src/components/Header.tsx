@@ -47,13 +47,16 @@ const Header: React.FC<HeaderProps> = ({
             />
           </svg>
         </span>
-        <h1 className="title">{title}</h1>
+        <div className="brand">
+          <h1 className="title">{title}</h1>
+          <div className="subtitle">Minimal PHP tinker, redesigned</div>
+        </div>
       </div>
 
       <div className="header-right">
         <button
           type="button"
-          className={`btn btn-run ${executionState.isExecuting ? 'executing' : ''}`}
+          className={`btn btn-run ${executionState.isExecuting ? 'executing' : 'pulsing'}`}
           onClick={() => onRun()}
           disabled={executionState.isExecuting}
           title="Run PHP Code (Ctrl+Enter)"

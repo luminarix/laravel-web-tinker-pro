@@ -66,6 +66,14 @@ textarea {
   --border-color: #e6e6e7;
   --shadow-1: 0 1px 2px rgba(0, 0, 0, 0.06), 0 1px 1px rgba(0, 0, 0, 0.04);
 
+  /* header gradient */
+  --header-gradient:
+    linear-gradient(
+      90deg,
+      color-mix(in oklab, var(--accent-color) 10%, transparent) 0%,
+      transparent 55%
+    ), var(--bg-secondary);
+
   /* brand & status */
   --accent-color: #2563eb; /* blue-600 */
   --accent-color-hover: #1d4ed8; /* blue-700 */
@@ -105,6 +113,14 @@ textarea {
   --shadow-1:
     0 1px 0 rgba(0, 0, 0, 0.4), 0 0 0 1px rgba(255, 255, 255, 0.02) inset;
 
+  /* header gradient */
+  --header-gradient:
+    linear-gradient(
+      90deg,
+      color-mix(in oklab, var(--accent-color) 16%, transparent) 0%,
+      transparent 55%
+    ), var(--bg-secondary);
+
   /* brand & status */
   --accent-color: #60a5fa; /* blue-400 */
   --accent-color-hover: #93c5fd; /* blue-300 */
@@ -139,10 +155,16 @@ textarea {
   align-items: center;
   justify-content: space-between;
   padding: 12px 16px;
-  background-color: var(--bg-secondary);
+  background: var(--header-gradient, var(--bg-secondary));
   border-bottom: 1px solid var(--border-color);
   min-height: 56px;
   flex-shrink: 0;
+}
+
+.header-left {
+  display: flex;
+  align-items: center;
+  gap: 10px;
 }
 
 .header-left .title {
@@ -151,6 +173,17 @@ textarea {
   font-weight: 600;
   color: var(--text-primary);
   margin: 0;
+}
+
+.brand {
+  display: flex;
+  flex-direction: column;
+}
+
+.subtitle {
+  font-size: 12px;
+  color: var(--text-muted);
+  margin-top: 2px;
 }
 
 .header-right {
@@ -214,6 +247,23 @@ textarea {
   cursor: wait;
 }
 
+/* Subtle pulse when idle */
+.btn.btn-run.pulsing {
+  animation: pulse 2.2s ease-in-out infinite;
+}
+
+@keyframes pulse {
+  0% {
+    box-shadow: 0 0 0 0 rgba(37, 99, 235, 0.18);
+  }
+  70% {
+    box-shadow: 0 0 0 8px rgba(37, 99, 235, 0);
+  }
+  100% {
+    box-shadow: 0 0 0 0 rgba(37, 99, 235, 0);
+  }
+}
+
 /* Secondary (outline-accent) */
 .btn.btn-share {
   background-color: transparent;
@@ -244,6 +294,32 @@ textarea {
 
 .btn.btn-theme:hover {
   background-color: var(--bg-secondary);
+}
+
+/* Copy feedback */
+.btn-copy.copied {
+  animation: pop 300ms ease;
+  background: color-mix(in oklab, var(--accent-color) 14%, transparent);
+  border-color: var(--accent-color);
+  color: var(--accent-color);
+}
+
+@keyframes pop {
+  0% {
+    transform: scale(0.98);
+  }
+  60% {
+    transform: scale(1.03);
+  }
+  100% {
+    transform: scale(1);
+  }
+}
+
+/* Small button */
+.btn.btn-xs {
+  padding: 4px 8px;
+  font-size: 12px;
 }
 
 /* Tab Manager Styles */
@@ -386,7 +462,7 @@ textarea {
 
 .execution-stats {
   display: flex;
-  gap: 16px;
+  gap: 12px;
   font-size: 12px;
   color: var(--text-secondary);
 }
@@ -705,13 +781,7 @@ textarea {
   }
 }
 
-/* --- Extras: logo, grid toggle, and subtle pattern --- */
-.header-left {
-  display: flex;
-  align-items: center;
-  gap: 10px;
-}
-
+/* --- Extras: logo, grid toggle, subtle pattern --- */
 .logo {
   width: 28px;
   height: 28px;
