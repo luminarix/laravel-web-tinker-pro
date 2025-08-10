@@ -416,10 +416,12 @@ textarea {
 .tab-list {
   display: flex;
   align-items: center;
-  overflow-x: auto;
+  overflow: hidden;
   height: 40px;
   padding: 0 8px;
   gap: 2px;
+  flex: 1;
+  min-width: 0;
 }
 
 .tab {
@@ -437,6 +439,8 @@ textarea {
     border-color 0.15s ease,
     background-color 0.15s ease;
   white-space: nowrap;
+  flex: 0 0 auto;
+  min-width: fit-content;
 }
 
 .tab:hover {
@@ -578,7 +582,8 @@ textarea {
   background: var(--bg-tertiary);
   border-color: var(--accent-color);
   color: var(--accent-color);
-  box-shadow: 0 2px 4px color-mix(in oklab, var(--text-primary) 12%, transparent);
+  box-shadow: 0 2px 4px
+    color-mix(in oklab, var(--text-primary) 12%, transparent);
 }
 
 .tab-add:focus-visible {
@@ -1636,7 +1641,8 @@ textarea {
   background: var(--bg-tertiary);
   border-color: var(--accent-color);
   color: var(--accent-color);
-  box-shadow: 0 2px 4px color-mix(in oklab, var(--text-primary) 12%, transparent);
+  box-shadow: 0 2px 4px
+    color-mix(in oklab, var(--text-primary) 12%, transparent);
 }
 
 .tab-list-button:focus-visible {
@@ -1725,7 +1731,8 @@ textarea {
 .search-input:focus {
   outline: none;
   border-color: var(--accent-color);
-  box-shadow: 0 0 0 3px color-mix(in oklab, var(--accent-color) 15%, transparent);
+  box-shadow: 0 0 0 3px
+    color-mix(in oklab, var(--accent-color) 15%, transparent);
 }
 
 .search-clear {
@@ -1773,11 +1780,13 @@ textarea {
 
 .tab-item {
   display: flex;
-  align-items: flex-start;
+  align-items: center;
   gap: 12px;
-  padding: 12px 24px;
-  border-bottom: 1px solid color-mix(in oklab, var(--border-color) 50%, transparent);
+  padding: 16px 24px;
+  border-bottom: 1px solid
+    color-mix(in oklab, var(--border-color) 50%, transparent);
   transition: all 0.15s ease;
+  cursor: pointer;
 }
 
 .tab-item:hover {
@@ -1799,7 +1808,7 @@ textarea {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  margin-bottom: 6px;
+  margin-bottom: 0;
 }
 
 .tab-item-name {
@@ -1839,19 +1848,10 @@ textarea {
   color: var(--accent-color);
 }
 
-.tab-item-preview {
-  color: var(--text-secondary);
-  font-size: 13px;
-  font-family: var(--font-mono);
-  line-height: 1.4;
-  word-wrap: break-word;
-  white-space: pre-wrap;
-}
-
 .tab-item-actions {
   display: flex;
   align-items: center;
-  gap: 4px;
+  gap: 6px;
   flex-shrink: 0;
 }
 
@@ -1859,15 +1859,15 @@ textarea {
   display: flex;
   align-items: center;
   justify-content: center;
-  width: 28px;
-  height: 28px;
+  width: 32px;
+  height: 32px;
   border: 1px solid transparent;
   border-radius: var(--radius-1);
   background: transparent;
   color: var(--text-secondary);
   cursor: pointer;
   transition: all 0.15s ease;
-  font-size: 12px;
+  font-size: 14px;
 }
 
 .tab-item-actions .tab-action:hover {
@@ -1881,10 +1881,242 @@ textarea {
 }
 
 .tab-item-actions .tab-action.delete {
-  color: var(--error-color);
+  color: var(--text-secondary);
 }
 
 .tab-item-actions .tab-action.delete:hover {
+  background: color-mix(in oklab, var(--error-color) 10%, transparent);
+  border-color: var(--error-color);
+  color: var(--error-color);
+}
+
+/* Tab Overflow Button */
+.tab-overflow-button {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  min-width: 50px;
+  width: auto;
+  height: 32px;
+  padding: 6px 8px;
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-1);
+  background: var(--bg-primary);
+  color: var(--text-secondary);
+  cursor: pointer;
+  transition: all 0.15s ease;
+  margin-left: 8px;
+  font-size: 12px;
+  box-shadow: 0 1px 2px color-mix(in oklab, var(--text-primary) 8%, transparent);
+}
+
+.tab-overflow-button:hover {
+  background: var(--bg-tertiary);
+  border-color: var(--accent-color);
+  color: var(--accent-color);
+  box-shadow: 0 2px 4px
+    color-mix(in oklab, var(--text-primary) 12%, transparent);
+}
+
+.tab-overflow-button.open {
+  background: var(--bg-tertiary);
+  border-color: var(--accent-color);
+  color: var(--accent-color);
+}
+
+.tab-overflow-button.tab-overflow-button svg {
+  transition: transform 0.15s ease;
+}
+
+.tab-overflow-button.open svg {
+  transform: rotate(180deg);
+}
+
+.overflow-count {
+  font-weight: 500;
+  font-size: 11px;
+  min-width: 16px;
+  text-align: center;
+}
+
+/* Tab Overflow Dropdown */
+.tab-overflow-dropdown {
+  position: fixed;
+  z-index: 1000;
+  background: var(--bg-primary);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-2);
+  box-shadow: 0 4px 16px
+    color-mix(in oklab, var(--text-primary) 15%, transparent);
+  max-height: 400px;
+  min-width: 300px;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+}
+
+.overflow-search-container {
+  padding: 12px;
+  border-bottom: 1px solid var(--border-color);
+  background: var(--bg-secondary);
+}
+
+.overflow-search-wrapper {
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+
+.overflow-search-icon {
+  position: absolute;
+  left: 8px;
+  color: var(--text-secondary);
+  font-size: 12px;
+  pointer-events: none;
+}
+
+.overflow-search-input {
+  width: 100%;
+  padding: 8px 8px 8px 28px;
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-1);
+  background: var(--bg-primary);
+  color: var(--text-primary);
+  font-size: 13px;
+  transition: all 0.15s ease;
+}
+
+.overflow-search-input:focus {
+  outline: none;
+  border-color: var(--accent-color);
+  box-shadow: 0 0 0 2px
+    color-mix(in oklab, var(--accent-color) 15%, transparent);
+}
+
+.overflow-search-clear {
+  position: absolute;
+  right: 4px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 20px;
+  height: 20px;
+  border: none;
+  border-radius: var(--radius-1);
+  background: transparent;
+  color: var(--text-secondary);
+  cursor: pointer;
+  transition: all 0.15s ease;
+  font-size: 10px;
+}
+
+.overflow-search-clear:hover {
+  background: var(--bg-tertiary);
+  color: var(--text-primary);
+}
+
+.overflow-tabs-list {
+  flex: 1;
+  overflow-y: auto;
+  max-height: 300px;
+}
+
+.overflow-no-results {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 24px 12px;
+  color: var(--text-secondary);
+  font-size: 13px;
+  font-style: italic;
+}
+
+.overflow-tab-item {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 10px 12px;
+  border-bottom: 1px solid
+    color-mix(in oklab, var(--border-color) 30%, transparent);
+  transition: all 0.15s ease;
+  cursor: pointer;
+}
+
+.overflow-tab-item:hover {
+  background: var(--bg-tertiary);
+}
+
+.overflow-tab-item.active {
+  background: color-mix(in oklab, var(--accent-color) 8%, transparent);
+  border-left: 2px solid var(--accent-color);
+  padding-left: 10px;
+}
+
+.overflow-tab-item:last-child {
+  border-bottom: none;
+}
+
+.overflow-tab-info {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.overflow-tab-name {
+  font-weight: 500;
+  color: var(--text-primary);
+  font-size: 13px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.overflow-tab-badges {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  margin-left: 8px;
+}
+
+.overflow-tab-actions {
+  display: flex;
+  align-items: center;
+  gap: 2px;
+  flex-shrink: 0;
+}
+
+.overflow-tab-actions .tab-action {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 24px;
+  height: 24px;
+  border: 1px solid transparent;
+  border-radius: var(--radius-1);
+  background: transparent;
+  color: var(--text-secondary);
+  cursor: pointer;
+  transition: all 0.15s ease;
+  font-size: 11px;
+}
+
+.overflow-tab-actions .tab-action:hover {
+  background: var(--bg-secondary);
+  border-color: var(--border-color);
+  color: var(--text-primary);
+}
+
+.overflow-tab-actions .tab-action.active {
+  color: var(--warning-color);
+}
+
+.overflow-tab-actions .tab-action.delete {
+  color: var(--text-secondary);
+}
+
+.overflow-tab-actions .tab-action.delete:hover {
   background: color-mix(in oklab, var(--error-color) 10%, transparent);
   border-color: var(--error-color);
   color: var(--error-color);
@@ -1895,14 +2127,104 @@ textarea {
   .tab-list-modal {
     width: 95vw;
     max-height: 90vh;
+    margin: 0 auto;
+  }
+
+  .tab-list-modal .modal-header {
+    padding: 12px 16px;
+  }
+
+  .tab-list-modal .modal-header h3 {
+    font-size: 16px;
+  }
+
+  .search-container {
+    padding: 12px 16px;
+  }
+
+  .search-input {
+    padding: 10px 10px 10px 32px;
+    font-size: 16px; /* Prevents zoom on iOS */
   }
 
   .tab-item {
-    flex-direction: column;
+    padding: 12px 16px;
     gap: 8px;
+    align-items: center;
+    flex-direction: row;
+  }
+
+  .tab-item-info {
+    flex: 1;
+    min-width: 0;
+  }
+
+  .tab-item-header {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 4px;
+  }
+
+  .tab-item-name {
+    font-size: 14px;
+    width: 100%;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+  .tab-item-badges {
+    margin-left: 0;
   }
 
   .tab-item-actions {
-    align-self: flex-end;
+    flex-shrink: 0;
+    gap: 4px;
+  }
+
+  .tab-item-actions .tab-action {
+    width: 32px;
+    height: 32px;
+    font-size: 13px;
+  }
+
+  .tab-overflow-dropdown {
+    max-width: 95vw;
+    min-width: 280px;
+  }
+
+  .overflow-search-container {
+    padding: 8px 12px;
+  }
+
+  .overflow-search-input {
+    padding: 8px 8px 8px 24px;
+    font-size: 16px; /* Prevents zoom on iOS */
+  }
+
+  .overflow-tab-item {
+    padding: 8px 12px;
+    gap: 6px;
+    align-items: center;
+    flex-direction: row;
+  }
+
+  .overflow-tab-info {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 2px;
+  }
+
+  .overflow-tab-name {
+    font-size: 13px;
+  }
+
+  .overflow-tab-badges {
+    margin-left: 0;
+  }
+
+  .overflow-tab-actions {
+    flex-shrink: 0;
+    gap: 2px;
   }
 }

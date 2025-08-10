@@ -1,14 +1,12 @@
 import type React from 'react';
-import { useState, useMemo } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import {
-  FaSearch,
-  FaTimes,
-  FaRegClone,
-  FaThumbtack,
   FaLock,
   FaLockOpen,
-  FaTrash,
-  FaEye,
+  FaRegClone,
+  FaSearch,
+  FaThumbtack,
+  FaTimes,
 } from 'react-icons/fa';
 import type { Tab } from '../types';
 
@@ -41,9 +39,10 @@ const TabListModal: React.FC<TabListModalProps> = ({
     if (!searchTerm.trim()) {
       return tabs;
     }
-    return tabs.filter((tab) =>
-      tab.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      tab.code.toLowerCase().includes(searchTerm.toLowerCase())
+    return tabs.filter(
+      (tab) =>
+        tab.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
+        tab.code.toLowerCase().includes(searchTerm.toLowerCase()),
     );
   }, [tabs, searchTerm]);
 
@@ -57,11 +56,25 @@ const TabListModal: React.FC<TabListModalProps> = ({
     // Don't close modal after actions so user can continue managing tabs
   };
 
+  // Handle ESC key to close modal
+  useEffect(() => {
+    const handleKeyDown = (event: KeyboardEvent) => {
+      if (event.key === 'Escape' && isOpen) {
+        onClose();
+      }
+    };
+
+    document.addEventListener('keydown', handleKeyDown);
+    return () => {
+      document.removeEventListener('keydown', handleKeyDown);
+    };
+  }, [isOpen, onClose]);
+
   if (!isOpen) return null;
 
   return (
     <div className="modal-overlay" onClick={onClose}>
-      <div 
+      <div
         className={`modal-content tab-list-modal ${theme}`}
         onClick={(e) => e.stopPropagation()}
       >
@@ -112,6 +125,15 @@ const TabListModal: React.FC<TabListModalProps> = ({
                 <div
                   key={tab.id}
                   className={`tab-item ${tab.isActive ? 'active' : ''}`}
+                  onClick={() => handleTabSelect(tab)}
+                  role="button"
+                  tabIndex={0}
+                  onKeyDown={(e) => {
+                    if (e.key === 'Enter' || e.key === ' ') {
+                      e.preventDefault();
+                      handleTabSelect(tab);
+                    }
+                  }}
                 >
                   <div className="tab-item-info">
                     <div className="tab-item-header">
@@ -134,25 +156,16 @@ const TabListModal: React.FC<TabListModalProps> = ({
                         )}
                       </div>
                     </div>
-                    <div className="tab-item-preview">
-                      {tab.code.slice(0, 100)}
-                      {tab.code.length > 100 && '...'}
-                    </div>
                   </div>
-                  
+
                   <div className="tab-item-actions">
                     <button
                       type="button"
                       className="tab-action"
-                      onClick={() => handleTabSelect(tab)}
-                      title="Select tab"
-                    >
-                      <FaEye />
-                    </button>
-                    <button
-                      type="button"
-                      className="tab-action"
-                      onClick={() => handleAction(() => onDuplicate(tab.id))}
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        handleAction(() => onDuplicate(tab.id));
+                      }}
                       title="Duplicate tab"
                     >
                       <FaRegClone />
@@ -160,7 +173,10 @@ const TabListModal: React.FC<TabListModalProps> = ({
                     <button
                       type="button"
                       className={`tab-action ${tab.pinned ? 'active' : ''}`}
-                      onClick={() => handleAction(() => onTogglePin(tab.id))}
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        handleAction(() => onTogglePin(tab.id));
+                      }}
                       title={tab.pinned ? 'Unpin' : 'Pin'}
                     >
                       <FaThumbtack />
@@ -168,7 +184,10 @@ const TabListModal: React.FC<TabListModalProps> = ({
                     <button
                       type="button"
                       className="tab-action"
-                      onClick={() => handleAction(() => onToggleLock(tab.id))}
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        handleAction(() => onToggleLock(tab.id));
+                      }}
                       title={tab.locked ? 'Unlock' : 'Lock'}
                     >
                       {tab.locked ? <FaLock /> : <FaLockOpen />}
@@ -177,10 +196,13 @@ const TabListModal: React.FC<TabListModalProps> = ({
                       <button
                         type="button"
                         className="tab-action delete"
-                        onClick={() => handleAction(() => onTabClose(tab.id))}
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          handleAction(() => onTabClose(tab.id));
+                        }}
                         title="Delete tab"
                       >
-                        <FaTrash />
+                        <FaTimes />
                       </button>
                     )}
                   </div>

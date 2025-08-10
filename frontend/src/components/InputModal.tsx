@@ -60,7 +60,6 @@ const InputModal: React.FC<InputModalProps> = ({
         <h3 className="modal-title">{title}</h3>
         <form onSubmit={handleSubmit}>
           <input
-            // biome-ignore lint/a11y/noAutofocus: QoL for tab renaming
             autoFocus
             type="text"
             className="modal-input"

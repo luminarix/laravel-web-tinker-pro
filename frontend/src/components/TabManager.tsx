@@ -1,18 +1,20 @@
 import type React from 'react';
-import { useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import {
+  FaChevronDown,
+  FaList,
   FaLock,
   FaLockOpen,
   FaPlus,
   FaRegClone,
   FaThumbtack,
   FaTimes,
-  FaList,
 } from 'react-icons/fa';
 import { CONSTANTS } from '../constants';
 import type { Tab } from '../types';
 import InputModal from './InputModal';
 import TabListModal from './TabListModal';
+import TabOverflowDropdown from './TabOverflowDropdown';
 
 interface TabManagerProps {
   tabs: Tab[];
@@ -43,6 +45,112 @@ const TabManager: React.FC<TabManagerProps> = ({
   const [selectedTab, setSelectedTab] = useState<Tab | null>(null);
   const [dragOverId, setDragOverId] = useState<string | null>(null);
   const [isTabListModalOpen, setIsTabListModalOpen] = useState(false);
+  const [isOverflowOpen, setIsOverflowOpen] = useState(false);
+  const [visibleTabs, setVisibleTabs] = useState<Tab[]>(tabs);
+  const [overflowTabs, setOverflowTabs] = useState<Tab[]>([]);
+
+  const tabListRef = useRef<HTMLDivElement>(null);
+  const overflowButtonRef = useRef<HTMLButtonElement>(null);
+
+  // Calculate which tabs should be visible vs overflow
+  useEffect(() => {
+    const calculateVisibleTabs = () => {
+      if (!tabListRef.current) return;
+
+      const container = tabListRef.current;
+      const containerWidth = container.clientWidth;
+
+      // Account for the list and add buttons - get actual widths
+      const listButton = container.querySelector(
+        '.tab-list-button',
+      ) as HTMLElement;
+      const addButton = container.querySelector('.tab-add') as HTMLElement;
+      const buttonSpace =
+        (listButton?.offsetWidth || 36) + (addButton?.offsetWidth || 36) + 8; // Reduced gap
+
+      // Account for overflow button space (reduced)
+      const overflowButtonSpace = 50;
+
+      const availableWidth = containerWidth - buttonSpace - overflowButtonSpace;
+
+      if (availableWidth <= 0) {
+        // Not enough space, show minimum
+        setVisibleTabs(tabs.length > 0 ? [tabs[0]] : []);
+        setOverflowTabs(tabs.slice(1));
+        return;
+      }
+
+      // Calculate actual tab widths by measuring
+      let totalTabWidth = 0;
+      let visibleCount = 0;
+
+      // Create a temporary element to measure tab widths
+      const tempDiv = document.createElement('div');
+      tempDiv.style.visibility = 'hidden';
+      tempDiv.style.position = 'absolute';
+      tempDiv.style.top = '-1000px';
+      tempDiv.className = 'tab';
+      tempDiv.style.padding = '10px 14px';
+      tempDiv.style.fontSize = getComputedStyle(document.body).fontSize;
+      document.body.appendChild(tempDiv);
+
+      for (let i = 0; i < tabs.length; i++) {
+        // Account for tab content (name + action buttons + padding)
+        tempDiv.textContent = tabs[i].name;
+        const baseTabWidth = tempDiv.offsetWidth;
+
+        // Add space for action buttons (clone, lock/unlock, pin, close if applicable)
+        const actionButtonsWidth =
+          tabs[i].locked || tabs[i].pinned
+            ? 90 // 3 buttons (clone, lock, pin)
+            : 120; // 4 buttons (clone, lock, pin, close)
+
+        const tabWidth = baseTabWidth + actionButtonsWidth + 6; // 6px for gaps
+
+        if (totalTabWidth + tabWidth <= availableWidth) {
+          totalTabWidth += tabWidth;
+          visibleCount++;
+        } else {
+          break;
+        }
+      }
+
+      document.body.removeChild(tempDiv);
+
+      if (visibleCount >= tabs.length) {
+        setVisibleTabs(tabs);
+        setOverflowTabs([]);
+      } else {
+        // Ensure at least one tab is visible and prioritize active tab
+        visibleCount = Math.max(1, visibleCount);
+        const activeTab = tabs.find((tab) => tab.isActive);
+        const visible = tabs.slice(0, visibleCount);
+
+        // If active tab is not visible, replace the last visible tab with it
+        if (activeTab && !visible.includes(activeTab)) {
+          visible[visible.length - 1] = activeTab;
+        }
+
+        setVisibleTabs(visible);
+        setOverflowTabs(tabs.filter((tab) => !visible.includes(tab)));
+      }
+    };
+
+    // Add a small delay to ensure DOM is ready
+    const timer = setTimeout(calculateVisibleTabs, 50);
+
+    const resizeObserver = new ResizeObserver(() => {
+      setTimeout(calculateVisibleTabs, 50);
+    });
+    if (tabListRef.current) {
+      resizeObserver.observe(tabListRef.current);
+    }
+
+    return () => {
+      clearTimeout(timer);
+      resizeObserver.disconnect();
+    };
+  }, [tabs]);
 
   const handleTabSelect = (tab: Tab) => {
     onTabSelect(tab.id);
@@ -55,7 +163,9 @@ const TabManager: React.FC<TabManagerProps> = ({
 
   const handleModalConfirm = (newName: string) => {
     if (selectedTab && newName.trim() && newName !== selectedTab.name) {
-      const truncatedName = newName.trim().slice(0, CONSTANTS.TAB_NAME_MAX_LENGTH);
+      const truncatedName = newName
+        .trim()
+        .slice(0, CONSTANTS.TAB_NAME_MAX_LENGTH);
       onTabRename(selectedTab.id, truncatedName);
     }
     setIsModalOpen(false);
@@ -99,7 +209,7 @@ const TabManager: React.FC<TabManagerProps> = ({
   return (
     <>
       <div className={`tab-manager ${theme}`}>
-        <div className="tab-list" role="tablist">
+        <div className="tab-list" role="tablist" ref={tabListRef}>
           <button
             type="button"
             className="tab-list-button"
@@ -108,7 +218,7 @@ const TabManager: React.FC<TabManagerProps> = ({
           >
             <FaList />
           </button>
-          
+
           <button
             type="button"
             className="tab-add"
@@ -118,7 +228,7 @@ const TabManager: React.FC<TabManagerProps> = ({
             <FaPlus />
           </button>
 
-          {tabs.map((tab) => (
+          {visibleTabs.map((tab) => (
             <div
               key={tab.id}
               className={`tab ${tab.isActive ? 'active' : ''} ${dragOverId === tab.id ? 'drag-over' : ''}`}
@@ -188,6 +298,19 @@ const TabManager: React.FC<TabManagerProps> = ({
               </div>
             </div>
           ))}
+
+          {overflowTabs.length > 0 && (
+            <button
+              ref={overflowButtonRef}
+              type="button"
+              className={`tab-overflow-button ${isOverflowOpen ? 'open' : ''}`}
+              onClick={() => setIsOverflowOpen(!isOverflowOpen)}
+              title={`${overflowTabs.length} more tabs`}
+            >
+              <FaChevronDown />
+              <span className="overflow-count">{overflowTabs.length}</span>
+            </button>
+          )}
         </div>
       </div>
 
@@ -210,6 +333,19 @@ const TabManager: React.FC<TabManagerProps> = ({
         onTogglePin={onTogglePin}
         onToggleLock={onToggleLock}
         onTabClose={onTabClose}
+        theme={theme}
+      />
+
+      <TabOverflowDropdown
+        isOpen={isOverflowOpen}
+        overflowTabs={overflowTabs}
+        onClose={() => setIsOverflowOpen(false)}
+        onTabSelect={onTabSelect}
+        onDuplicate={onDuplicate}
+        onTogglePin={onTogglePin}
+        onToggleLock={onToggleLock}
+        onTabClose={onTabClose}
+        anchorRef={overflowButtonRef}
         theme={theme}
       />
     </>

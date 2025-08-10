@@ -8,12 +8,10 @@ import Header from './components/Header';
 import HistoryModal from './components/HistoryModal';
 import OutputPanel from './components/OutputPanel';
 import TabManager from './components/TabManager';
-
+import { CONSTANTS, STORAGE_KEYS } from './constants';
 import { useCodeExecution } from './hooks/useCodeExecution';
 import { useCodeSharing } from './hooks/useCodeSharing';
-
 import type { ExecuteCodeResponse, Tab } from './types';
-import { CONSTANTS, STORAGE_KEYS } from './constants';
 import './App.css';
 
 const App: React.FC = () => {
