@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Luminarix\LaravelWebTinkerPro;
 
 use Illuminate\Support\Facades\Gate;
+use Illuminate\Support\Facades\Route;
 use Luminarix\LaravelWebTinkerPro\Commands\LaravelWebTinkerProInstallCommand;
 use Luminarix\LaravelWebTinkerPro\Commands\LaravelWebTinkerProUpdateCommand;
 use Luminarix\LaravelWebTinkerPro\OutputModifiers\OutputModifier;
@@ -28,9 +29,11 @@ class LaravelWebTinkerProServiceProvider extends PackageServiceProvider
             ->hasRoute('web-tinker-pro');
     }
 
-    public function packageBooted(): void
+    public function bootingPackage(): void
     {
-        $this->registerWebTinkerProGate();
+        $this
+            ->registerMiddlewareGroup()
+            ->registerWebTinkerProGate();
         /** @var class-string $outputModifier */
         $outputModifier = config('web-tinker-pro.output_modifier');
         $this->app->bind(OutputModifier::class, $outputModifier);
@@ -41,6 +44,15 @@ class LaravelWebTinkerProServiceProvider extends PackageServiceProvider
         Gate::define('viewWebTinkerPro', function ($user = null) {
             return app()->environment('local');
         });
+
+        return $this;
+    }
+
+    protected function registerMiddlewareGroup(): self
+    {
+        /** @var array<class-string> $middlewares */
+        $middlewares = config('web-tinker-pro.middlewares', []);
+        Route::middlewareGroup('web-tinker-pro', $middlewares);
 
         return $this;
     }
