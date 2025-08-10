@@ -65,7 +65,7 @@ const CodeEditor: React.FC<CodeEditorProps> = ({
       monaco.editor.setModelLanguage(model, 'php-inline');
     }
 
-    // Add keyboard shortcut for running code (Ctrl+Enter)
+    // Add keyboard shortcut for running code (Cmd/Ctrl+Enter)
     if (onRun) {
       editor.addCommand(monaco.KeyMod.CtrlCmd | monaco.KeyCode.Enter, () => {
         // Use a ref to call the latest onRun with the current editor value (fixes stale closure)

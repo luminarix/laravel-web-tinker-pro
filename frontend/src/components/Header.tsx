@@ -2,6 +2,7 @@ import type React from 'react';
 import { FaMoon, FaPlay, FaShare, FaSun, FaTh } from 'react-icons/fa';
 import { MdClear } from 'react-icons/md';
 import type { ExecutionState } from '../types';
+import { isMac } from '../utils/platform.ts';
 
 interface HeaderProps {
   onRun: (code?: string) => void;
@@ -66,7 +67,7 @@ const Header: React.FC<HeaderProps> = ({
           className={`btn btn-run ${executionState.isExecuting ? 'executing' : 'pulsing'}`}
           onClick={() => onRun()}
           disabled={executionState.isExecuting}
-          title="Run PHP Code (Ctrl+Enter)"
+          title={`Run PHP Code (${isMac() ? 'Cmd' : 'Ctrl'}+Enter)`}
         >
           <FaPlay />
           {executionState.isExecuting ? 'Running...' : 'Run'}

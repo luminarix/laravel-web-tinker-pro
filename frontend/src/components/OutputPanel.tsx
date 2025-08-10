@@ -272,7 +272,7 @@ const OutputPanel: React.FC<OutputPanelProps> = ({
             <div className="placeholder-icon">🚀</div>
             <p>Click "Run" to execute your PHP code</p>
             <p className="placeholder-hint">
-              Use {isMac() ? 'Cmd+Enter' : 'Ctrl+Enter'} as a keyboard shortcut
+              Use {isMac() ? 'Cmd' : 'Ctrl'}+Enter as a keyboard shortcut
             </p>
           </div>
         )}

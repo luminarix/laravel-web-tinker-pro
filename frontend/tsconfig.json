@@ -7,7 +7,6 @@
     "skipLibCheck": true,
     "useDefineForClassFields": true,
 
-    /* modules */
     "module": "ESNext",
     "moduleDetection": "force",
     "moduleResolution": "bundler",
@@ -16,7 +15,6 @@
     "allowImportingTsExtensions": true,
     "noUncheckedSideEffectImports": true,
 
-    /* type checking */
     "strict": true,
     "noUnusedLocals": true,
     "noUnusedParameters": true

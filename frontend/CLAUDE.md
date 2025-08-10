@@ -76,7 +76,7 @@ The `src/services/api.ts` file contains mock implementations that simulate:
 - Light/dark theme switching with background pattern toggle
 - Code execution with simulated PHP output
 - Code sharing via URL generation
-- Keyboard shortcuts (Ctrl+Enter to run code)
+- Keyboard shortcuts (Cmd/Ctrl+Enter to run code)
 - Responsive split-pane layout
 
 ## Development Notes
