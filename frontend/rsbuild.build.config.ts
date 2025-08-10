@@ -21,9 +21,10 @@ export default defineConfig({
         legalComments: 'none',
         assetPrefix: 'auto',
         distPath: {
-          root: 'dist',
-          html: '',
+          root: '../resources',
+          html: 'views',
         },
+        cleanDistPath: true,
       },
       tools: {
         htmlPlugin(config) {
@@ -39,9 +40,10 @@ export default defineConfig({
         legalComments: 'none',
         assetPrefix: 'auto',
         distPath: {
-          root: 'dist',
-          html: '',
+          root: '../resources',
+          html: 'views',
         },
+        cleanDistPath: true,
       },
       tools: {
         htmlPlugin(config) {
