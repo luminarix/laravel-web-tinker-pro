@@ -233,7 +233,6 @@ const TabManager: React.FC<TabManagerProps> = ({
               key={tab.id}
               className={`tab ${tab.isActive ? 'active' : ''} ${dragOverId === tab.id ? 'drag-over' : ''}`}
               onClick={() => handleTabSelect(tab)}
-              onDoubleClick={() => handleTabDoubleClick(tab)}
               onKeyDown={(e) => {
                 if (e.key === 'Enter' || e.key === ' ') {
                   e.preventDefault();
@@ -250,7 +249,15 @@ const TabManager: React.FC<TabManagerProps> = ({
               onDrop={(e) => handleDrop(e, tab.id)}
             >
               {' '}
-              <span className="tab-name">{tab.name}</span>
+              <span
+                className="tab-name"
+                onDoubleClick={(e) => {
+                  e.stopPropagation();
+                  handleTabDoubleClick(tab);
+                }}
+              >
+                {tab.name}
+              </span>
               <div className="tab-actions">
                 <button
                   type="button"
