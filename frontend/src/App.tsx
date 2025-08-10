@@ -94,14 +94,20 @@ const App: React.FC = () => {
     if (shareId) {
       loadSharedCode(shareId).then((sharedData) => {
         if (sharedData) {
+          const savedTabs = localStorage.getItem(STORAGE_KEYS.TABS);
+          const parsedTabs = JSON.parse(savedTabs ?? '[]').map((tab: Tab) => ({
+            ...tab,
+            isActive: false,
+          }));
+
           const sharedTab: Tab = {
             id: nanoid(),
-            name: sharedData.title || 'Shared Code',
+            name: `Shared - ${sharedData.title}` || 'Shared Code',
             code: sharedData.code,
             isActive: true,
           };
 
-          setTabs([sharedTab]);
+          setTabs([...parsedTabs, sharedTab]);
           setActiveTabId(sharedTab.id);
 
           // Remove share parameter from URL

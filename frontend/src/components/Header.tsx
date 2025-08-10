@@ -4,9 +4,9 @@ import {
   FaBars,
   FaMoon,
   FaPlay,
+  FaPlus,
   FaShare,
   FaSun,
-  FaPlus,
   FaTh,
   FaTimes,
 } from 'react-icons/fa';

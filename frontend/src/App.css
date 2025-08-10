@@ -1130,7 +1130,6 @@ textarea {
   .mobile-only {
     display: flex !important;
   }
-  
 
   .btn-run {
     padding: 6px 12px;
@@ -1440,7 +1439,7 @@ textarea {
 }
 
 /* --- Extras: logo, grid toggle, subtle pattern --- */
-.logo {
+.header-left .logo {
   width: 28px;
   height: 28px;
   border-radius: 8px;

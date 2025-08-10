@@ -54,8 +54,7 @@ export const useCodeSharing = () => {
 
   const loadSharedCode = useCallback(async (shareId: string) => {
     try {
-      const sharedData = await getSharedCode(shareId);
-      return sharedData;
+      return await getSharedCode(shareId);
     } catch (error) {
       console.error('Failed to load shared code:', error);
       return null;
