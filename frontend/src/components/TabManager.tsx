@@ -8,6 +8,7 @@ import {
   FaThumbtack,
   FaTimes,
 } from 'react-icons/fa';
+import { CONSTANTS } from '../constants';
 import type { Tab } from '../types';
 import InputModal from './InputModal';
 
@@ -51,7 +52,8 @@ const TabManager: React.FC<TabManagerProps> = ({
 
   const handleModalConfirm = (newName: string) => {
     if (selectedTab && newName.trim() && newName !== selectedTab.name) {
-      onTabRename(selectedTab.id, newName);
+      const truncatedName = newName.trim().slice(0, CONSTANTS.TAB_NAME_MAX_LENGTH);
+      onTabRename(selectedTab.id, truncatedName);
     }
     setIsModalOpen(false);
     setSelectedTab(null);
@@ -182,6 +184,7 @@ const TabManager: React.FC<TabManagerProps> = ({
         title="Rename Tab"
         placeholder="Enter new tab name"
         defaultValue={selectedTab?.name || ''}
+        maxLength={CONSTANTS.TAB_NAME_MAX_LENGTH}
         onConfirm={handleModalConfirm}
         onCancel={handleModalCancel}
       />

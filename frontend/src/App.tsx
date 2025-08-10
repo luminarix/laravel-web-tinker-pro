@@ -13,15 +13,8 @@ import { useCodeExecution } from './hooks/useCodeExecution';
 import { useCodeSharing } from './hooks/useCodeSharing';
 
 import type { ExecuteCodeResponse, Tab } from './types';
+import { CONSTANTS, STORAGE_KEYS } from './constants';
 import './App.css';
-
-const STORAGE_KEYS = {
-  TABS: 'webTinker_tabs',
-  ACTIVE_TAB: 'webTinker_activeTab',
-  THEME: 'webTinker_theme',
-  BG_PATTERN: 'webTinker_bgPattern',
-  SPLIT_SIZE: 'webTinker_splitSize',
-};
 
 const App: React.FC = () => {
   const [tabs, setTabs] = useState<Tab[]>([]);
@@ -294,9 +287,10 @@ const App: React.FC = () => {
   }, [tabs.length]);
 
   const handleTabRename = useCallback((tabId: string, newName: string) => {
+    const truncatedName = newName.slice(0, CONSTANTS.TAB_NAME_MAX_LENGTH);
     setTabs((prevTabs) =>
       prevTabs.map((tab) =>
-        tab.id === tabId ? { ...tab, name: newName } : tab,
+        tab.id === tabId ? { ...tab, name: truncatedName } : tab,
       ),
     );
   }, []);

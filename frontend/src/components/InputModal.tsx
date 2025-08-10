@@ -6,6 +6,7 @@ interface InputModalProps {
   title: string;
   placeholder?: string;
   defaultValue?: string;
+  maxLength?: number;
   onConfirm: (value: string) => void;
   onCancel: () => void;
 }
@@ -15,6 +16,7 @@ const InputModal: React.FC<InputModalProps> = ({
   title,
   placeholder = '',
   defaultValue = '',
+  maxLength,
   onConfirm,
   onCancel,
 }) => {
@@ -66,6 +68,7 @@ const InputModal: React.FC<InputModalProps> = ({
             onChange={(e) => setInputValue(e.target.value)}
             onKeyDown={handleKeyDown}
             placeholder={placeholder}
+            maxLength={maxLength}
           />
           <div className="modal-actions">
             <button
