@@ -6,6 +6,7 @@ namespace Luminarix\LaravelWebTinkerPro;
 
 use Illuminate\Support\Facades\Gate;
 use Luminarix\LaravelWebTinkerPro\Commands\LaravelWebTinkerProInstallCommand;
+use Luminarix\LaravelWebTinkerPro\OutputModifiers\OutputModifier;
 use Spatie\LaravelPackageTools\Package;
 use Spatie\LaravelPackageTools\PackageServiceProvider;
 
@@ -26,6 +27,9 @@ class LaravelWebTinkerProServiceProvider extends PackageServiceProvider
     public function packageBooted(): void
     {
         $this->registerWebTinkerProGate();
+        /** @var class-string $outputModifier */
+        $outputModifier = config('web-tinker-pro.output_modifier');
+        $this->app->bind(OutputModifier::class, $outputModifier);
     }
 
     protected function registerWebTinkerProGate(): self

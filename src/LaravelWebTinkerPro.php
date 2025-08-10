@@ -38,10 +38,16 @@ class LaravelWebTinkerPro
         $this->shell->addInput($phpCode);
 
         $closure = new ExecutionLoopClosure($this->shell);
+        $initialMemoryUsage = memory_get_usage();
         $runtime = Benchmark::measure(fn () => $closure->execute());
+        $memoryUsage = max(memory_get_usage() - $initialMemoryUsage, 0);
         $output = $this->cleanOutput($this->output->fetch());
 
-        return $this->outputModifier->modify($output, $runtime);
+        return $this->outputModifier->modify(
+            output: $output,
+            runtime: $runtime,
+            memoryUsage: $memoryUsage,
+        );
     }
 
     public function removeComments(string $code): string

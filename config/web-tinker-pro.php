@@ -7,6 +7,8 @@ return [
 
     'path' => '/tinker-pro',
 
+    'output_modifier' => Luminarix\LaravelWebTinkerPro\OutputModifiers\BasicModifier::class,
+
     'middlewares' => [
         Illuminate\Cookie\Middleware\EncryptCookies::class,
         Illuminate\Session\Middleware\StartSession::class,
