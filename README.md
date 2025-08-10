@@ -150,11 +150,21 @@ Built with `@dnd-kit/core` for:
 composer require luminarix/laravel-web-tinker-pro
 ```
 
-# Then, publish the configuration and assets:
+### Then, publish the configuration and assets:
 
 ```bash
 # Install the package
 php artisan laravel-web-tinker-pro:install
+```
+
+### Default route and considerations
+By default, the package will be available at `/tinker-pro`. You can change this by modifying the `web-tinker-pro.php` config file.
+By default, the route will only be accessible from the local environment. You can override this behavior by creating your own Gate:
+
+```php
+Gate::define('viewWebTinkerPro', function () {
+    // Your custom logic here
+});
 ```
 
 ---
