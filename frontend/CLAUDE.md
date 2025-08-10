@@ -48,6 +48,7 @@ bun run check
 - `HistoryModal.tsx` - Execution history management with pin/compare functionality
 - `DiffModal.tsx` - Side-by-side diff viewer using Monaco's DiffEditor
 - `InputModal.tsx` - Generic input modal for user prompts
+- `OutputRenderer.tsx` - Smart output renderer that handles both plain text and HTML content
 
 ### Custom Monaco Configuration
 
@@ -81,6 +82,7 @@ The `src/services/api.ts` file contains mock implementations that simulate:
 - Light/dark theme switching with background pattern toggle
 - Code execution with simulated PHP output
 - Code sharing via URL generation
+- HTML output rendering with automatic detection and safe sanitization
 - Execution history tracking with pin/compare functionality
 - Side-by-side diff comparison of code versions
 - Tab management with drag-and-drop reordering

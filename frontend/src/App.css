@@ -679,7 +679,7 @@ textarea {
 
 .output-content {
   flex: 1;
-  padding: 16px;
+  padding: 16px 16px 100px;
   overflow-y: auto;
   font-family:
     ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono",
@@ -760,6 +760,67 @@ textarea {
 
 .output-text {
   color: var(--text-primary);
+}
+
+/* HTML Output Styles */
+.html-output {
+  background: var(--bg-secondary);
+  border: 1px solid var(--border-color);
+  border-left: 3px solid currentColor;
+  border-radius: var(--radius-1);
+  padding: 12px;
+  font-size: 13px;
+  line-height: 1.5;
+  color: var(--text-primary);
+  overflow: auto;
+}
+
+.html-output * {
+  max-width: 100%;
+}
+
+.html-output img {
+  max-width: 100%;
+  height: auto;
+  display: block;
+  margin: 8px 0;
+}
+
+.html-output table {
+  border-collapse: collapse;
+  width: 100%;
+  margin: 8px 0;
+}
+
+.html-output th,
+.html-output td {
+  border: 1px solid var(--border-color);
+  padding: 8px;
+  text-align: left;
+}
+
+.html-output th {
+  background: var(--bg-primary);
+  font-weight: bold;
+}
+
+.html-output pre {
+  background: var(--bg-primary);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-1);
+  padding: 8px;
+  margin: 8px 0;
+  font-family: var(--font-mono);
+  font-size: 12px;
+  overflow-x: auto;
+}
+
+.html-output code {
+  background: var(--bg-primary);
+  border-radius: var(--radius-1);
+  padding: 2px 4px;
+  font-family: var(--font-mono);
+  font-size: 12px;
 }
 
 .no-output {

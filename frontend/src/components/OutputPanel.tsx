@@ -9,6 +9,7 @@ import type {
 } from '../types';
 import { isBetween } from '../utils/number.ts';
 import { isMac } from '../utils/platform';
+import OutputRenderer from './OutputRenderer';
 
 interface OutputPanelProps {
   executionState: ExecutionState;
@@ -128,7 +129,7 @@ const OutputPanel: React.FC<OutputPanelProps> = ({
             ) : executionResult ? (
               executionResult.output ? (
                 <div className="success-output">
-                  <pre className="output-text">{executionResult.output}</pre>
+                  <OutputRenderer content={executionResult.output} />
                 </div>
               ) : null
             ) : null}
@@ -216,7 +217,7 @@ const OutputPanel: React.FC<OutputPanelProps> = ({
         ) : result ? (
           result.output ? (
             <div className="success-output">
-              <pre className="output-text">{result.output}</pre>
+              <OutputRenderer content={result.output} />
             </div>
           ) : null
         ) : (
