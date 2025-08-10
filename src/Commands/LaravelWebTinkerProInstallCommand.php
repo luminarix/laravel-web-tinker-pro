@@ -16,10 +16,10 @@ class LaravelWebTinkerProInstallCommand extends Command
     {
         $this->comment('Publishing Laravel Web Tinker Pro Assets...');
 
-        $this->call('vendor:publish', ['--tag' => 'laravel-web-tinker-pro-config']);
-        $this->call('vendor:publish', ['--tag' => 'laravel-web-tinker-pro-views']);
-        $this->call('vendor:publish', ['--tag' => 'laravel-web-tinker-pro-assets']);
-        $this->call('vendor:publish', ['--tag' => 'laravel-web-tinker-pro-migrations']);
+        $this->call('vendor:publish', ['--tag' => 'web-tinker-pro-config']);
+        $this->call('vendor:publish', ['--tag' => 'web-tinker-pro-views']);
+        $this->call('vendor:publish', ['--tag' => 'web-tinker-pro-assets']);
+        $this->call('vendor:publish', ['--tag' => 'web-tinker-pro-migrations']);
 
         $this->info('Laravel Web Tinker Pro installed successfully.');
 
