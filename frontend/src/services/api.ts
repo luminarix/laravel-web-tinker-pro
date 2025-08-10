@@ -67,5 +67,3 @@ export async function getSharedCode(
 
   return null;
 }
-
-export default api;

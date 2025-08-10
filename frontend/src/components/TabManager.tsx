@@ -352,7 +352,7 @@ const TabManager: React.FC<TabManagerProps> = ({
         onTogglePin={onTogglePin}
         onToggleLock={onToggleLock}
         onTabClose={onTabClose}
-        anchorRef={overflowButtonRef}
+        anchorRef={overflowButtonRef as React.RefObject<HTMLElement>}
         theme={theme}
       />
     </>
