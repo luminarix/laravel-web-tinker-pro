@@ -45,7 +45,7 @@ textarea {
   height: 100vh;
   display: flex;
   flex-direction: column;
-  overflow: hidden;
+  position: relative;
 }
 
 /* Design tokens */
@@ -153,10 +153,14 @@ textarea {
   --radius-2: 10px;
 }
 .main-content {
-  flex: 1;
+  flex: 1 1 0;
   min-height: 0;
   overflow: hidden;
   background: var(--bg-primary);
+  display: flex;
+  flex-direction: column;
+  position: relative;
+  z-index: 1;
 }
 
 /* Header Styles */
@@ -167,8 +171,10 @@ textarea {
   padding: 12px 16px;
   background: var(--header-gradient, var(--bg-secondary));
   border-bottom: 1px solid var(--border-color);
-  min-height: 56px;
-  flex-shrink: 0;
+  height: 56px;
+  flex: 0 0 auto;
+  position: relative;
+  z-index: 100;
 }
 
 .header-left {
@@ -215,6 +221,7 @@ textarea {
   display: flex;
   align-items: center;
   gap: var(--space-2);
+  position: relative;
 }
 
 /* Buttons */
@@ -395,14 +402,15 @@ textarea {
   background-color: var(--bg-secondary);
   border-bottom: 1px solid var(--border-color);
   padding: 0;
-  flex-shrink: 0;
+  flex: 0 0 auto;
+  height: 40px;
 }
 
 .tab-list {
   display: flex;
   align-items: center;
   overflow-x: auto;
-  min-height: 40px;
+  height: 40px;
   padding: 0 8px;
   gap: 2px;
 }
@@ -646,6 +654,8 @@ textarea {
   flex-direction: column;
   background: var(--bg-primary);
   border-left: 1px solid var(--border-color);
+  position: relative;
+  overflow: hidden;
 }
 
 .output-header {
@@ -686,6 +696,20 @@ textarea {
     "Courier New", monospace;
   color: var(--text-primary);
   min-height: 0;
+}
+
+/* Split Pane Container fix */
+.main-content > div {
+  flex: 1 1 0;
+  min-height: 0;
+  position: relative;
+}
+
+/* Code Editor Container */
+.code-editor {
+  height: 100%;
+  width: 100%;
+  position: relative;
 }
 
 .loading {
@@ -884,56 +908,230 @@ textarea {
 .SplitPane {
   background: var(--bg-primary) !important;
   height: 100% !important;
+  flex: 1 1 0;
+  position: relative !important;
 }
 
 @media (min-width: 769px) {
   .monaco-editor .parameter-hints-widget {
-    transform: translateY(95px) !important;
+    transform: translateY(0) !important;
   }
+}
+
+/* Mobile Menu Styles */
+.desktop-controls {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.mobile-only {
+  display: none !important;
+}
+
+.btn-hamburger {
+  padding: 8px 10px;
+  font-size: 18px;
+  background: transparent;
+  color: var(--text-primary);
+  border: 1px solid var(--border-color);
+  cursor: pointer;
+}
+
+.btn-hamburger:hover {
+  background: var(--bg-hover);
+}
+
+.mobile-menu {
+  position: absolute;
+  top: calc(100% + 8px);
+  right: 0;
+  background: var(--bg-secondary);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-2);
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.25);
+  z-index: 9999;
+  min-width: 200px;
+  animation: slideDown 0.2s ease-out;
+  overflow: hidden;
+  max-height: calc(100vh - 100px);
+  overflow-y: auto;
+}
+
+@keyframes slideDown {
+  from {
+    opacity: 0;
+    transform: translateY(-10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.mobile-menu-item {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  width: 100%;
+  padding: 12px 16px;
+  background: transparent;
+  color: var(--text-primary);
+  border: none;
+  text-align: left;
+  font-size: 14px;
+  cursor: pointer;
+  transition: background-color 0.15s;
+  white-space: nowrap;
+}
+
+.mobile-menu-item:hover {
+  background: var(--bg-hover);
+}
+
+.mobile-menu-item.is-active {
+  color: var(--accent-primary);
+}
+
+.mobile-menu-item .icon-placeholder {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 16px;
+  font-size: 12px;
+  font-weight: 600;
+}
+
+.mobile-menu-divider {
+  height: 1px;
+  background: var(--border-color);
+  margin: 4px 0;
+}
+
+.btn-text {
+  display: inline;
 }
 
 /* Responsive Design */
 @media (max-width: 768px) {
   .header {
     padding: 8px 12px;
-    min-height: 50px;
+    height: 50px;
   }
 
   .header-left .title {
     font-size: 17px;
   }
 
+  .header-left .subtitle {
+    display: none;
+  }
+
+  .header-left .logo {
+    display: none;
+  }
+
   .header-right {
     gap: 8px;
   }
 
-  .btn {
-    padding: 6px 10px;
-    font-size: 13px;
+  .desktop-controls {
+    display: none;
   }
 
-  .production-warning {
-    font-size: 10px;
-    padding: 3px 8px;
-    margin-left: 8px;
+  .mobile-only {
+    display: flex !important;
+  }
+
+  .btn-run {
+    padding: 6px 12px;
+    font-size: 14px;
+  }
+
+  .btn-text {
+    display: none;
+  }
+
+  .btn-run .fa {
+    margin-right: 0;
+  }
+
+  /* Tab Manager Mobile */
+  .tab-manager {
+    height: 36px;
   }
 
   .tab-list {
+    height: 36px;
     padding: 0 4px;
   }
 
   .tab {
-    padding: 8px 10px;
-    min-width: 100px;
+    padding: 6px 10px;
+    font-size: 13px;
+    min-width: 60px;
   }
 
-  .execution-stats {
-    gap: 12px;
-    font-size: 11px;
+  .tab-name {
+    max-width: 80px;
+  }
+
+  .add-tab-btn {
+    padding: 6px 10px;
+    font-size: 13px;
+  }
+
+  /* Split Pane Mobile - Stack vertically */
+  .SplitPane {
+    flex-direction: column !important;
+  }
+
+  .SplitPane > .Pane1 {
+    width: 100% !important;
+    height: 50% !important;
+  }
+
+  .SplitPane > .Pane2 {
+    width: 100% !important;
+    height: 50% !important;
+  }
+
+  .SplitPane > .Resizer {
+    display: none !important;
+  }
+
+  /* Output panel mobile */
+  .output-panel {
+    border-left: none;
+    border-top: 1px solid var(--border-color);
+  }
+
+  .output-header {
+    padding: 8px 12px;
+    font-size: 13px;
   }
 
   .output-content {
     padding: 12px;
+    font-size: 13px;
+  }
+
+  /* Editor mobile adjustments */
+  .code-editor {
+    font-size: 13px;
+  }
+
+  /* History modal mobile */
+  .modal-content {
+    width: 95vw;
+    max-width: 95vw;
+    margin: 10px;
+  }
+
+  /* Production warning mobile */
+  .production-warning {
+    font-size: 10px;
+    padding: 2px 6px;
   }
 }
 
