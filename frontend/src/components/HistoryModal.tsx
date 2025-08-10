@@ -52,9 +52,9 @@ const HistoryModal: React.FC<HistoryModalProps> = ({
   const sorted = useMemo(() => {
     const pinned = history.filter((h) => h.pinned);
     const rest = history.filter((h) => !h.pinned);
-    // Keep pinned first, then sort each group by timestamp ascending
+    // Keep pinned first, then sort each group by timestamp descending (newest first)
     const byTs = (a: ExecutionRecord, b: ExecutionRecord) =>
-      new Date(a.ts).getTime() - new Date(b.ts).getTime();
+      new Date(b.ts).getTime() - new Date(a.ts).getTime();
     return [...pinned.sort(byTs), ...rest.sort(byTs)];
   }, [history]);
 
