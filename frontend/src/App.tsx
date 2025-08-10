@@ -74,7 +74,7 @@ const App: React.FC = () => {
       pinned: false,
       locked: false,
       history: [],
-      replState: { enabled: true, cells: [] },
+      replState: { enabled: false, cells: [] },
     };
 
     setTabs([defaultTab]);
@@ -158,39 +158,7 @@ const App: React.FC = () => {
       const userCode = (code ?? tab.code) || '';
       const replEnabled = tab.replState?.enabled ?? true;
 
-      let result: ExecuteCodeResponse | null;
-
-      if (replEnabled) {
-        // In REPL mode, we need to execute all previous code for context
-        // but only show output from the current execution
-        const joinedRepl = (tab.replState?.cells || [])
-          .map((c) => c.code)
-          .join('\n');
-        const composedCode = joinedRepl
-          ? `${joinedRepl}\n${userCode}`
-          : userCode;
-
-        // Execute the composed code to maintain REPL state
-        const composedResult = await executeCode(composedCode);
-
-        // Also execute just the current code to get its isolated output
-        const currentResult = await executeCode(userCode);
-
-        // Use the current result's output but keep composed result's execution context
-        result =
-          composedResult && currentResult
-            ? {
-                output: currentResult.output,
-                error: composedResult.error,
-                executionTime: composedResult.executionTime,
-                memoryUsage: composedResult.memoryUsage,
-                exitCode: composedResult.exitCode,
-              }
-            : composedResult;
-      } else {
-        // Non-REPL mode: just execute the current code
-        result = await executeCode(userCode);
-      }
+      const result: ExecuteCodeResponse | null = await executeCode(userCode);
 
       // Record history (with the user's code snapshot, not the composed one)
       setTabs((prev) =>
@@ -205,12 +173,13 @@ const App: React.FC = () => {
             ts: Date.now(),
             pinned: false,
           };
-          // cap history to last 100
-          const nextHistory = [...history, newRecord].slice(-100);
+
+          // cap history to last 25
+          const nextHistory = [...history, newRecord].slice(-25);
 
           // If success and REPL is enabled, persist the code as a state cell
           const nextRepl = { ...(t.replState ?? { enabled: true, cells: [] }) };
-          if (replEnabled && result && result.exitCode === 0) {
+          if (replEnabled && result) {
             nextRepl.cells = [
               ...(nextRepl.cells || []),
               {
@@ -279,7 +248,7 @@ const App: React.FC = () => {
       pinned: false,
       locked: false,
       history: [],
-      replState: { enabled: true, cells: [] },
+      replState: { enabled: false, cells: [] },
     };
 
     setTabs((prevTabs) => [
@@ -340,6 +309,7 @@ const App: React.FC = () => {
                 : t,
             ),
           );
+          clearOutput();
         }}
         replEnabled={activeTab?.replState?.enabled ?? true}
         executionState={executionState}

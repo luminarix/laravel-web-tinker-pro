@@ -1,6 +1,7 @@
 import type React from 'react';
 import { useCallback, useEffect, useMemo, useState } from 'react';
 import type { ExecutionRecord } from '../types';
+import { isBetween } from '../utils/number.ts';
 
 interface HistoryModalProps {
   isOpen: boolean;
@@ -124,14 +125,8 @@ const HistoryModal: React.FC<HistoryModalProps> = ({
                     <span className="modal-history-time">
                       {new Date(rec.ts).toLocaleTimeString()}
                     </span>
-                    <span
-                      className={`modal-history-status ${rec.result?.exitCode === 0 ? 'success' : 'error'}`}
-                    >
-                      {rec.result
-                        ? rec.result.exitCode === 0
-                          ? 'OK'
-                          : `Exit ${rec.result.exitCode}`
-                        : 'Error'}
+                    <span className="modal-history-status">
+                      {isBetween(rec.result?.status, 200, 299) ? '✅' : '❌'}
                     </span>
                     <span title={rec.code} className="modal-history-code">
                       {rec.code.split('\n')[0]?.slice(0, 120)}

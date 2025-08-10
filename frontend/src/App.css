@@ -442,6 +442,7 @@ textarea {
 .tab-name {
   flex: 1;
   font-size: 14px;
+  user-select: none;
 }
 
 .tab-actions {
@@ -674,14 +675,6 @@ textarea {
   display: inline-flex;
   align-items: center;
   gap: 6px;
-}
-
-.stat.exit-code.success {
-  color: var(--success-color);
-}
-
-.stat.exit-code.error {
-  color: var(--error-color);
 }
 
 .output-content {
@@ -1051,14 +1044,6 @@ textarea {
 
 .modal-history-status {
   font-weight: 600;
-}
-
-.modal-history-status.success {
-  color: var(--success-color);
-}
-
-.modal-history-status.error {
-  color: var(--error-color);
 }
 
 .modal-history-code {

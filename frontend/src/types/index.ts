@@ -36,12 +36,21 @@ export interface ExecuteCodeRequest {
   stdin?: string;
 }
 
-export interface ExecuteCodeResponse {
+export interface ServerResponse {
+  timestamp: number;
+  runtime: number;
+  memoryUsage: string;
   output: string;
-  error: string | null;
-  executionTime: number;
-  memoryUsage: number;
-  exitCode: number;
+  outputSize: string;
+}
+
+export interface ExecuteCodeResponse {
+  timestamp: string;
+  runtime: string;
+  memoryUsage: string;
+  output: string;
+  outputSize: string;
+  status: number;
 }
 
 export interface ShareCodeRequest {

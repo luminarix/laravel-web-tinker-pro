@@ -6,6 +6,8 @@ final class BasicModifier implements OutputModifier
 {
     public function modify(mixed ...$args): string
     {
+        $timestamp = now()->timestamp;
+
         /** @var string $output */
         $output = $args['output'];
         /** @var int $runtime */
@@ -13,18 +15,16 @@ final class BasicModifier implements OutputModifier
         /** @var int $memoryUsage */
         $memoryUsage = $args['memoryUsage'];
 
-        $memoryUsageFormatted = $this->formatBytes($memoryUsage);
-        $timestamp = now()->timestamp;
-        $formattedRuntime = round($runtime / 1_000, 3);
-        $outputSizeFormatted = $this->formatBytes(mb_strlen($output, 'binary'));
+        $memoryUsage = $this->formatBytes($memoryUsage);
+        $outputSize = $this->formatBytes(mb_strlen($output, 'binary'));
 
         $json = json_encode(
             value: compact(
                 'timestamp',
-                'formattedRuntime',
-                'memoryUsageFormatted',
+                'runtime',
+                'memoryUsage',
                 'output',
-                'outputSizeFormatted'
+                'outputSize'
             )
         );
 

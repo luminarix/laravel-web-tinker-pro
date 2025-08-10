@@ -7,6 +7,7 @@ import type {
   ReplCell,
   ReplState,
 } from '../types';
+import { isBetween } from '../utils/number.ts';
 import { isMac } from '../utils/platform';
 
 interface OutputPanelProps {
@@ -27,19 +28,6 @@ const OutputPanel: React.FC<OutputPanelProps> = ({
   const { isExecuting, result, error } = executionState;
   const [copied, setCopied] = useState(false);
   const [copiedItems, setCopiedItems] = useState<Set<string>>(new Set());
-
-  const formatExecutionTime = (time: number): string => {
-    if (time < 0.001) return '<0.001s';
-    return `${time.toFixed(3)}s`;
-  };
-
-  const formatMemoryUsage = (bytes: number): string => {
-    if (bytes === 0) return '0 B';
-    const k = 1024;
-    const sizes = ['B', 'KB', 'MB', 'GB'];
-    const i = Math.floor(Math.log(bytes) / Math.log(k));
-    return `${parseFloat((bytes / k ** i).toFixed(2))} ${sizes[i]}`;
-  };
 
   const copyOutput = async (text: string, id?: string) => {
     try {
@@ -87,11 +75,7 @@ const OutputPanel: React.FC<OutputPanelProps> = ({
     const executionError = executionRecord?.error;
 
     // Prepare text for copying (prefer output, then error, then code)
-    const copyText =
-      executionResult?.output ||
-      executionResult?.error ||
-      executionError ||
-      code;
+    const copyText = executionResult?.output || executionError || code;
 
     return (
       <div
@@ -108,16 +92,11 @@ const OutputPanel: React.FC<OutputPanelProps> = ({
             </span>
             {executionResult && (
               <>
+                <span className="stat">🕑 {executionResult.timestamp}</span>
+                <span className="stat">⌛️ {executionResult.runtime}</span>
+                <span className="stat">💾 {executionResult.memoryUsage}</span>
                 <span className="stat">
-                  ⏱️ {formatExecutionTime(executionResult.executionTime)}
-                </span>
-                <span className="stat">
-                  💾 {formatMemoryUsage(executionResult.memoryUsage)}
-                </span>
-                <span
-                  className={`stat exit-code ${executionResult.exitCode === 0 ? 'success' : 'error'}`}
-                >
-                  Exit: {executionResult.exitCode}
+                  {isBetween(executionResult.status, 200, 299) ? '✅' : '❌'}
                 </span>
               </>
             )}
@@ -146,25 +125,11 @@ const OutputPanel: React.FC<OutputPanelProps> = ({
                 <pre className="error-text">{executionError}</pre>
               </div>
             ) : executionResult ? (
-              <>
-                {executionResult.error ? (
-                  <div className="error-output">
-                    <div className="error-header">⚠️ PHP Error</div>
-                    <pre className="error-text">{executionResult.error}</pre>
-                  </div>
-                ) : null}
-
-                {executionResult.output ? (
-                  <div className="success-output">
-                    <div className="output-header-text">✅ Output</div>
-                    <pre className="output-text">{executionResult.output}</pre>
-                  </div>
-                ) : !executionResult.error ? (
-                  <div className="no-output">
-                    <span>Code executed successfully (no output)</span>
-                  </div>
-                ) : null}
-              </>
+              executionResult.output ? (
+                <div className="success-output">
+                  <pre className="output-text">{executionResult.output}</pre>
+                </div>
+              ) : null
             ) : null}
           </div>
         )}
@@ -181,23 +146,19 @@ const OutputPanel: React.FC<OutputPanelProps> = ({
         <h3>Output</h3>
         {result && (
           <div className="execution-stats">
+            <span className="stat">🕑 {result.timestamp}</span>
+            <span className="stat">⌛️ {result.runtime}</span>
+            <span className="stat">💾 {result.memoryUsage}</span>
+            <span className="stat">🤏🏻 {result.outputSize}</span>
             <span className="stat">
-              ⏱️ {formatExecutionTime(result.executionTime)}
+              {isBetween(result.status, 200, 299) ? '✅' : '❌'}
             </span>
-            <span className="stat">
-              💾 {formatMemoryUsage(result.memoryUsage)}
-            </span>
-            <span
-              className={`stat exit-code ${result.exitCode === 0 ? 'success' : 'error'}`}
-            >
-              Exit: {result.exitCode}
-            </span>
-            {(result.output || result.error) && (
+            {(result.output || error) && (
               <button
                 type="button"
                 className={`btn btn-theme btn-xs btn-copy ${copied ? 'copied' : ''}`}
                 onClick={() => {
-                  const text = result.output || result.error || '';
+                  const text = result.output || error || '';
                   navigator.clipboard
                     ?.writeText(text)
                     .then(() => {
@@ -248,25 +209,11 @@ const OutputPanel: React.FC<OutputPanelProps> = ({
             <pre className="error-text">{error}</pre>
           </div>
         ) : result ? (
-          <>
-            {result.error ? (
-              <div className="error-output">
-                <div className="error-header">⚠️ PHP Error</div>
-                <pre className="error-text">{result.error}</pre>
-              </div>
-            ) : null}
-
-            {result.output ? (
-              <div className="success-output">
-                <div className="output-header-text">✅ Output</div>
-                <pre className="output-text">{result.output}</pre>
-              </div>
-            ) : !result.error ? (
-              <div className="no-output">
-                <span>Code executed successfully (no output)</span>
-              </div>
-            ) : null}
-          </>
+          result.output ? (
+            <div className="success-output">
+              <pre className="output-text">{result.output}</pre>
+            </div>
+          ) : null
         ) : (
           <div className="placeholder">
             <div className="placeholder-icon">🚀</div>
