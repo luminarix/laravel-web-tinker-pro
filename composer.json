@@ -1,0 +1,71 @@
+{
+    "name": "luminarix/laravel-web-tinker-pro",
+    "description": "This is my package laravel-web-tinker-pro",
+    "keywords": [
+        "Luminarix Labs",
+        "laravel",
+        "laravel-web-tinker-pro"
+    ],
+    "homepage": "https://github.com/luminarix/laravel-web-tinker-pro",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Luminarix Labs",
+            "email": "hello@luminarix.dev",
+            "role": "Developer"
+        }
+    ],
+    "require": {
+        "php": "^8.4",
+        "spatie/laravel-package-tools": "^1.16",
+        "illuminate/contracts": "^12.0"
+    },
+    "require-dev": {
+        "laravel/pint": "^1.18.3",
+        "nunomaduro/collision": "^v8.5.0",
+        "larastan/larastan": "^v3.0.2",
+        "orchestra/testbench": "^10.0.0",
+        "pestphp/pest": "^v3.7.1",
+        "pestphp/pest-plugin-arch": "^v3.0.0",
+        "pestphp/pest-plugin-laravel": "^v3.0.0",
+        "phpstan/extension-installer": "^1.4.3",
+        "phpstan/phpstan-deprecation-rules": "^2.0.1",
+        "phpstan/phpstan-phpunit": "^2.0.3"
+    },
+    "autoload": {
+        "psr-4": {
+            "Luminarix\\LaravelWebTinkerPro\\": "src/",
+            "Luminarix\\LaravelWebTinkerPro\\Database\\Factories\\": "database/factories/"
+        }
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "Luminarix\\LaravelWebTinkerPro\\Tests\\": "tests/"
+        }
+    },
+    "scripts": {
+        "analyse": "vendor/bin/phpstan analyse --memory-limit=4G -v",
+        "test": "vendor/bin/pest",
+        "test-coverage": "vendor/bin/pest --coverage",
+        "format": "XDEBUG_MODE=off vendor/bin/pint --parallel"
+    },
+    "config": {
+        "sort-packages": true,
+        "allow-plugins": {
+            "pestphp/pest-plugin": true,
+            "phpstan/extension-installer": true
+        }
+    },
+    "extra": {
+        "laravel": {
+            "providers": [
+                "Luminarix\\LaravelWebTinkerPro\\LaravelWebTinkerProServiceProvider"
+            ],
+            "aliases": {
+                "LaravelWebTinkerPro": "Luminarix\\LaravelWebTinkerPro\\Facades\\LaravelWebTinkerPro"
+            }
+        }
+    },
+    "minimum-stability": "dev",
+    "prefer-stable": true
+}
