@@ -20,11 +20,11 @@ class LaravelWebTinkerProServiceProvider extends PackageServiceProvider
     {
         $package
             ->name('laravel-web-tinker-pro')
-            ->hasConfigFile('web-tinker-pro.php')
+            ->hasConfigFile('web-tinker-pro')
             ->hasViews('web-tinker-pro')
             ->hasMigration('create_laravel-web-tinker-pro_table')
             ->hasCommand(LaravelWebTinkerProInstallCommand::class)
-            ->hasRoute('web-tinker-pro.php');
+            ->hasRoute('web-tinker-pro');
     }
 
     protected function registerWebTinkerProGate(): self
