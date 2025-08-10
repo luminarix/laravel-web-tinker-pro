@@ -7,7 +7,6 @@ import type {
   ReplCell,
   ReplState,
 } from '../types';
-import { isBetween } from '../utils/number.ts';
 import { isMac } from '../utils/platform';
 import OutputRenderer from './OutputRenderer';
 
@@ -93,13 +92,28 @@ const OutputPanel: React.FC<OutputPanelProps> = ({
             </span>
             {executionResult && (
               <>
-                <span className="stat">🕑 {executionResult.timestamp} | </span>
-                <span className="stat">⌛️ {executionResult.runtime}</span>
-                <span className="stat">💾 {executionResult.memoryUsage}</span>
-                <span className="stat">🤏🏻 {executionResult.outputSize}</span>
-                <span className="stat">
-                  {isBetween(executionResult.status, 200, 299) ? '✅' : '❌'}
-                </span>
+                <div className="stat-container">
+                  <span className="stat-icon">🕑</span>
+                  <span className="stat-value">
+                    {executionResult.timestamp}
+                  </span>
+                </div>
+                <div className="stat-container">
+                  <span className="stat-icon">⚡</span>
+                  <span className="stat-value">{executionResult.runtime}</span>
+                </div>
+                <div className="stat-container">
+                  <span className="stat-icon">💾</span>
+                  <span className="stat-value">
+                    {executionResult.memoryUsage}
+                  </span>
+                </div>
+                <div className="stat-container">
+                  <span className="stat-icon">📊</span>
+                  <span className="stat-value">
+                    {executionResult.outputSize}
+                  </span>
+                </div>
               </>
             )}
           </div>
@@ -150,13 +164,22 @@ const OutputPanel: React.FC<OutputPanelProps> = ({
           <div className="execution-stats">
             {!isReplMode && (
               <>
-                <span className="stat">🕑 {result.timestamp}</span>
-                <span className="stat">⌛️ {result.runtime}</span>
-                <span className="stat">💾 {result.memoryUsage}</span>
-                <span className="stat">🤏🏻 {result.outputSize}</span>
-                <span className="stat">
-                  {isBetween(result.status, 200, 299) ? '✅' : '❌'}
-                </span>
+                <div className="stat-container">
+                  <span className="stat-icon">🕑</span>
+                  <span className="stat-value">{result.timestamp}</span>
+                </div>
+                <div className="stat-container">
+                  <span className="stat-icon">⚡</span>
+                  <span className="stat-value">{result.runtime}</span>
+                </div>
+                <div className="stat-container">
+                  <span className="stat-icon">💾</span>
+                  <span className="stat-value">{result.memoryUsage}</span>
+                </div>
+                <div className="stat-container">
+                  <span className="stat-icon">📊</span>
+                  <span className="stat-value">{result.outputSize}</span>
+                </div>
                 {(result.output || error) && (
                   <button
                     type="button"

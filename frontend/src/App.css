@@ -393,8 +393,15 @@ textarea {
 
 /* Small button */
 .btn.btn-xs {
-  padding: 4px 8px;
-  font-size: 12px;
+  padding: 6px 10px;
+  font-size: 13px;
+  min-width: 32px;
+  height: 32px;
+}
+
+.btn.btn-xs svg {
+  width: 14px;
+  height: 14px;
 }
 
 /* Tab Manager Styles */
@@ -662,9 +669,10 @@ textarea {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding: 12px 16px;
+  padding: 8px 12px;
   background: var(--bg-secondary);
   border-bottom: 1px solid var(--border-color);
+  font-size: 13px;
 }
 
 .output-header h3 {
@@ -676,20 +684,49 @@ textarea {
 
 .execution-stats {
   display: flex;
-  gap: 12px;
-  font-size: 12px;
+  gap: 8px;
+  font-size: 11px;
   color: var(--text-secondary);
+  align-items: center;
 }
 
 .stat {
   display: inline-flex;
   align-items: center;
-  gap: 6px;
+  gap: 4px;
+  white-space: nowrap;
+}
+
+.stat-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 3px;
+  padding: 8px 12px;
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-1);
+  background: var(--bg-secondary);
+  min-width: 60px;
+  min-height: 50px;
+}
+
+.stat-icon {
+  font-size: 14px;
+  line-height: 1;
+}
+
+.stat-value {
+  font-size: 11px;
+  color: var(--text-primary);
+  font-weight: 500;
+  white-space: nowrap;
+  line-height: 1;
 }
 
 .output-content {
   flex: 1;
-  padding: 16px 16px 100px;
+  padding: 16px;
   overflow-y: auto;
   font-family:
     ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono",
@@ -914,7 +951,7 @@ textarea {
 
 @media (min-width: 769px) {
   .monaco-editor .parameter-hints-widget {
-    transform: translateY(0) !important;
+    transform: translateY(95px) !important;
   }
 }
 
@@ -990,7 +1027,7 @@ textarea {
 }
 
 .mobile-menu-item.is-active {
-  color: var(--accent-primary);
+  color: var(--accent-color);
 }
 
 .mobile-menu-item .icon-placeholder {
@@ -1013,14 +1050,26 @@ textarea {
 }
 
 /* Responsive Design */
+.mobile-add-tab {
+  display: none;
+}
+
 @media (max-width: 768px) {
   .header {
     padding: 8px 12px;
     height: 50px;
+    display: grid;
+    grid-template-columns: 1fr auto auto 1fr;
+    align-items: center;
+    gap: 8px;
+  }
+
+  .header-left {
+    justify-self: start;
   }
 
   .header-left .title {
-    font-size: 17px;
+    font-size: 16px;
   }
 
   .header-left .subtitle {
@@ -1033,6 +1082,45 @@ textarea {
 
   .header-right {
     gap: 8px;
+    display: contents;
+  }
+
+  .btn-run {
+    grid-column: 2;
+    justify-self: center;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .mobile-add-tab {
+    grid-column: 3;
+    justify-self: center;
+    display: flex !important;
+    align-items: center;
+    justify-content: center;
+    width: 36px;
+    height: 36px;
+    border: 1px solid var(--border-color);
+    background: var(--bg-primary);
+    color: var(--text-secondary);
+    border-radius: 6px;
+    font-size: 14px;
+  }
+
+  .mobile-add-tab:hover {
+    background: var(--bg-tertiary);
+    color: var(--text-primary);
+  }
+
+  .btn-hamburger {
+    grid-column: 4;
+    justify-self: end;
+  }
+
+  /* Hide original add tab button on mobile */
+  .tab-add {
+    display: none;
   }
 
   .desktop-controls {
@@ -1042,6 +1130,7 @@ textarea {
   .mobile-only {
     display: flex !important;
   }
+  
 
   .btn-run {
     padding: 6px 12px;
@@ -1064,6 +1153,7 @@ textarea {
   .tab-list {
     height: 36px;
     padding: 0 4px;
+    gap: 8px;
   }
 
   .tab {
@@ -1107,8 +1197,13 @@ textarea {
   }
 
   .output-header {
-    padding: 8px 12px;
-    font-size: 13px;
+    padding: 6px 10px;
+    font-size: 12px;
+  }
+
+  .execution-stats .stat-container,
+  .repl-cell-meta .stat-container {
+    display: none;
   }
 
   .output-content {
@@ -1301,10 +1396,6 @@ textarea {
   color: var(--text-secondary);
 }
 
-.modal-history-status {
-  font-weight: 600;
-}
-
 .modal-history-code {
   color: var(--text-primary);
   white-space: nowrap;
@@ -1337,10 +1428,9 @@ textarea {
     padding: 8px;
   }
 
-  .execution-stats {
-    flex-direction: column;
-    gap: 4px;
-    text-align: right;
+  .execution-stats .stat-container,
+  .repl-cell-meta .stat-container {
+    display: none;
   }
 
   .modal-content {
@@ -1430,7 +1520,7 @@ textarea {
 .repl-cell-meta {
   display: flex;
   align-items: center;
-  gap: 12px;
+  gap: 8px;
   flex: 1;
 }
 

@@ -6,6 +6,7 @@ import {
   FaPlay,
   FaShare,
   FaSun,
+  FaPlus,
   FaTh,
   FaTimes,
 } from 'react-icons/fa';
@@ -21,6 +22,7 @@ interface HeaderProps {
   onToggleBgPattern: () => void;
   onToggleRepl: () => void;
   onResetRepl: () => void;
+  onAddTab: () => void;
   replEnabled: boolean;
   executionState: ExecutionState;
   theme: 'light' | 'dark';
@@ -36,6 +38,7 @@ const Header: React.FC<HeaderProps> = ({
   onToggleBgPattern,
   onToggleRepl,
   onResetRepl,
+  onAddTab,
   replEnabled,
   executionState,
   theme,
@@ -121,6 +124,16 @@ const Header: React.FC<HeaderProps> = ({
           <span className="btn-text">
             {executionState.isExecuting ? 'Running...' : 'Run'}
           </span>
+        </button>
+
+        {/* Mobile Add Tab button */}
+        <button
+          type="button"
+          className="btn mobile-add-tab mobile-only"
+          onClick={onAddTab}
+          title="Add new tab"
+        >
+          <FaPlus />
         </button>
 
         {/* Desktop controls */}

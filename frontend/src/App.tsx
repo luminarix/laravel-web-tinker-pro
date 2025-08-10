@@ -326,6 +326,7 @@ const App: React.FC = () => {
           );
           clearOutput();
         }}
+        onAddTab={handleTabAdd}
         replEnabled={activeTab?.replState?.enabled ?? true}
         executionState={executionState}
         theme={theme}
@@ -382,9 +383,9 @@ const App: React.FC = () => {
       <div className="main-content">
         <SplitPane
           split="vertical"
-          minSize={window.innerWidth * 0.35}
-          maxSize={-window.innerWidth * 0.35}
-          defaultSize={window.innerWidth * 0.6}
+          minSize={window.innerWidth * 0.4}
+          maxSize={-window.innerWidth * 0.4}
+          defaultSize={window.innerWidth * 0.5}
           resizerStyle={{
             background: 'var(--border-color)',
             width: '2px',
