@@ -1,6 +1,6 @@
 {
     "name": "luminarix/laravel-web-tinker-pro",
-    "description": "This is my package laravel-web-tinker-pro",
+    "description": "Minimal PHP tinker, redesigned.",
     "keywords": [
         "Luminarix Labs",
         "laravel",
@@ -34,8 +34,7 @@
     },
     "autoload": {
         "psr-4": {
-            "Luminarix\\LaravelWebTinkerPro\\": "src/",
-            "Luminarix\\LaravelWebTinkerPro\\Database\\Factories\\": "database/factories/"
+            "Luminarix\\LaravelWebTinkerPro\\": "src/"
         }
     },
     "autoload-dev": {
@@ -51,6 +50,7 @@
     },
     "config": {
         "sort-packages": true,
+        "optimize-autoloader": true,
         "allow-plugins": {
             "pestphp/pest-plugin": true,
             "phpstan/extension-installer": true
