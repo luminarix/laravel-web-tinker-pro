@@ -10,7 +10,7 @@ return new class extends Migration
 {
     public function up()
     {
-        Schema::create('laravel_web_tinker_pro_table', function (Blueprint $table) {
+        Schema::create('web_tinker_pro', function (Blueprint $table) {
             $table->id();
 
             $table->timestamps();
