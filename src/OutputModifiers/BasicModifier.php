@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Luminarix\LaravelWebTinkerPro\OutputModifiers;
 
 final class BasicModifier implements OutputModifier

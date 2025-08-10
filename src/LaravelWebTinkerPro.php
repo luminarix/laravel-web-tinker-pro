@@ -21,15 +21,11 @@ class LaravelWebTinkerPro
 
     protected Shell $shell;
 
-    protected OutputModifier $outputModifier;
-
-    public function __construct(OutputModifier $outputModifier)
+    public function __construct(protected OutputModifier $outputModifier)
     {
         $this->output = new BufferedOutput;
 
         $this->shell = $this->createShell($this->output);
-
-        $this->outputModifier = $outputModifier;
     }
 
     public function execute(string $phpCode): string
