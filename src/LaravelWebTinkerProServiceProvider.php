@@ -6,6 +6,7 @@ namespace Luminarix\LaravelWebTinkerPro;
 
 use Illuminate\Support\Facades\Gate;
 use Luminarix\LaravelWebTinkerPro\Commands\LaravelWebTinkerProInstallCommand;
+use Luminarix\LaravelWebTinkerPro\Commands\LaravelWebTinkerProUpdateCommand;
 use Luminarix\LaravelWebTinkerPro\OutputModifiers\OutputModifier;
 use Spatie\LaravelPackageTools\Package;
 use Spatie\LaravelPackageTools\PackageServiceProvider;
@@ -20,7 +21,10 @@ class LaravelWebTinkerProServiceProvider extends PackageServiceProvider
             ->hasViews('web-tinker-pro')
             ->hasAssets()
             // ->hasMigration('create_web_tinker_pro_tables')
-            ->hasCommand(LaravelWebTinkerProInstallCommand::class)
+            ->hasCommands([
+                LaravelWebTinkerProInstallCommand::class,
+                LaravelWebTinkerProUpdateCommand::class,
+            ])
             ->hasRoute('web-tinker-pro');
     }
 
