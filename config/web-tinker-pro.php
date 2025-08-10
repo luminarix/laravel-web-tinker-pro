@@ -10,7 +10,7 @@ return [
     'middleware' => [
         Illuminate\Cookie\Middleware\EncryptCookies::class,
         Illuminate\Session\Middleware\StartSession::class,
-        Luminarix\LaravelWebTinker\Http\Middleware\Authorize::class,
+        Luminarix\LaravelWebTinkerPro\Http\Middleware\Authorize::class,
     ],
 
     'config_file' => env('PSYSH_CONFIG', null),
