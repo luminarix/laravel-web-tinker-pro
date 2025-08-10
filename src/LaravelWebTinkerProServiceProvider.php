@@ -5,8 +5,6 @@ declare(strict_types=1);
 namespace Luminarix\LaravelWebTinkerPro;
 
 use Illuminate\Support\Facades\Gate;
-use Illuminate\Support\Facades\Route;
-use Luminarix\LaravelWebTinker\Controllers\WebTinkerController;
 use Luminarix\LaravelWebTinkerPro\Commands\LaravelWebTinkerProInstallCommand;
 use Spatie\LaravelPackageTools\Package;
 use Spatie\LaravelPackageTools\PackageServiceProvider;
