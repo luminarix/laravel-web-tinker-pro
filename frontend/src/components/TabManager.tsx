@@ -7,10 +7,12 @@ import {
   FaRegClone,
   FaThumbtack,
   FaTimes,
+  FaList,
 } from 'react-icons/fa';
 import { CONSTANTS } from '../constants';
 import type { Tab } from '../types';
 import InputModal from './InputModal';
+import TabListModal from './TabListModal';
 
 interface TabManagerProps {
   tabs: Tab[];
@@ -40,6 +42,7 @@ const TabManager: React.FC<TabManagerProps> = ({
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [selectedTab, setSelectedTab] = useState<Tab | null>(null);
   const [dragOverId, setDragOverId] = useState<string | null>(null);
+  const [isTabListModalOpen, setIsTabListModalOpen] = useState(false);
 
   const handleTabSelect = (tab: Tab) => {
     onTabSelect(tab.id);
@@ -97,6 +100,24 @@ const TabManager: React.FC<TabManagerProps> = ({
     <>
       <div className={`tab-manager ${theme}`}>
         <div className="tab-list" role="tablist">
+          <button
+            type="button"
+            className="tab-list-button"
+            onClick={() => setIsTabListModalOpen(true)}
+            title="List all tabs"
+          >
+            <FaList />
+          </button>
+          
+          <button
+            type="button"
+            className="tab-add"
+            onClick={onTabAdd}
+            title="Add new tab"
+          >
+            <FaPlus />
+          </button>
+
           {tabs.map((tab) => (
             <div
               key={tab.id}
@@ -167,15 +188,6 @@ const TabManager: React.FC<TabManagerProps> = ({
               </div>
             </div>
           ))}
-
-          <button
-            type="button"
-            className="tab-add"
-            onClick={onTabAdd}
-            title="Add new tab"
-          >
-            <FaPlus />
-          </button>
         </div>
       </div>
 
@@ -187,6 +199,18 @@ const TabManager: React.FC<TabManagerProps> = ({
         maxLength={CONSTANTS.TAB_NAME_MAX_LENGTH}
         onConfirm={handleModalConfirm}
         onCancel={handleModalCancel}
+      />
+
+      <TabListModal
+        isOpen={isTabListModalOpen}
+        tabs={tabs}
+        onClose={() => setIsTabListModalOpen(false)}
+        onTabSelect={onTabSelect}
+        onDuplicate={onDuplicate}
+        onTogglePin={onTogglePin}
+        onToggleLock={onToggleLock}
+        onTabClose={onTabClose}
+        theme={theme}
       />
     </>
   );
