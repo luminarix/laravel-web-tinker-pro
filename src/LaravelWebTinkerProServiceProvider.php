@@ -22,6 +22,7 @@ class LaravelWebTinkerProServiceProvider extends PackageServiceProvider
             ->name('laravel-web-tinker-pro')
             ->hasConfigFile('web-tinker-pro')
             ->hasViews('web-tinker-pro')
+            ->hasAssets()
             ->hasMigration('create_laravel-web-tinker-pro_table')
             ->hasCommand(LaravelWebTinkerProInstallCommand::class)
             ->hasRoute('web-tinker-pro');
