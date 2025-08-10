@@ -7,7 +7,7 @@ return [
 
     'path' => '/tinker-pro',
 
-    'middleware' => [
+    'middlewares' => [
         Illuminate\Cookie\Middleware\EncryptCookies::class,
         Illuminate\Session\Middleware\StartSession::class,
         Luminarix\LaravelWebTinkerPro\Http\Middleware\Authorize::class,
