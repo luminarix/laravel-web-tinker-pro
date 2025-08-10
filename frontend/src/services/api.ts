@@ -9,17 +9,11 @@ import type {
 } from '../types';
 import { formatRuntime, formatTimestamp } from '../utils/formatter.ts';
 
-const API_BASE_URL = 'https://backend.helixmetrics.dev/tinker-pro';
-
-const api = axios.create({
-  baseURL: API_BASE_URL,
-});
-
 export async function executePhpCode(
   request: ExecuteCodeRequest,
 ): Promise<ExecuteCodeResponse> {
   try {
-    const response = await api.post<ServerResponse>('/', {
+    const response = await axios.post<ServerResponse>('/tinker-pro', {
       code: request.code,
     });
     const data = response.data;
