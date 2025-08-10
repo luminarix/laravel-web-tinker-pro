@@ -1,8 +1,6 @@
 export interface ReplCell {
   id: string;
-  code: string;
-  ts: number;
-  historyId?: string;
+  historyId: string;
 }
 
 export interface ReplState {
@@ -15,7 +13,7 @@ export interface ExecutionRecord {
   code: string;
   result: ExecuteCodeResponse | null;
   error: string | null;
-  ts: number;
+  ts: string;
   pinned?: boolean;
 }
 

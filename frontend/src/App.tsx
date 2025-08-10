@@ -160,6 +160,10 @@ const App: React.FC = () => {
 
       const result: ExecuteCodeResponse | null = await executeCode(userCode);
 
+      if (!result) {
+        return;
+      }
+
       // Record history (with the user's code snapshot, not the composed one)
       setTabs((prev) =>
         prev.map((t) => {
@@ -170,7 +174,7 @@ const App: React.FC = () => {
             code: userCode,
             result,
             error: result ? null : 'Execution failed',
-            ts: Date.now(),
+            ts: result.timestamp,
             pinned: false,
           };
 
@@ -184,8 +188,6 @@ const App: React.FC = () => {
               ...(nextRepl.cells || []),
               {
                 id: nanoid(),
-                code: userCode,
-                ts: Date.now(),
                 historyId: newRecord.id,
               },
             ];
@@ -425,7 +427,16 @@ const App: React.FC = () => {
           onClear={() => {
             setTabs((prev) =>
               prev.map((t) =>
-                t.id === activeTab.id ? { ...t, history: [] } : t,
+                t.id === activeTab.id
+                  ? {
+                      ...t,
+                      history: [],
+                      replState: {
+                        enabled: t.replState?.enabled ?? false,
+                        cells: [],
+                      },
+                    }
+                  : t,
               ),
             );
           }}

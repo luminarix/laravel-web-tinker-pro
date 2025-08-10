@@ -64,15 +64,18 @@ const OutputPanel: React.FC<OutputPanelProps> = ({
   };
 
   const renderReplCell = (cell: ReplCell, index: number) => {
-    const { id, code, ts, historyId } = cell;
+    const { id, historyId } = cell;
     const isCopied = copiedItems.has(id);
 
     // Find the corresponding execution result from history
-    const executionRecord = historyId
-      ? history?.find((record) => record.id === historyId)
-      : null;
-    const executionResult = executionRecord?.result;
-    const executionError = executionRecord?.error;
+    const executionRecord = history?.find((record) => record.id === historyId);
+    if (!executionRecord) return null;
+
+    const {
+      code,
+      result: executionResult,
+      error: executionError,
+    } = executionRecord;
 
     // Prepare text for copying (prefer output, then error, then code)
     const copyText = executionResult?.output || executionError || code;
@@ -87,14 +90,12 @@ const OutputPanel: React.FC<OutputPanelProps> = ({
             <span className="repl-cell-index">
               #{(replState?.cells?.length || 0) - index}
             </span>
-            <span className="repl-cell-time">
-              {new Date(ts).toLocaleTimeString()}
-            </span>
             {executionResult && (
               <>
-                <span className="stat">🕑 {executionResult.timestamp}</span>
+                <span className="stat">🕑 {executionResult.timestamp} | </span>
                 <span className="stat">⌛️ {executionResult.runtime}</span>
                 <span className="stat">💾 {executionResult.memoryUsage}</span>
+                <span className="stat">🤏🏻 {executionResult.outputSize}</span>
                 <span className="stat">
                   {isBetween(executionResult.status, 200, 299) ? '✅' : '❌'}
                 </span>
@@ -146,35 +147,39 @@ const OutputPanel: React.FC<OutputPanelProps> = ({
         <h3>Output</h3>
         {result && (
           <div className="execution-stats">
-            <span className="stat">🕑 {result.timestamp}</span>
-            <span className="stat">⌛️ {result.runtime}</span>
-            <span className="stat">💾 {result.memoryUsage}</span>
-            <span className="stat">🤏🏻 {result.outputSize}</span>
-            <span className="stat">
-              {isBetween(result.status, 200, 299) ? '✅' : '❌'}
-            </span>
-            {(result.output || error) && (
-              <button
-                type="button"
-                className={`btn btn-theme btn-xs btn-copy ${copied ? 'copied' : ''}`}
-                onClick={() => {
-                  const text = result.output || error || '';
-                  navigator.clipboard
-                    ?.writeText(text)
-                    .then(() => {
-                      setCopied(true);
-                      setTimeout(() => setCopied(false), 1200);
-                    })
-                    .catch(() => {
-                      setCopied(true);
-                      setTimeout(() => setCopied(false), 1200);
-                    });
-                }}
-                title={copied ? 'Copied' : 'Copy output'}
-                aria-live="polite"
-              >
-                <FaRegCopy />
-              </button>
+            {!isReplMode && (
+              <>
+                <span className="stat">🕑 {result.timestamp}</span>
+                <span className="stat">⌛️ {result.runtime}</span>
+                <span className="stat">💾 {result.memoryUsage}</span>
+                <span className="stat">🤏🏻 {result.outputSize}</span>
+                <span className="stat">
+                  {isBetween(result.status, 200, 299) ? '✅' : '❌'}
+                </span>
+                {(result.output || error) && (
+                  <button
+                    type="button"
+                    className={`btn btn-theme btn-xs btn-copy ${copied ? 'copied' : ''}`}
+                    onClick={() => {
+                      const text = result.output || error || '';
+                      navigator.clipboard
+                        ?.writeText(text)
+                        .then(() => {
+                          setCopied(true);
+                          setTimeout(() => setCopied(false), 1200);
+                        })
+                        .catch(() => {
+                          setCopied(true);
+                          setTimeout(() => setCopied(false), 1200);
+                        });
+                    }}
+                    title={copied ? 'Copied' : 'Copy output'}
+                    aria-live="polite"
+                  >
+                    <FaRegCopy />
+                  </button>
+                )}
+              </>
             )}
             {onOpenHistory && (
               <button
