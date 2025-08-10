@@ -20,6 +20,7 @@ const STORAGE_KEYS = {
   ACTIVE_TAB: 'webTinker_activeTab',
   THEME: 'webTinker_theme',
   BG_PATTERN: 'webTinker_bgPattern',
+  SPLIT_SIZE: 'webTinker_splitSize',
 };
 
 const App: React.FC = () => {
@@ -27,6 +28,7 @@ const App: React.FC = () => {
   const [activeTabId, setActiveTabId] = useState<string>('');
   const [theme, setTheme] = useState<'light' | 'dark'>('dark');
   const [bgPattern, setBgPattern] = useState<boolean>(false);
+  const [splitSize, setSplitSize] = useState<number>(window.innerWidth * 0.5);
   const [hasLoadedFromStorage, setHasLoadedFromStorage] =
     useState<boolean>(false);
   const [isHistoryOpen, setIsHistoryOpen] = useState<boolean>(false);
@@ -50,6 +52,11 @@ const App: React.FC = () => {
     const savedBg = localStorage.getItem(STORAGE_KEYS.BG_PATTERN);
     if (savedBg) {
       setBgPattern(savedBg === '1' || savedBg === 'true');
+    }
+
+    const savedSplitSize = localStorage.getItem(STORAGE_KEYS.SPLIT_SIZE);
+    if (savedSplitSize) {
+      setSplitSize(Number(savedSplitSize));
     }
 
     setHasLoadedFromStorage(true);
@@ -129,6 +136,13 @@ const App: React.FC = () => {
       localStorage.setItem(STORAGE_KEYS.BG_PATTERN, bgPattern ? '1' : '0');
     }
   }, [bgPattern, hasLoadedFromStorage]);
+
+  // Save split size to localStorage (only after initial load)
+  useEffect(() => {
+    if (hasLoadedFromStorage) {
+      localStorage.setItem(STORAGE_KEYS.SPLIT_SIZE, splitSize.toString());
+    }
+  }, [splitSize, hasLoadedFromStorage]);
 
   const activeTab = tabs.find((tab) => tab.id === activeTabId);
 
@@ -281,6 +295,10 @@ const App: React.FC = () => {
     );
   }, []);
 
+  const handleSplitSizeChange = useCallback((size: number) => {
+    setSplitSize(size);
+  }, []);
+
   if (tabs.length === 0) {
     return;
   }
@@ -385,7 +403,8 @@ const App: React.FC = () => {
           split="vertical"
           minSize={window.innerWidth * 0.4}
           maxSize={-window.innerWidth * 0.4}
-          defaultSize={window.innerWidth * 0.5}
+          defaultSize={splitSize}
+          onChange={handleSplitSizeChange}
           resizerStyle={{
             background: 'var(--border-color)',
             width: '2px',
