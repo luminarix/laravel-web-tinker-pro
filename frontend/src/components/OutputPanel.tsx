@@ -1,6 +1,6 @@
 import type React from 'react';
 import { useState } from 'react';
-import { FaRegCopy } from 'react-icons/fa';
+import { FaRegCopy, FaRegClock, FaStopwatch, FaMicrochip, FaFileAlt } from 'react-icons/fa';
 import type {
   ExecutionRecord,
   ExecutionState,
@@ -93,23 +93,23 @@ const OutputPanel: React.FC<OutputPanelProps> = ({
             {executionResult && (
               <>
                 <div className="stat-container">
-                  <span className="stat-icon">🕑</span>
+                  <span className="stat-icon"><FaRegClock /></span>
                   <span className="stat-value">
                     {executionResult.timestamp}
                   </span>
                 </div>
                 <div className="stat-container">
-                  <span className="stat-icon">⚡</span>
+                  <span className="stat-icon"><FaStopwatch /></span>
                   <span className="stat-value">{executionResult.runtime}</span>
                 </div>
                 <div className="stat-container">
-                  <span className="stat-icon">💾</span>
+                  <span className="stat-icon"><FaMicrochip /></span>
                   <span className="stat-value">
                     {executionResult.memoryUsage}
                   </span>
                 </div>
                 <div className="stat-container">
-                  <span className="stat-icon">📊</span>
+                  <span className="stat-icon"><FaFileAlt /></span>
                   <span className="stat-value">
                     {executionResult.outputSize}
                   </span>
@@ -165,19 +165,19 @@ const OutputPanel: React.FC<OutputPanelProps> = ({
             {!isReplMode && (
               <>
                 <div className="stat-container">
-                  <span className="stat-icon">🕑</span>
+                  <span className="stat-icon"><FaRegClock /></span>
                   <span className="stat-value">{result.timestamp}</span>
                 </div>
                 <div className="stat-container">
-                  <span className="stat-icon">⚡</span>
+                  <span className="stat-icon"><FaStopwatch /></span>
                   <span className="stat-value">{result.runtime}</span>
                 </div>
                 <div className="stat-container">
-                  <span className="stat-icon">💾</span>
+                  <span className="stat-icon"><FaMicrochip /></span>
                   <span className="stat-value">{result.memoryUsage}</span>
                 </div>
                 <div className="stat-container">
-                  <span className="stat-icon">📊</span>
+                  <span className="stat-icon"><FaFileAlt /></span>
                   <span className="stat-value">{result.outputSize}</span>
                 </div>
                 {(result.output || error) && (
