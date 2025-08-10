@@ -162,7 +162,7 @@ By default, the package will be available at `/tinker-pro`. You can change this 
 By default, the route will only be accessible from the local environment. You can override this behavior by creating your own Gate:
 
 ```php
-Gate::define('viewWebTinkerPro', function () {
+Gate::define('viewWebTinkerPro', function ($user = null) {
     // Your custom logic here
 });
 ```
