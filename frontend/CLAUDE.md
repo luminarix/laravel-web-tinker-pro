@@ -45,6 +45,9 @@ bun run check
 - `TabManager.tsx` - Multi-tab interface for managing multiple code snippets
 - `OutputPanel.tsx` - Displays PHP execution results and errors
 - `Header.tsx` - Toolbar with run, share, and theme controls
+- `HistoryModal.tsx` - Execution history management with pin/compare functionality
+- `DiffModal.tsx` - Side-by-side diff viewer using Monaco's DiffEditor
+- `InputModal.tsx` - Generic input modal for user prompts
 
 ### Custom Monaco Configuration
 
@@ -61,6 +64,8 @@ The project includes a custom PHP-inline language definition (`src/monaco/php-in
 - Custom hooks: `useCodeExecution` and `useCodeSharing`
 - localStorage persistence for tabs, active tab, theme, and background pattern preferences
 - URL-based code sharing with `?share=` parameter
+- Per-tab execution history with pinning support
+- REPL state management for multi-cell execution contexts
 
 ### Mock Backend
 
@@ -76,6 +81,9 @@ The `src/services/api.ts` file contains mock implementations that simulate:
 - Light/dark theme switching with background pattern toggle
 - Code execution with simulated PHP output
 - Code sharing via URL generation
+- Execution history tracking with pin/compare functionality
+- Side-by-side diff comparison of code versions
+- Tab management with drag-and-drop reordering
 - Keyboard shortcuts (Cmd/Ctrl+Enter to run code)
 - Responsive split-pane layout
 
@@ -86,3 +94,5 @@ The `src/services/api.ts` file contains mock implementations that simulate:
 - Monaco Editor warnings are suppressed in Rsbuild configuration
 - All components use React.FC typing pattern
 - LocalStorage keys are centralized in STORAGE_KEYS constant
+- Utility functions for number operations, platform detection, and formatting are in `src/utils/`
+- DND Kit library used for drag-and-drop functionality in tab management

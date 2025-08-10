@@ -169,10 +169,23 @@ const App: React.FC = () => {
         prev.map((t) => {
           if (t.id !== tab.id) return t;
           const history = t.history ?? [];
+
+          const outputSizeSplit = result.outputSize.split(' ');
+          const outputSize = parseFloat(outputSizeSplit[0]);
+          const outputSizeUnit = outputSizeSplit[1];
+
+          const historyResult = { ...result };
+          if (
+            outputSizeUnit !== 'B' &&
+            (outputSize > 250 || outputSizeUnit !== 'KB')
+          ) {
+            historyResult.output = 'Output too large to display';
+          }
+
           const newRecord = {
             id: nanoid(),
             code: userCode,
-            result,
+            result: historyResult,
             error: result ? null : 'Execution failed',
             ts: result.timestamp,
             pinned: false,
