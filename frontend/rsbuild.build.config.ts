@@ -18,20 +18,21 @@ export default defineConfig({
     environments: {
         local: {
             output: {
-                legalComments: 'none',
-                assetPrefix: 'auto',
+                assetPrefix: '/vendor/web-tinker-pro',
                 distPath: {
-                    root: '../resources',
-                    css: 'dist/css',
-                    font: 'dist/font',
-                    js: 'dist/js',
-                    jsAsync: 'dist/js/async'
+                    root: '../resources/dist',
+                    js: 'js',
+                    jsAsync: 'js/async',
+                    css: 'css',
+                    cssAsync: 'css/async',
+                    font: 'font',
                 },
                 cleanDistPath: true,
+                legalComments: 'none',
             },
             tools: {
                 htmlPlugin(config) {
-                    config.filename = 'views/local.blade.php';
+                    config.filename = '../views/local.blade.php';
                 },
             },
             html: { templateParameters: { prod: false } },
@@ -40,20 +41,21 @@ export default defineConfig({
 
         production: {
             output: {
-                legalComments: 'none',
-                assetPrefix: 'auto',
+                assetPrefix: '/vendor/web-tinker-pro',
                 distPath: {
-                    root: '../resources',
-                    css: 'dist/css',
-                    font: 'dist/font',
-                    js: 'dist/js',
-                    jsAsync: 'dist/js/async'
+                    root: '../resources/dist',
+                    js: 'js',
+                    jsAsync: 'js/async',
+                    css: 'css',
+                    cssAsync: 'css/async',
+                    font: 'font',
                 },
                 cleanDistPath: true,
+                legalComments: 'none',
             },
             tools: {
                 htmlPlugin(config) {
-                    config.filename = 'views/production.blade.php';
+                    config.filename = '../views/production.blade.php';
                 },
             },
             html: { templateParameters: { prod: true } },
