@@ -8,9 +8,15 @@ import Header from './components/Header';
 import HistoryModal from './components/HistoryModal';
 import OutputPanel from './components/OutputPanel';
 import TabManager from './components/TabManager';
-import { CONSTANTS, STORAGE_KEYS } from './constants';
+import { CONSTANTS } from './constants';
 import { useCodeExecution } from './hooks/useCodeExecution';
 import { useCodeSharing } from './hooks/useCodeSharing';
+import {
+  getSetting,
+  getTabs,
+  setTabs as saveTabsToStorage,
+  setSetting,
+} from './services/database';
 import type { ExecuteCodeResponse, Tab } from './types';
 import './App.css';
 
@@ -30,114 +36,144 @@ const App: React.FC = () => {
   const { executionState, executeCode, clearOutput } = useCodeExecution();
   const { handleShare, loadSharedCode, getShareIdFromUrl } = useCodeSharing();
 
-  // Load from localStorage on mount
+  // Load from IndexedDB on mount
   useEffect(() => {
-    const savedTabs = localStorage.getItem(STORAGE_KEYS.TABS);
-    const savedActiveTab = localStorage.getItem(STORAGE_KEYS.ACTIVE_TAB);
-    const savedTheme = localStorage.getItem(STORAGE_KEYS.THEME);
-
-    if (savedTheme) {
-      setTheme(savedTheme as 'light' | 'dark');
-    }
-
-    const savedBg = localStorage.getItem(STORAGE_KEYS.BG_PATTERN);
-    if (savedBg) {
-      setBgPattern(savedBg === '1' || savedBg === 'true');
-    }
-
-    const savedSplitSize = localStorage.getItem(STORAGE_KEYS.SPLIT_SIZE);
-    if (savedSplitSize) {
-      setSplitSize(Number(savedSplitSize));
-    }
-
-    setHasLoadedFromStorage(true);
-
-    if (savedTabs && savedActiveTab) {
+    const loadFromStorage = async () => {
       try {
-        const parsedTabs = JSON.parse(savedTabs);
-        setTabs(parsedTabs);
-        setActiveTabId(savedActiveTab);
-        return;
-      } catch (error) {
-        console.error('Failed to load saved tabs:', error);
-      }
-    }
+        // Load settings
+        const savedTheme = await getSetting('THEME');
+        if (savedTheme) {
+          setTheme(savedTheme as 'light' | 'dark');
+        }
 
-    // Create default tab
-    const defaultTab: Tab = {
-      id: nanoid(),
-      name: 'Tab 1',
-      code: '',
-      isActive: true,
-      pinned: false,
-      locked: false,
-      history: [],
-      replState: { enabled: false, cells: [] },
+        const savedBg = await getSetting('BG_PATTERN');
+        if (savedBg) {
+          setBgPattern(savedBg === '1' || savedBg === 'true');
+        }
+
+        const savedSplitSize = await getSetting('SPLIT_SIZE');
+        if (savedSplitSize) {
+          setSplitSize(Number(savedSplitSize));
+        }
+
+        setHasLoadedFromStorage(true);
+
+        // Load tabs
+        const { tabs: savedTabs, activeTabId: savedActiveTab } =
+          await getTabs();
+
+        if (savedTabs && savedActiveTab) {
+          setTabs(savedTabs);
+          setActiveTabId(savedActiveTab);
+          return;
+        }
+
+        // Create default tab
+        const defaultTab: Tab = {
+          id: nanoid(),
+          name: 'Tab 1',
+          code: '',
+          isActive: true,
+          pinned: false,
+          locked: false,
+          history: [],
+          replState: { enabled: false, cells: [] },
+        };
+
+        setTabs([defaultTab]);
+        setActiveTabId(defaultTab.id);
+      } catch (error) {
+        console.error('Failed to load from storage:', error);
+        // Fallback to default tab
+        const defaultTab: Tab = {
+          id: nanoid(),
+          name: 'Tab 1',
+          code: '',
+          isActive: true,
+          pinned: false,
+          locked: false,
+          history: [],
+          replState: { enabled: false, cells: [] },
+        };
+
+        setTabs([defaultTab]);
+        setActiveTabId(defaultTab.id);
+        setHasLoadedFromStorage(true);
+      }
     };
 
-    setTabs([defaultTab]);
-    setActiveTabId(defaultTab.id);
+    loadFromStorage();
   }, []);
 
   // Check for shared code on mount
   useEffect(() => {
     const shareId = getShareIdFromUrl();
     if (shareId) {
-      loadSharedCode(shareId).then((sharedData) => {
-        if (sharedData) {
-          const savedTabs = localStorage.getItem(STORAGE_KEYS.TABS);
-          const parsedTabs = JSON.parse(savedTabs ?? '[]').map((tab: Tab) => ({
-            ...tab,
-            isActive: false,
-          }));
+      const loadSharedData = async () => {
+        try {
+          const sharedData = await loadSharedCode(shareId);
+          if (sharedData) {
+            const { tabs: savedTabs } = await getTabs();
+            const parsedTabs = (savedTabs ?? []).map((tab: Tab) => ({
+              ...tab,
+              isActive: false,
+            }));
 
-          const sharedTab: Tab = {
-            id: nanoid(),
-            name: `Shared - ${sharedData.title}` || 'Shared Code',
-            code: sharedData.code,
-            isActive: true,
-          };
+            const sharedTab: Tab = {
+              id: nanoid(),
+              name: `Shared - ${sharedData.title}` || 'Shared Code',
+              code: sharedData.code,
+              isActive: true,
+              pinned: false,
+              locked: false,
+              history: [],
+              replState: { enabled: false, cells: [] },
+            };
 
-          setTabs([...parsedTabs, sharedTab]);
-          setActiveTabId(sharedTab.id);
+            setTabs([...parsedTabs, sharedTab]);
+            setActiveTabId(sharedTab.id);
 
-          // Remove share parameter from URL
-          window.history.replaceState(
-            {},
-            document.title,
-            window.location.pathname,
-          );
+            // Remove share parameter from URL
+            window.history.replaceState(
+              {},
+              document.title,
+              window.location.pathname,
+            );
+          }
+        } catch (error) {
+          console.error('Failed to load shared code:', error);
         }
-      });
+      };
+
+      loadSharedData();
     }
   }, [loadSharedCode, getShareIdFromUrl]);
 
-  // Save to localStorage when tabs or activeTabId change
+  // Save to IndexedDB when tabs or activeTabId change
   useEffect(() => {
-    if (tabs.length > 0) {
-      localStorage.setItem(STORAGE_KEYS.TABS, JSON.stringify(tabs));
-      localStorage.setItem(STORAGE_KEYS.ACTIVE_TAB, activeTabId);
+    if (tabs.length > 0 && hasLoadedFromStorage) {
+      saveTabsToStorage(tabs, activeTabId);
     }
-  }, [tabs, activeTabId]);
+  }, [tabs, activeTabId, hasLoadedFromStorage]);
 
-  // Save theme to localStorage (only after initial load)
+  // Save theme to IndexedDB (only after initial load)
   useEffect(() => {
     if (hasLoadedFromStorage) {
-      localStorage.setItem(STORAGE_KEYS.THEME, theme);
+      setSetting('THEME', theme);
     }
   }, [theme, hasLoadedFromStorage]);
 
-  // Save bg pattern to localStorage (only after initial load)
+  // Save bg pattern to IndexedDB (only after initial load)
   useEffect(() => {
     if (hasLoadedFromStorage) {
-      localStorage.setItem(STORAGE_KEYS.BG_PATTERN, bgPattern ? '1' : '0');
+      setSetting('BG_PATTERN', bgPattern ? '1' : '0');
     }
   }, [bgPattern, hasLoadedFromStorage]);
 
-  // Save split size to localStorage (only after initial load)
+  // Save split size to IndexedDB (only after initial load)
   useEffect(() => {
     if (hasLoadedFromStorage) {
-      localStorage.setItem(STORAGE_KEYS.SPLIT_SIZE, splitSize.toString());
+      setSetting('SPLIT_SIZE', splitSize.toString());
     }
   }, [splitSize, hasLoadedFromStorage]);
 

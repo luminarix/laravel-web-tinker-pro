@@ -36,7 +36,7 @@ bun run check
 - **Build Tool**: Rsbuild with React plugin
 - **Code Editor**: Monaco Editor with custom PHP-inline language support
 - **Styling**: CSS with custom properties for theming
-- **State**: Local state with localStorage persistence
+- **State**: Local state with IndexedDB persistence
 
 ### Key Components
 
@@ -63,7 +63,7 @@ The project includes a custom PHP-inline language definition (`src/monaco/php-in
 
 - Uses React hooks (`useState`, `useCallback`, `useEffect`) for local state
 - Custom hooks: `useCodeExecution` and `useCodeSharing`
-- localStorage persistence for tabs, active tab, theme, and background pattern preferences
+- IndexedDB persistence for tabs, active tab, theme, and background pattern preferences
 - URL-based code sharing with `?share=` parameter
 - Per-tab execution history with pinning support
 - REPL state management for multi-cell execution contexts
@@ -73,7 +73,7 @@ The project includes a custom PHP-inline language definition (`src/monaco/php-in
 The `src/services/api.ts` file contains mock implementations that simulate:
 
 - PHP code execution with realistic delays and responses
-- Code sharing via localStorage (for development)
+- Code sharing via IndexedDB (for development)
 - Error simulation for testing (use `syntax_error` or `runtime_error` in code)
 
 ## Key Features
@@ -95,6 +95,6 @@ The `src/services/api.ts` file contains mock implementations that simulate:
 - TypeScript strict mode enabled
 - Monaco Editor warnings are suppressed in Rsbuild configuration
 - All components use React.FC typing pattern
-- LocalStorage keys are centralized in STORAGE_KEYS constant
+- IndexedDB keys are centralized in database.ts
 - Utility functions for number operations, platform detection, and formatting are in `src/utils/`
 - DND Kit library used for drag-and-drop functionality in tab management
