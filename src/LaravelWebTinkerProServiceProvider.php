@@ -11,11 +11,6 @@ use Spatie\LaravelPackageTools\PackageServiceProvider;
 
 class LaravelWebTinkerProServiceProvider extends PackageServiceProvider
 {
-    public function boot(): void
-    {
-        $this->registerWebTinkerProGate();
-    }
-
     public function configurePackage(Package $package): void
     {
         $package
@@ -26,6 +21,11 @@ class LaravelWebTinkerProServiceProvider extends PackageServiceProvider
             ->hasMigration('create_laravel-web-tinker-pro_table')
             ->hasCommand(LaravelWebTinkerProInstallCommand::class)
             ->hasRoute('web-tinker-pro');
+    }
+
+    public function packageBooted(): void
+    {
+        $this->registerWebTinkerProGate();
     }
 
     protected function registerWebTinkerProGate(): self
