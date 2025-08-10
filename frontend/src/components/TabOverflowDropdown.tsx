@@ -42,8 +42,10 @@ const TabOverflowDropdown: React.FC<TabOverflowDropdownProps> = ({
     if (!searchTerm.trim()) {
       return overflowTabs;
     }
-    return overflowTabs.filter((tab) =>
-      tab.name.toLowerCase().includes(searchTerm.toLowerCase()),
+    return overflowTabs.filter(
+      (tab) =>
+        tab.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
+        tab.code.toLowerCase().includes(searchTerm.toLowerCase()),
     );
   }, [overflowTabs, searchTerm]);
 
@@ -113,7 +115,7 @@ const TabOverflowDropdown: React.FC<TabOverflowDropdownProps> = ({
           <FaSearch className="overflow-search-icon" />
           <input
             type="text"
-            placeholder="Search overflow tabs..."
+            placeholder="Search tabs by name or code content..."
             value={searchTerm}
             onChange={(e) => setSearchTerm(e.target.value)}
             className="overflow-search-input"
