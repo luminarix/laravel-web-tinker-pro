@@ -10,6 +10,44 @@ import {
   phpSignatureHelpProvider,
 } from '../monaco/php-inline';
 
+// Define custom themes globally to ensure they're available before Editor renders
+const defineCustomThemes = (monaco: typeof import('monaco-editor')) => {
+  // Define custom themes for better PHP highlighting
+  monaco.editor.defineTheme('php-dark', {
+    base: 'vs-dark',
+    inherit: true,
+    rules: [
+      { token: 'support.function', foreground: 'DCDCAA' }, // Yellow for methods
+      { token: 'entity.name.function', foreground: 'DCDCAA' }, // Yellow for methods
+      { token: 'type.identifier', foreground: '4EC9B0' }, // Cyan for classes
+      { token: 'variable.other.property', foreground: '98D8F8' }, // Bright blue for properties
+      { token: 'variable', foreground: '98D8F8' }, // Bright blue for variables
+      { token: 'variable.language', foreground: '569CD6' }, // Blue for $this
+      { token: 'keyword', foreground: '569CD6' }, // Blue for keywords (function, fn, etc.)
+      { token: 'type', foreground: '569CD6' }, // Blue for type keywords (string, bool, int, etc.)
+      { token: 'constant', foreground: 'D4D4D4' }, // Light gray for constants
+    ],
+    colors: {},
+  });
+
+  monaco.editor.defineTheme('php-light', {
+    base: 'vs',
+    inherit: true,
+    rules: [
+      { token: 'support.function', foreground: '795E26' }, // Dark yellow/brown for methods
+      { token: 'entity.name.function', foreground: '795E26' }, // Dark yellow/brown for methods
+      { token: 'type.identifier', foreground: '267F99' }, // Blue for classes
+      { token: 'variable.other.property', foreground: '0451A5' }, // Dark blue for properties (light theme)
+      { token: 'variable', foreground: '0451A5' }, // Dark blue for variables (light theme)
+      { token: 'variable.language', foreground: '0000FF' }, // Blue for $this (light theme)
+      { token: 'keyword', foreground: '569CD6' }, // Blue for keywords (function, fn, etc.)
+      { token: 'type', foreground: '569CD6' }, // Blue for type keywords (string, bool, int, etc.)
+      { token: 'constant', foreground: '000000' }, // Black for constants (light theme)
+    ],
+    colors: {},
+  });
+};
+
 interface CodeEditorProps {
   value: string;
   onChange: (value: string) => void;
@@ -32,11 +70,9 @@ const CodeEditor: React.FC<CodeEditorProps> = ({
     onRunRef.current = onRun;
   }, [onRun]);
 
-  const handleEditorDidMount = (
-    editor: editor.IStandaloneCodeEditor,
-    monaco: typeof import('monaco-editor'),
-  ) => {
-    editorRef.current = editor;
+  const handleEditorWillMount = (monaco: typeof import('monaco-editor')) => {
+    // Define custom themes before editor initializes
+    defineCustomThemes(monaco);
 
     // Register custom PHP inline language
     monaco.languages.register({ id: 'php-inline' });
@@ -58,6 +94,13 @@ const CodeEditor: React.FC<CodeEditorProps> = ({
 
     // Set tokenization rules for PHP inline
     monaco.languages.setMonarchTokensProvider('php-inline', phpInlineTokenizer);
+  };
+
+  const handleEditorDidMount = (
+    editor: editor.IStandaloneCodeEditor,
+    monaco: typeof import('monaco-editor'),
+  ) => {
+    editorRef.current = editor;
 
     // Set the model language to PHP inline
     const model = editor.getModel();
@@ -89,9 +132,10 @@ const CodeEditor: React.FC<CodeEditorProps> = ({
       <Editor
         height="100%"
         defaultLanguage={'php-inline'}
-        theme={theme === 'dark' ? 'vs-dark' : 'light'}
+        theme={theme === 'dark' ? 'php-dark' : 'php-light'}
         value={value || ''}
         onChange={handleEditorChange}
+        beforeMount={handleEditorWillMount}
         onMount={handleEditorDidMount}
         loading={
           <div className="editor-skeleton" aria-busy="true" aria-live="polite">

@@ -107,6 +107,7 @@ export const phpInlineTokenizer: languages.IMonarchLanguage = {
     'require_once',
     'return',
     'static',
+    'parent',
     'switch',
     'throw',
     'trait',
@@ -453,6 +454,35 @@ export const phpInlineTokenizer: languages.IMonarchLanguage = {
     'DEFAULT_INCLUDE_PATH',
     'PEAR_INSTALL_DIR',
     'PEAR_EXTENSION_DIR',
+
+    // JSON constants
+    'JSON_HEX_TAG',
+    'JSON_HEX_AMP',
+    'JSON_HEX_APOS',
+    'JSON_HEX_QUOT',
+    'JSON_FORCE_OBJECT',
+    'JSON_NUMERIC_CHECK',
+    'JSON_BIGINT_AS_STRING',
+    'JSON_PRETTY_PRINT',
+    'JSON_UNESCAPED_SLASHES',
+    'JSON_UNESCAPED_UNICODE',
+    'JSON_PARTIAL_OUTPUT_ON_ERROR',
+    'JSON_PRESERVE_ZERO_FRACTION',
+    'JSON_UNESCAPED_LINE_TERMINATORS',
+    'JSON_THROW_ON_ERROR',
+    'JSON_INVALID_UTF8_IGNORE',
+    'JSON_INVALID_UTF8_SUBSTITUTE',
+    'JSON_ERROR_NONE',
+    'JSON_ERROR_DEPTH',
+    'JSON_ERROR_STATE_MISMATCH',
+    'JSON_ERROR_CTRL_CHAR',
+    'JSON_ERROR_SYNTAX',
+    'JSON_ERROR_UTF8',
+    'JSON_ERROR_RECURSION',
+    'JSON_ERROR_INF_OR_NAN',
+    'JSON_ERROR_UNSUPPORTED_TYPE',
+    'JSON_ERROR_INVALID_PROPERTY_NAME',
+    'JSON_ERROR_UTF16',
   ],
 
   operators: [
@@ -525,8 +555,60 @@ export const phpInlineTokenizer: languages.IMonarchLanguage = {
 
   tokenizer: {
     root: [
+      // Special PHP pseudo-variables
+      [/\$this\b/, 'variable.language'],
+      
       // Variables
       [/\$[a-zA-Z_]\w*/, 'variable'],
+
+      // Class names after keywords (with proper capture groups)
+      [/(new\s+)([A-Z]\w*)/, ['keyword', 'type.identifier']],
+      [/(class\s+)([A-Z]\w*)/, ['keyword', 'type.identifier']],
+      [/(extends\s+)([A-Z]\w*)/, ['keyword', 'type.identifier']],
+      [/(implements\s+)([A-Z]\w*)/, ['keyword', 'type.identifier']],
+
+      // Use statements - highlight namespaced class names (with alias support)
+      [
+        /(use\s+)((?:[A-Z]\w*\\)*[A-Z]\w*)(\s+as\s+)([A-Za-z]\w*)/,
+        ['keyword', 'type.identifier', 'keyword', 'type.identifier'],
+      ],
+      [/(use\s+)((?:[A-Z]\w*\\)*[A-Z]\w*)/, ['keyword', 'type.identifier']],
+
+      // Namespace declarations
+      [
+        /(namespace\s+)((?:[A-Z]\w*\\)*[A-Z]\w*)/,
+        ['keyword', 'type.identifier'],
+      ],
+
+      // Static method calls
+      [/([A-Z]\w*)(::)/, ['type.identifier', 'operator']],
+
+      // Object method calls (->method())
+      [/(->)([a-zA-Z_]\w*)(\s*)(\()/, ['operator', 'entity.name.function', 'white', '@brackets']],
+      
+      // Object property access (->property without parentheses)
+      [/(->)([a-zA-Z_]\w*)/, ['operator', 'variable.other.property']],
+
+      // Method calls (identifier followed by parentheses)
+      [
+        /([a-zA-Z_]\w*)(\s*)(\()/,
+        {
+          cases: {
+            '$1@keywords': ['keyword', 'white', '@brackets'],
+            '$1@builtinFunctions': ['support.function', 'white', '@brackets'],
+            '@default': ['entity.name.function', 'white', '@brackets'],
+          },
+        },
+      ],
+
+      // Class names in type hints (standalone PascalCase before variables, not constants)
+      [/[A-Z]\w*(?=\s+\$)/, 'type.identifier'],
+
+      // PHP constants (ALL_CAPS identifiers)
+      [/[A-Z][A-Z0-9_]*/, 'constant'],
+
+      // Namespace references
+      [/\\[A-Z]\w*(?:\\[A-Z]\w*)*/, 'type.identifier'],
 
       // Keywords and identifiers
       [
