@@ -1686,41 +1686,48 @@ export const phpCompletionProvider: languages.CompletionItemProvider = {
       endColumn: word.endColumn,
     };
 
+    const currentWord = word.word;
     const suggestions: languages.CompletionItem[] = [];
 
-    // Add function completions
+    // Add function completions (case-sensitive filtering)
     phpFunctionSignatures.forEach((func) => {
-      suggestions.push({
-        label: func.name,
-        kind: languages.CompletionItemKind.Function,
-        insertText: `${func.name}($1)$0`,
-        insertTextRules: languages.CompletionItemInsertTextRule.InsertAsSnippet,
-        range,
-        detail: func.signature,
-        documentation: func.description,
-      });
+      if (func.name.startsWith(currentWord)) {
+        suggestions.push({
+          label: func.name,
+          kind: languages.CompletionItemKind.Function,
+          insertText: `${func.name}($1)$0`,
+          insertTextRules: languages.CompletionItemInsertTextRule.InsertAsSnippet,
+          range,
+          detail: func.signature,
+          documentation: func.description,
+        });
+      }
     });
 
-    // Add constants completions
+    // Add constants completions (case-sensitive filtering)
     phpInlineTokenizer.constants?.forEach((constant: string) => {
-      suggestions.push({
-        label: constant,
-        kind: languages.CompletionItemKind.Constant,
-        insertText: constant,
-        range,
-        detail: `PHP constant: ${constant}`,
-      });
+      if (constant.startsWith(currentWord)) {
+        suggestions.push({
+          label: constant,
+          kind: languages.CompletionItemKind.Constant,
+          insertText: constant,
+          range,
+          detail: `PHP constant: ${constant}`,
+        });
+      }
     });
 
-    // Add keyword completions
+    // Add keyword completions (case-sensitive filtering)
     phpInlineTokenizer.keywords?.forEach((keyword: string) => {
-      suggestions.push({
-        label: keyword,
-        kind: languages.CompletionItemKind.Keyword,
-        insertText: keyword,
-        range,
-        detail: `PHP keyword: ${keyword}`,
-      });
+      if (keyword.startsWith(currentWord)) {
+        suggestions.push({
+          label: keyword,
+          kind: languages.CompletionItemKind.Keyword,
+          insertText: keyword,
+          range,
+          detail: `PHP keyword: ${keyword}`,
+        });
+      }
     });
 
     return { suggestions };
