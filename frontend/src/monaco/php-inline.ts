@@ -1730,6 +1730,66 @@ export const phpCompletionProvider: languages.CompletionItemProvider = {
       }
     });
 
+    // Add custom PHP snippets
+    const phpSnippets = [
+      {
+        label: 'pubf',
+        insertText: 'public function $1() {\n\t$0\n}',
+        detail: 'public function',
+        documentation: 'Creates a public function',
+      },
+      {
+        label: 'pubsf',
+        insertText: 'public static function $1() {\n\t$0\n}',
+        detail: 'public static function',
+        documentation: 'Creates a public static function',
+      },
+      {
+        label: 'prof',
+        insertText: 'protected function $1() {\n\t$0\n}',
+        detail: 'protected function',
+        documentation: 'Creates a protected function',
+      },
+      {
+        label: 'prosf',
+        insertText: 'protected static function $1() {\n\t$0\n}',
+        detail: 'protected static function',
+        documentation: 'Creates a protected static function',
+      },
+      {
+        label: 'prif',
+        insertText: 'private function $1() {\n\t$0\n}',
+        detail: 'private function',
+        documentation: 'Creates a private function',
+      },
+      {
+        label: 'prisf',
+        insertText: 'private static function $1() {\n\t$0\n}',
+        detail: 'private static function',
+        documentation: 'Creates a private static function',
+      },
+      {
+        label: '__construct',
+        insertText: 'public function __construct() {\n\t$0\n}',
+        detail: 'constructor function',
+        documentation: 'Creates a public constructor function',
+      },
+    ];
+
+    phpSnippets.forEach((snippet) => {
+      if (snippet.label.startsWith(currentWord)) {
+        suggestions.push({
+          label: snippet.label,
+          kind: languages.CompletionItemKind.Snippet,
+          insertText: snippet.insertText,
+          insertTextRules: languages.CompletionItemInsertTextRule.InsertAsSnippet,
+          range,
+          detail: snippet.detail,
+          documentation: snippet.documentation,
+        });
+      }
+    });
+
     return { suggestions };
   },
 };
