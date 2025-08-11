@@ -960,12 +960,6 @@ textarea {
   position: relative !important;
 }
 
-@media (min-width: 769px) {
-  .monaco-editor .parameter-hints-widget {
-    transform: translateY(95px) !important;
-  }
-}
-
 /* Mobile Menu Styles */
 .desktop-controls {
   display: flex;
