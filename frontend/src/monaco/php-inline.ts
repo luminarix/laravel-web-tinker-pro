@@ -557,7 +557,7 @@ export const phpInlineTokenizer: languages.IMonarchLanguage = {
     root: [
       // Special PHP pseudo-variables
       [/\$this\b/, 'variable.language'],
-      
+
       // Variables
       [/\$[a-zA-Z_]\w*/, 'variable'],
 
@@ -584,8 +584,11 @@ export const phpInlineTokenizer: languages.IMonarchLanguage = {
       [/([A-Z]\w*)(::)/, ['type.identifier', 'operator']],
 
       // Object method calls (->method())
-      [/(->)([a-zA-Z_]\w*)(\s*)(\()/, ['operator', 'entity.name.function', 'white', '@brackets']],
-      
+      [
+        /(->)([a-zA-Z_]\w*)(\s*)(\()/,
+        ['operator', 'entity.name.function', 'white', '@brackets'],
+      ],
+
       // Object property access (->property without parentheses)
       [/(->)([a-zA-Z_]\w*)/, ['operator', 'variable.other.property']],
 
@@ -1696,7 +1699,8 @@ export const phpCompletionProvider: languages.CompletionItemProvider = {
           label: func.name,
           kind: languages.CompletionItemKind.Function,
           insertText: `${func.name}($1)$0`,
-          insertTextRules: languages.CompletionItemInsertTextRule.InsertAsSnippet,
+          insertTextRules:
+            languages.CompletionItemInsertTextRule.InsertAsSnippet,
           range,
           detail: func.signature,
           documentation: func.description,
@@ -1782,7 +1786,8 @@ export const phpCompletionProvider: languages.CompletionItemProvider = {
           label: snippet.label,
           kind: languages.CompletionItemKind.Snippet,
           insertText: snippet.insertText,
-          insertTextRules: languages.CompletionItemInsertTextRule.InsertAsSnippet,
+          insertTextRules:
+            languages.CompletionItemInsertTextRule.InsertAsSnippet,
           range,
           detail: snippet.detail,
           documentation: snippet.documentation,
