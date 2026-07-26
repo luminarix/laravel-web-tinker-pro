@@ -143,6 +143,8 @@ Built with `@dnd-kit/core` for:
 
 ## 🚀 Installation & Setup
 
+Laravel Web Tinker Pro requires PHP 8.4 and supports Laravel 12 and 13.
+
 ### Quick Start
 
 ```bash
