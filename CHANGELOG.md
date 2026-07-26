@@ -2,6 +2,10 @@
 
 All notable changes to `laravel-web-tinker-pro` will be documented in this file.
 
+## v0.0.7 - 2026-07-26
+
+**Full Changelog**: https://github.com/luminarix/laravel-web-tinker-pro/compare/v0.0.6...v0.0.7
+
 ## v0.0.6 - 2025-08-13
 
 **Full Changelog**: https://github.com/luminarix/laravel-web-tinker-pro/compare/v0.0.5...v0.0.6
