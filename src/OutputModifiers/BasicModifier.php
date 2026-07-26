@@ -36,7 +36,9 @@ final class BasicModifier implements OutputModifier
     public function formatBytes(int $bytes): string
     {
         $units = ['B', 'KB', 'MB', 'GB', 'TB'];
-        $power = $bytes > 0 ? floor(log($bytes, 1_024)) : 0;
+        $power = $bytes > 0
+            ? min((int) floor(log($bytes, 1_024)), count($units) - 1)
+            : 0;
 
         return number_format($bytes / (1_024 ** $power), 2) . ' ' . $units[$power];
     }
